@@ -136,9 +136,13 @@ label {
 	line-height:34px;
 	
 }
+.minus {
+	background-color: #fff !important;
+	border: none !important;
+}
 .search .input-group {
 	float:left;
-	width:200px;
+	width:500px;
 }
 .search .time, .category {
 	float:left;

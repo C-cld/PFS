@@ -128,10 +128,10 @@ window.onload = function() {
 	}
 
 	//时间选择器格式化
-	/* $('#datetimepicker1').datetimepicker({locale: 'zh-cn',viewMode: 'months',format: 'YYYY/MM'});
+	$('#datetimepicker1').datetimepicker({locale: 'zh-cn',viewMode: 'months',format: 'YYYY/MM'});
 	$('#datetimepicker2').datetimepicker({locale: 'zh-cn',viewMode: 'months',format: 'YYYY/MM'});
 	$("#datetimepicker1").on("dp.change",function (e) {$('#datetimepicker2').data("DateTimePicker").minDate(e.date);});
-	$("#datetimepicker2").on("dp.change",function (e) {$('#datetimepicker1').data("DateTimePicker").maxDate(e.date);});*/
+	$("#datetimepicker2").on("dp.change",function (e) {$('#datetimepicker1').data("DateTimePicker").maxDate(e.date);});
 	$('#datetimepicker3').datetimepicker({
 		locale : 'zh-cn',
 		viewMode : 'days',
