@@ -1,1 +1,292 @@
-hello world
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+		<title>个人财务系统</title>
+		<link th:href="@{/css/index.css}" rel="stylesheet" type="text/css">
+		<link th:href="@{/css/bootstrap-datetimepicker.css}" rel="stylesheet" type="text/css">
+		<link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" type="text/css">
+		<link th:href="@{/css/bootstrap-select.min.css}" rel="stylesheet" type="text/css">
+		
+		<script th:src="@{/js/jquery-2.1.1.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/moment-with-locales.js}"></script>
+		<script type="text/javascript" th:src="@{/js/bootstrap-datetimepicker.js}"></script>
+		<script type="text/javascript" th:src="@{/js/bootstrap-select.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/echarts.min.js}"></script>
+	</head>
+	<body>
+	<div class="main">
+		<div style="padding-top:30px">
+			<a href="#accordion1" aria-expanded="false" aria-controls="accordion1" class="accordion-title accordionTitle js-accordionTrigger">趋势图</a>
+		</div>
+		<div class="accordion-content accordionItem is-expanded animateIn" id="accordion1" aria-hidden="false">
+			<div id="chart" style="width: 1000px;height:400px;margin:0 auto"></div>
+		</div>
+		<div class="data">
+			<hr/>
+			<!-- <div class="search">
+				<div class="time">
+					<label>时间：</label>
+					<div class='input-group date' >
+						<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+						<input type='text' class="form-control" id='datetimepicker1' />
+					</div>
+					<div class='input-group date' >
+						<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+						<input type='text' class="form-control" id='datetimepicker2' />
+					</div>
+				</div>
+				<div class="category">
+					<label>种类：</label>
+					<select class="selectpicker" id="firstSelect" title="一级" multiple>
+						<option value="1">一</option>
+						<option value="2">二</option>
+					</select>
+					<select class="selectpicker" id="secondSelect" title="二级" data-actions-box="true" multiple >
+						<option value="1">一点一</option>
+						<option value="2">二点一</option>
+					</select>
+				</div>
+			</div> -->
+			<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
+             </button>
+             <table class="table table-striped">
+             	<thead class="thead-light">
+				    <tr>
+				      <th scope="col">#</th>
+				      <th scope="col">日期</th>
+				      <th scope="col">早上体重</th>
+				      <th scope="col">晚上体重</th>
+				    </tr>
+				  </thead>
+				  <tbody>
+				  	<tr>
+				      <th scope="row">1</th>
+				      <td>2019-01-01</td>
+				      <td>67.12</td>
+				      <td>67.56</td>
+				    </tr>
+				    <tr>
+				      <th scope="row">2</th>
+				      <td>2019-01-02</td>
+				      <td>66.23</td>
+				      <td>66.01</td>
+				    </tr>
+				  </tbody>
+             </table>
+		</div>
+	</div>
+	<!-- 新增弹窗 -->
+	<form class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" th:action="@{/add}" th:method="post">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        			<h4 class="modal-title" id="myModalLabel">新增</h4>
+				</div>
+				<div class="modal-body">
+					<table>
+						<tr>
+							<td><label>时间：</label></td>
+							<td>
+								<div class='input-group date' >
+									<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+									<input type='text' class="form-control" id='datetimepicker3' name="date" onkeyup="value=value.replace(/^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/g,'')"/>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td><label>早上体重（Kg）：</label></td>
+							<td><input type="text" class="form-control" id="amWeight" name="amWeight" onkeyup="value=value.replace(/[^\d.]/g,'')"></td>
+						</tr>
+						<tr>
+							<td><label>晚上体重（Kg）：</label></td>
+							<td><input type="text" class="form-control" id="pmWeight" name="pmWeight" onkeyup="value=value.replace(/[^\d.]/g,'')"></td>
+						</tr>
+					</table>
+				</div>
+				<div class="modal-footer">
+			        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+			        <!-- <button type="button" class="btn btn-primary" onclick="save()">保存</button> -->
+			        <button type="submit" class="btn btn-primary">保存</button>
+			      </div>
+			</div>
+		</div>
+	</form>
+		
+		<script th:inline="javascript">
+		var dom = document.getElementById("chart");
+		var myChart = echarts.init(dom);
+		var chartData = genData();
+		option = {
+			    title: {
+			        text: '未来一周气温变化',
+			        subtext: '纯属虚构'
+			    },
+			    tooltip: {
+			        trigger: 'axis'
+			    },
+			    legend: {
+			        data:['早上','晚上']
+			    },
+			    toolbox: {
+			        show: true,
+			        feature: {
+			            dataZoom: {
+			                yAxisIndex: 'none'
+			            },
+			            dataView: {readOnly: false},
+			            magicType: {type: ['line', 'bar']},
+			            restore: {},
+			            saveAsImage: {}
+			        }
+			    },
+			    xAxis:  {
+			        type: 'category',
+			        boundaryGap: false,
+			        data: chartData.dateData
+			    },
+			    yAxis: {
+			        type: 'value',
+			        axisLabel: {
+			            formatter: '{value} Kg'
+			        }
+			    },
+			    series: [
+			        {
+			            name:'早上',
+			            type:'line',
+			            smooth: true,
+			            data: chartData.amData,
+			            markPoint: {
+			                data: [
+			                    {type: 'max', name: '最大值'},
+			                    {type: 'min', name: '最小值'}
+			                ]
+			            }
+			        },
+			        {
+			            name:'晚上',
+			            type:'line',
+			            smooth: true,
+			            data: chartData.pmData,
+			        }
+			    ]
+			};
+		
+		if (option && typeof option === "object") {
+		    myChart.setOption(option, true);
+		}
+		
+		function genData() {
+			var dateData = [];
+			var amData = [];
+			var pmData = [];
+			var weightList = [[${weightList}]];
+			if (weightList != null) {
+            	var weightListSize = weightList.length;
+                console.log(weightListSize);
+                for (i = 0 ; i < weightListSize ; i ++) {
+                	dateData.push(weightList[i].date);
+                	amData.push(weightList[i].amWeight);
+                	pmData.push(weightList[i].pmWeight);
+                }
+            }
+			return {
+				dateData: dateData,
+				amData: amData,
+				pmData: pmData
+               };
+		}
+		
+		window.onload = function() {
+        	//点击报表
+        	var d = document,
+        	accordionToggles = d.querySelectorAll('.js-accordionTrigger'),
+        	setAria,
+        	setAccordionAria,
+        	switchAccordion,
+          	touchSupported = ('ontouchstart' in window),
+          	pointerSupported = ('pointerdown' in window);
+        	
+        	skipClickDelay = function(e){
+        		e.preventDefault();
+        		e.target.click();
+          	}
+        	setAriaAttr = function(el, ariaType, newProperty){
+        		el.setAttribute(ariaType, newProperty);
+        	};
+        	setAccordionAria = function(el1, el2, expanded){
+        		switch(expanded) {
+        	  		case "true":
+        				setAriaAttr(el1, 'aria-expanded', 'true');
+        				setAriaAttr(el2, 'aria-hidden', 'false');
+        				break;
+        			  case "false":
+        				setAriaAttr(el1, 'aria-expanded', 'false');
+        				setAriaAttr(el2, 'aria-hidden', 'true');
+        				break;
+        			  default:
+        				break;
+        		}
+        	};
+        	switchAccordion = function(e) {
+        		e.preventDefault();
+        		var thisAnswer = e.target.parentNode.nextElementSibling;
+        		var thisQuestion = e.target;
+        		if(thisAnswer.classList.contains('is-collapsed')) {
+        			setAccordionAria(thisQuestion, thisAnswer, 'true');
+        		} else {
+        			setAccordionAria(thisQuestion, thisAnswer, 'false');
+        		}
+        		thisQuestion.classList.toggle('is-collapsed');
+        		thisQuestion.classList.toggle('is-expanded');
+        			thisAnswer.classList.toggle('is-collapsed');
+        			thisAnswer.classList.toggle('is-expanded');
+        		
+        		thisAnswer.classList.toggle('animateIn');
+        	};
+        	for (var i=0,len=accordionToggles.length; i<len; i++) {
+        		if(touchSupported) {
+        	  		accordionToggles[i].addEventListener('touchstart', skipClickDelay, false);
+        		}
+        		if(pointerSupported){
+        		  accordionToggles[i].addEventListener('pointerdown', skipClickDelay, false);
+        		}
+        		accordionToggles[i].addEventListener('click', switchAccordion, false);
+        	}
+        	
+        	
+        	//时间选择器格式化
+        	/* $('#datetimepicker1').datetimepicker({locale: 'zh-cn',viewMode: 'months',format: 'YYYY/MM'});
+        	$('#datetimepicker2').datetimepicker({locale: 'zh-cn',viewMode: 'months',format: 'YYYY/MM'});
+        	$("#datetimepicker1").on("dp.change",function (e) {$('#datetimepicker2').data("DateTimePicker").minDate(e.date);});
+            $("#datetimepicker2").on("dp.change",function (e) {$('#datetimepicker1').data("DateTimePicker").maxDate(e.date);});*/ 
+        	$('#datetimepicker3').datetimepicker({locale: 'zh-cn',viewMode: 'days',format: 'YYYY-MM-DD'});
+		}
+		
+		$('#secondSelect').on('changed.bs.select',function(e){
+        	var selectedValues = [];  
+        	$("#firstSelect option:selected").each(function(){ 
+        	selectedValues.push($(this).val()); 
+        	console.log($(this).val());
+        	});
+        });
+		
+		function save() {
+			var date = document.getElementById("datetimepicker3").value;
+			var amWeight = document.getElementById("amWeight").value;
+			var pmWeight = document.getElementById("pmWeight").value;
+			if (date == null || amWeight == null || pmWeight == null)
+			{
+				alert("有必填项未填");
+				return;
+			}
+			location.href= [[@{/}]] + "/add?date=" + date + "&amWeight=" + amWeight + "&pmWeight=" + pmWeight;
+			
+		}
+		</script>
+	</body>
+</html>

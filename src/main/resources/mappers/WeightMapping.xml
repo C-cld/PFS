@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cyy.dao.WeightMapper">
+
+	<resultMap type="com.cyy.domain.Weight" id="weightMap">
+		<id property="id" column="id" />
+		<result property="date" column="date" />
+		<result property="amWeight" column="am_weight" />
+		<result property="pmWeight" column="pm_weight" />
+		<result property="createDate" column="create_time" />
+	</resultMap>
+	
+	<select id="find" resultMap="weightMap">
+        select * from weight order by create_time asc
+    </select>
+    
+    <insert id="add" parameterType="com.cyy.domain.Weight"> 
+        insert into weight(id,date,am_weight,pm_weight,create_time) values(#{id},#{date},#{amWeight},#{pmWeight},now())  
+    </insert>
+</mapper>
