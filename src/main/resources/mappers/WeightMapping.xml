@@ -11,7 +11,7 @@
 	</resultMap>
 	
 	<select id="find" resultMap="weightMap">
-        select * from weight order by create_time asc
+        select * from weight order by date asc
     </select>
     
     <insert id="add" parameterType="com.cyy.domain.Weight"> 

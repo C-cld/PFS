@@ -6,11 +6,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.cyy.domain.Category;
 import com.cyy.domain.Weight;
 import com.cyy.service.CategoryService;
 import com.cyy.service.WeightService;
@@ -42,8 +40,8 @@ public class HomeController
 	
 	@RequestMapping(value = "/add")
 	public ModelAndView add(@RequestParam(value = "date", required = true) String date, 
-							@RequestParam(value = "amWeight", required = true) String amWeight, 
-							@RequestParam(value = "pmWeight", required = true) String pmWeight) {
+							@RequestParam(value = "amWeight", required = true, defaultValue = "0") String amWeight, 
+							@RequestParam(value = "pmWeight", required = true, defaultValue = "0") String pmWeight) {
 		try {
 			weightService.add(date, amWeight, pmWeight);
 		} catch (ParseException e) {

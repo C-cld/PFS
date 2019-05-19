@@ -62,18 +62,13 @@
 				    </tr>
 				  </thead>
 				  <tbody>
-				  	<tr>
+				  	<tr th:each="weight,weightStat : ${weightList}">
 				      <th scope="row">1</th>
-				      <td>2019-01-01</td>
-				      <td>67.12</td>
-				      <td>67.56</td>
+				      <td><a th:text="${#dates.format(weight.date, 'yyyy-MM-dd')}"></a></td>
+				      <td><a th:text="${weight.amWeight}"></a></td>
+				      <td><a th:text="${weight.pmWeight}"></a></td>
 				    </tr>
-				    <tr>
-				      <th scope="row">2</th>
-				      <td>2019-01-02</td>
-				      <td>66.23</td>
-				      <td>66.01</td>
-				    </tr>
+				    
 				  </tbody>
              </table>
 		</div>
@@ -115,71 +110,7 @@
 			</div>
 		</div>
 	</form>
-		
-		<script th:inline="javascript">
-		var dom = document.getElementById("chart");
-		var myChart = echarts.init(dom);
-		var chartData = genData();
-		option = {
-			    title: {
-			        text: '未来一周气温变化',
-			        subtext: '纯属虚构'
-			    },
-			    tooltip: {
-			        trigger: 'axis'
-			    },
-			    legend: {
-			        data:['早上','晚上']
-			    },
-			    toolbox: {
-			        show: true,
-			        feature: {
-			            dataZoom: {
-			                yAxisIndex: 'none'
-			            },
-			            dataView: {readOnly: false},
-			            magicType: {type: ['line', 'bar']},
-			            restore: {},
-			            saveAsImage: {}
-			        }
-			    },
-			    xAxis:  {
-			        type: 'category',
-			        boundaryGap: false,
-			        data: chartData.dateData
-			    },
-			    yAxis: {
-			        type: 'value',
-			        axisLabel: {
-			            formatter: '{value} Kg'
-			        }
-			    },
-			    series: [
-			        {
-			            name:'早上',
-			            type:'line',
-			            smooth: true,
-			            data: chartData.amData,
-			            markPoint: {
-			                data: [
-			                    {type: 'max', name: '最大值'},
-			                    {type: 'min', name: '最小值'}
-			                ]
-			            }
-			        },
-			        {
-			            name:'晚上',
-			            type:'line',
-			            smooth: true,
-			            data: chartData.pmData,
-			        }
-			    ]
-			};
-		
-		if (option && typeof option === "object") {
-		    myChart.setOption(option, true);
-		}
-		
+	<script th:inline="javascript">
 		function genData() {
 			var dateData = [];
 			var amData = [];
@@ -200,93 +131,8 @@
 				pmData: pmData
                };
 		}
-		
-		window.onload = function() {
-        	//点击报表
-        	var d = document,
-        	accordionToggles = d.querySelectorAll('.js-accordionTrigger'),
-        	setAria,
-        	setAccordionAria,
-        	switchAccordion,
-          	touchSupported = ('ontouchstart' in window),
-          	pointerSupported = ('pointerdown' in window);
-        	
-        	skipClickDelay = function(e){
-        		e.preventDefault();
-        		e.target.click();
-          	}
-        	setAriaAttr = function(el, ariaType, newProperty){
-        		el.setAttribute(ariaType, newProperty);
-        	};
-        	setAccordionAria = function(el1, el2, expanded){
-        		switch(expanded) {
-        	  		case "true":
-        				setAriaAttr(el1, 'aria-expanded', 'true');
-        				setAriaAttr(el2, 'aria-hidden', 'false');
-        				break;
-        			  case "false":
-        				setAriaAttr(el1, 'aria-expanded', 'false');
-        				setAriaAttr(el2, 'aria-hidden', 'true');
-        				break;
-        			  default:
-        				break;
-        		}
-        	};
-        	switchAccordion = function(e) {
-        		e.preventDefault();
-        		var thisAnswer = e.target.parentNode.nextElementSibling;
-        		var thisQuestion = e.target;
-        		if(thisAnswer.classList.contains('is-collapsed')) {
-        			setAccordionAria(thisQuestion, thisAnswer, 'true');
-        		} else {
-        			setAccordionAria(thisQuestion, thisAnswer, 'false');
-        		}
-        		thisQuestion.classList.toggle('is-collapsed');
-        		thisQuestion.classList.toggle('is-expanded');
-        			thisAnswer.classList.toggle('is-collapsed');
-        			thisAnswer.classList.toggle('is-expanded');
-        		
-        		thisAnswer.classList.toggle('animateIn');
-        	};
-        	for (var i=0,len=accordionToggles.length; i<len; i++) {
-        		if(touchSupported) {
-        	  		accordionToggles[i].addEventListener('touchstart', skipClickDelay, false);
-        		}
-        		if(pointerSupported){
-        		  accordionToggles[i].addEventListener('pointerdown', skipClickDelay, false);
-        		}
-        		accordionToggles[i].addEventListener('click', switchAccordion, false);
-        	}
-        	
-        	
-        	//时间选择器格式化
-        	/* $('#datetimepicker1').datetimepicker({locale: 'zh-cn',viewMode: 'months',format: 'YYYY/MM'});
-        	$('#datetimepicker2').datetimepicker({locale: 'zh-cn',viewMode: 'months',format: 'YYYY/MM'});
-        	$("#datetimepicker1").on("dp.change",function (e) {$('#datetimepicker2').data("DateTimePicker").minDate(e.date);});
-            $("#datetimepicker2").on("dp.change",function (e) {$('#datetimepicker1').data("DateTimePicker").maxDate(e.date);});*/ 
-        	$('#datetimepicker3').datetimepicker({locale: 'zh-cn',viewMode: 'days',format: 'YYYY-MM-DD'});
-		}
-		
-		$('#secondSelect').on('changed.bs.select',function(e){
-        	var selectedValues = [];  
-        	$("#firstSelect option:selected").each(function(){ 
-        	selectedValues.push($(this).val()); 
-        	console.log($(this).val());
-        	});
-        });
-		
-		function save() {
-			var date = document.getElementById("datetimepicker3").value;
-			var amWeight = document.getElementById("amWeight").value;
-			var pmWeight = document.getElementById("pmWeight").value;
-			if (date == null || amWeight == null || pmWeight == null)
-			{
-				alert("有必填项未填");
-				return;
-			}
-			location.href= [[@{/}]] + "/add?date=" + date + "&amWeight=" + amWeight + "&pmWeight=" + pmWeight;
-			
-		}
 		</script>
+		<script type="text/javascript" th:src="@{/js/index.js}"></script>
+		
 	</body>
 </html>
