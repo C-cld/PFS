@@ -142,7 +142,7 @@ label {
 }
 .search .input-group {
 	float:left;
-	width:500px;
+	width:400px;
 }
 .search .time, .category {
 	float:left;
@@ -153,4 +153,8 @@ select {
 	height: 30px;
 	border-radius: 3px;
 	border: 1px solid #e0e4e7
+}
+table a {
+	color: #46484a;
+	text-decoration:none !important;
 }

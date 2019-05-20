@@ -63,7 +63,7 @@
 				  </thead>
 				  <tbody>
 				  	<tr th:each="weight,weightStat : ${weightList}">
-				      <th scope="row">1</th>
+				      <th scope="row" th:text="${weightStat.count}">1</th>
 				      <td><a th:text="${#dates.format(weight.date, 'yyyy-MM-dd')}"></a></td>
 				      <td><a th:text="${weight.amWeight}"></a></td>
 				      <td><a th:text="${weight.pmWeight}"></a></td>
