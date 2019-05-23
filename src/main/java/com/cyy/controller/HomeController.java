@@ -21,7 +21,23 @@ public class HomeController
 	@Autowired
 	WeightService weightService;
 	
+	
 	@RequestMapping(value = "/")
+	public ModelAndView sidebar() 
+	{
+		try 
+		{
+			ModelAndView mav=new ModelAndView("sidebar");
+			return mav;
+		} 
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	@RequestMapping(value = "/index")
 	public ModelAndView index() 
 	{
 		try 
