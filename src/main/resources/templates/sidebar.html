@@ -1,0 +1,33 @@
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+		<link th:href="@{/css/sidebar.css}" rel="stylesheet" type="text/css">
+		<link th:href="@{/font/iconfont.css}" rel="stylesheet" type="text/css">
+	</head>
+	<body>
+		<div class="main">
+			<div class="main-side">
+				<div class="logo"></div>
+				<ul class="nav">
+					<li class="nav-item selected">
+						<a href="javascript:;"><i class="iconfont">&#xe607;</i>总览</a>
+					</li>
+					<li class="nav-item">
+						<a href="javascript:;"><i class="iconfont">&#xe608;</i>财务数据</a>
+						<dl>
+							<dd><a href="javascript:;" data-url="article-list.html" data-id='3' data-text="月度收支"><span class="line"></span>月度收支</a></dd>
+							<dd><a href="javascript:;" data-url="article-list.html" data-id='3' data-text="月度财务总览"><span class="line"></span>月度财务总览</a></dd>
+							<dd><a href="javascript:;" data-url="article-list.html" data-id='3' data-text="理财"><span class="line"></span>理财</a></dd>
+						</dl>
+					</li>
+				</ul>
+			</div>
+			<div class="main-container">
+				<div class="main-container-body">
+					<iframe src="./index" width="100%" height="100%" name="iframe" class="iframe"></iframe>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

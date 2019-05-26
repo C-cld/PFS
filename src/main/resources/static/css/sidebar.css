@@ -1,0 +1,99 @@
+.main-layout {
+	overflow: hidden;
+	width: 100%;
+	height: 100%;
+}
+
+.main-side {
+	width: 200px;
+	height: 100%;
+	background: #444c63;
+	position: absolute;
+	left: 0;
+  	top: 0;
+  	bottom: 0;
+  	overflow: auto;
+}
+
+.logo {
+  width: 100%;
+  height: 60px;
+  background: #00b5f9 url(../image/logo.png) center center no-repeat;
+}
+.nav {
+	background: #444c63;
+	padding:0px;
+	margin:0px;
+}
+
+@font-face {
+	font-family:layui-icon;src:url(../font/iconfont.eot?v=1.0.9);src:url(../font/iconfont.eot?v=1.0.9#iefix) format('embedded-opentype'),url(../font/iconfont.svg?v=1.0.9#iconfont) format('svg'),url(../font/iconfont.woff?v=1.0.9) format('woff'),url(../font/iconfont.ttf?v=1.0.9) format('truetype')
+}
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-stroke-width: 0.2px;
+  -moz-osx-font-smoothing: grayscale;
+}
+.nav-item .iconfont {
+	padding-right: 10px;
+  font-size: 18px;
+  color: #8f94a1;
+  position: relative;
+  top: 2px;
+}
+ul li {
+	list-style:none;
+	width:100%;
+}
+a {
+	text-decoration:none;
+	color:#fff;
+}
+.nav-item>a {
+	display: block;
+	padding-left:20px;
+	height:45px;
+	line-height: 45px;
+	transition: all 0.2s;
+}
+.nav-item>a:hover {
+	background-color:#4E5465;
+}
+.line {
+	width: 12px;
+  display: inline-block;
+  line-height: 40px;
+  height: 40px;
+  float: left;
+  margin-right: 10px;
+  margin-left: 48px;
+  background: url("../image/line.png") left center no-repeat;
+}
+dl,dd {
+	margin:0px;
+}
+dd>a {
+	display: block;
+	height:40px;
+	line-height: 40px;
+	font-size:14px;
+	color:#77829F;
+	transition: all 0.2s;
+}
+dd>a:hover {
+	color:#00B5F9;
+}
+.main-container {
+	margin-left:200px;
+	position:absolute;
+	top:0;
+	left:0;
+	right:0;
+	bottom:0;
+}
+iframe {
+	border: 0;
+}
