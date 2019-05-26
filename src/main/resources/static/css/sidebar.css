@@ -93,7 +93,25 @@ dd>a:hover {
 	left:0;
 	right:0;
 	bottom:0;
+	overflow: hidden;
 }
 iframe {
 	border: 0;
+}
+.main-container-header {
+	height:60px;
+	border-bottom: 1px solid #f0f0f0;
+	box-shadow: rgba(0, 21, 41, 0.08) 0px 1px 4px;
+	margin-bottom: 5px;
+}
+.main-container-header .iconfont {
+	font-size: 20px;
+    color: #444c63;
+}
+.hiden {
+	float: left;
+    width: 60px;
+    height: 60px;
+    line-height: 60px;
+    text-align: center;
 }
