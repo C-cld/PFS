@@ -64,7 +64,7 @@ public class HomeController
 			// 日期转换异常
 			e.printStackTrace();
 		}
-		ModelAndView mav=new ModelAndView("redirect:/");
+		ModelAndView mav=new ModelAndView("redirect:/index");
 		return mav;
 	}
 }
