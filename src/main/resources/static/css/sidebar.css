@@ -57,7 +57,7 @@ a {
 	padding-left:20px;
 	height:45px;
 	line-height: 45px;
-	transition: all 0.2s;
+	transition: color 0.2s;
 }
 .nav-item>a:hover {
 	background-color:#4E5465;
@@ -81,7 +81,7 @@ dd>a {
 	line-height: 40px;
 	font-size:14px;
 	color:#77829F;
-	transition: all 0.2s;
+	transition: color 0.2s;
 }
 dd>a:hover {
 	color:#00B5F9;
@@ -98,13 +98,18 @@ dd>a:hover {
 iframe {
 	border: 0;
 }
-.main-container-header {
+.main-header {
+	position:absolute;
+	margin-left:200px;
+	top:0;
+	left:0;
+	right:0;
 	height:60px;
 	border-bottom: 1px solid #f0f0f0;
 	box-shadow: rgba(0, 21, 41, 0.08) 0px 1px 4px;
-	margin-bottom: 5px;
+	margin-bottom: 4px;
 }
-.main-container-header .iconfont {
+.main-header .iconfont {
 	font-size: 20px;
     color: #444c63;
 }
@@ -114,4 +119,11 @@ iframe {
     height: 60px;
     line-height: 60px;
     text-align: center;
+}
+.main-container {
+	position:absolute;
+	margin-top:65px;
+	top:0;
+	left:0;
+	right:0;
 }
