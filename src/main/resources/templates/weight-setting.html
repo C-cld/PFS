@@ -1,0 +1,24 @@
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+		<title>个人财务系统</title>
+		<link th:href="@{/css/weight-setting.css}" rel="stylesheet" type="text/css">
+	</head>
+	<body>
+		<div class="main">
+			<div class="weight-group">
+				<a class="title">单位：</a>
+				<div class="sub"><input type="radio" id="kg-radio" name="weight-radio" class="regular-radio" checked /><label for="kg-radio"></label>公斤</div>
+				<div class="sub"><input type="radio" id="g-radio" name="weight-radio" class="regular-radio" checked /><label for="g-radio"></label>斤</div>
+			</div>
+			<div class="weight-group">
+				<a class="title">单位：</a>
+				<div class="sub"><input type="text"/></div>
+			</div>
+		</div>	
+	</body>
+</html>
+
+
+
