@@ -49,9 +49,4 @@ public class WeightController {
 		return mav;
 	}
 	
-	@RequestMapping(value = "/weight-setting")
-	public ModelAndView setting() {
-		ModelAndView mav = new ModelAndView("weight-setting");
-		return mav;
-	}
 }

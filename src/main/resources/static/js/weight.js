@@ -35,7 +35,7 @@ option = {
 	yAxis : {
 		type : 'value',
 		axisLabel : {
-			formatter : '{value} Kg'
+			formatter : '{value}'
 		}
 	},
 	series : [ {

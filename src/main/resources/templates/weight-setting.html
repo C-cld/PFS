@@ -6,17 +6,17 @@
 		<link th:href="@{/css/weight-setting.css}" rel="stylesheet" type="text/css">
 	</head>
 	<body>
-		<div class="main">
+		<form class="main" th:action="@{/save-weight-setting}" th:method="post">
 			<div class="weight-group">
 				<a class="title">单位：</a>
-				<div class="sub"><input type="radio" id="kg-radio" name="weight-radio" class="regular-radio" checked /><label for="kg-radio"></label>公斤</div>
-				<div class="sub"><input type="radio" id="g-radio" name="weight-radio" class="regular-radio" checked /><label for="g-radio"></label>斤</div>
+				<div class="sub"><input type="radio" id="kg-radio" name="weight-radio" class="regular-radio" value="0" th:checked="${weightSetting.unit} eq '0'?'true':'false'"/><label for="kg-radio"></label>公斤</div>
+				<div class="sub"><input type="radio" id="g-radio" name="weight-radio" class="regular-radio" value="1" th:checked="${weightSetting.unit} eq '1'?'true':'false'"/><label for="g-radio"></label>斤</div>
 			</div>
 			<div class="weight-group">
-				<a class="title">单位：</a>
-				<div class="sub"><input type="text"/></div>
+				<button type="submit" class="submit">保存</button>
 			</div>
-		</div>	
+			
+		</form>	
 	</body>
 </html>
 
