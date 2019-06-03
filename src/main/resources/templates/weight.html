@@ -65,8 +65,8 @@
 				  	<tr th:each="weight,weightStat : ${weightList}">
 				      <th scope="row" th:text="${weightStat.count}">1</th>
 				      <td><a th:text="${#dates.format(weight.date, 'yyyy-MM-dd')}"></a></td>
-				      <td><a th:text="${weight.amWeight}"></a></td>
-				      <td><a th:text="${weight.pmWeight}"></a></td>
+				      <td><a th:text="${unit} eq '0' ? ${weight.amWeight} : ${#numbers.formatDecimal(weight.amWeight*2,1,2)}"></a></td>
+				      <td><a th:text="${unit} eq '0' ? ${weight.pmWeight} : ${#numbers.formatDecimal(weight.pmWeight*2,1,2)}"></a></td>
 				    </tr>
 				    
 				  </tbody>
@@ -93,18 +93,17 @@
 							</td>
 						</tr>
 						<tr>
-							<td><label>早上体重：</label></td>
+							<td><label th:text="${unit} eq '0' ? '早上体重（Kg）' : '早上体重（g）'">早上体重：</label></td>
 							<td><input type="text" class="form-control" id="amWeight" name="amWeight" onkeyup="value=value.replace(/[^\d.]/g,'')"></td>
 						</tr>
 						<tr>
-							<td><label>晚上体重：</label></td>
+							<td><label th:text="${unit} eq '0' ? '晚上体重（Kg）' : '晚上体重（g）'">晚上体重：</label></td>
 							<td><input type="text" class="form-control" id="pmWeight" name="pmWeight" onkeyup="value=value.replace(/[^\d.]/g,'')"></td>
 						</tr>
 					</table>
 				</div>
 				<div class="modal-footer">
 			        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-			        <!-- <button type="button" class="btn btn-primary" onclick="save()">保存</button> -->
 			        <button type="submit" class="btn btn-primary">保存</button>
 			      </div>
 			</div>
@@ -116,12 +115,19 @@
 			var amData = [];
 			var pmData = [];
 			var weightList = [[${weightList}]];
+			var unit = [[${unit}]];
 			if (weightList != null) {
             	var weightListSize = weightList.length;
                 for (i = 0 ; i < weightListSize ; i ++) {
                 	dateData.push(weightList[i].date);
-                	amData.push(weightList[i].amWeight);
-                	pmData.push(weightList[i].pmWeight);
+                	if (unit == '0') {
+                    	amData.push(weightList[i].amWeight);
+                    	pmData.push(weightList[i].pmWeight);
+                	} else if (unit == '1') {
+                    	amData.push(weightList[i].amWeight * 2);
+                    	pmData.push(weightList[i].pmWeight * 2);
+                	}
+                	
                 }
             }
 			return {

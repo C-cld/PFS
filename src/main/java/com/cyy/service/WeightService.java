@@ -23,15 +23,15 @@ public class WeightService
 		return weightMapper.find();
 	}
 	
-	public void add(String date, String amWeight, String pmWeight) throws ParseException
+	public void add(String date, double amWeight, double pmWeight) throws ParseException
 	{
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd") ;
 		Date datee = dateFormat.parse(date);
 		Weight weight = new Weight();
 		weight.setId(UUID.randomUUID().toString().replace("-", "").toLowerCase());
 		weight.setDate(datee);
-		weight.setAmWeight(Double.valueOf(amWeight.toString()));
-		weight.setPmWeight(Double.valueOf(pmWeight.toString()));
+		weight.setAmWeight(amWeight);
+		weight.setPmWeight(pmWeight);
 		weightMapper.add(weight);
 	}
 }
