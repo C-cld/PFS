@@ -1,0 +1,57 @@
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="utf-8" />
+		<link th:href="@{/css/account.css}" rel="stylesheet" type="text/css">
+		<script th:src="@{/js/jquery-2.1.1.min.js}"></script>
+	</head>
+	<body>
+		<div class="content">
+			<div th:each="account,accountStat : ${accountList}" class="card">
+				<div class="close" onclick="deleteCard(this)"></div>
+				<div class="card-content">
+					
+					<div class="top">
+						<a th:text="${account.name}"></a>
+					</div>
+					<hr>
+					<div class="middle">
+						<div class="middle-account">
+							<a>账号：</a>
+							<a th:text="${account.username}"></a>
+						</div>
+						<div class="middle-password">
+							<a>密码：</a>
+							<a th:text="${account.password}" style="display:none"></a>
+							<div class="unvisiable" onclick="changePass(this)"></div>
+						</div>
+					</div>
+					<div class="bottom">
+						<button class="redirect">前往</button>
+					</div>
+				</div>
+				
+			</div>
+		</div>
+		<script type="text/javascript">
+				function deleteCard(obj) {
+					obj.parentNode.style.display="none";
+					$.ajax({        
+						url:'/delete-account', 
+						success:function(data){
+						}  
+					});  
+				}
+				
+				function changePass(obj) {
+					if (obj.getAttribute("class") == "unvisiable") {
+						obj.setAttribute("class","visiable");
+						obj.previousElementSibling.style.display="inline";
+					} else if (obj.getAttribute("class") == "visiable") {
+						obj.setAttribute("class","unvisiable");
+						
+						obj.previousElementSibling.style.display="none";
+					}
+				}
+			</script>
+	</body>
+</html>

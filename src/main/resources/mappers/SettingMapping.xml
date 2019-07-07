@@ -13,7 +13,7 @@
     </select>
 
     <update id="update" parameterType="com.cyy.domain.Setting">
-        update Setting
+        update setting
         <set>
             <if test="value != null">`value`=#{value},</if>
         </set>
