@@ -4,4 +4,8 @@
 	<select id="find" resultType="com.cyy.domain.Account">
 		select name,username,password,url from account where name like "%"#{1}"%"
 	</select>
+
+	<insert id="add" parameterType="com.cyy.domain.Account" keyProperty = "id">
+		insert into account (id,name,username,password,url) values(#{id},#{name},#{username},#{password},#{url});
+	</insert>
 </mapper>

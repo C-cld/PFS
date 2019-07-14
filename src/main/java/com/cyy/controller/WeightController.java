@@ -42,7 +42,7 @@ public class WeightController {
 		}
 	}
 	
-	@RequestMapping(value = "/add")
+	@RequestMapping(value = "/add-weight")
 	public ModelAndView add(@RequestParam(value = "date", required = true) String date, 
 							@RequestParam(value = "amWeight", required = true, defaultValue = "0") String amWeight, 
 							@RequestParam(value = "pmWeight", required = true, defaultValue = "0") String pmWeight) {

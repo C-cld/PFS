@@ -9,4 +9,5 @@ import com.cyy.domain.Account;
 @Mapper
 public interface AccountMapper {
 	List<Account> find(String keyword);
+	void add(Account account);
 }
