@@ -1,0 +1,85 @@
+.tag {
+    border: 1px solid;
+    float: left;
+    height: -webkit-fill-available;
+    overflow: auto;
+}
+.label-selected {
+    width: 200px;
+    min-height:40px;
+    padding: 5px;
+    margin:5px;
+    border:1px solid #ccc;
+    background-color: #fff;
+    position: relative;
+    border-radius: 6px;
+}
+.label-items {
+    width: 200px;
+    border: 1px solid #e6e6e6;
+    border-radius:6px;
+    padding: 5px;
+    margin:5px;
+}
+.label-items li {
+    display: flex;
+    line-height: 30px;
+    padding: 0 1rem;
+    border: 1px solid #e6e6e6;
+    border-radius: 4px;
+    margin-bottom: 5px;
+}
+.glyphicon-plus {
+    color: #00b5f9;
+    font-size: 25px;
+}
+.new-tag {
+    width:75%;
+    height: 30px;
+    border-radius:2px;
+    border: 1px solid #ccc;
+}
+.new-tag:focus{
+    transition: all .5s ease;
+    border-color: #66afe9;
+    outline: 0;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
+}
+.add {
+    margin-bottom:5px;
+}
+.add-tag {
+    background-color: #1E9FFF;
+    padding: 5px 9px;
+    color: #fff;
+    border: none;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius:3px;
+    opacity: .9;
+}
+.label-selected li {
+    display: inline-block;
+    height: 30px;
+    line-height: 30px;
+    background-color: #66CCFF;
+    color: #FFFFFF;
+    margin: 5px;
+    border-radius: 5px;
+    font-size: 14px;
+    padding: 0 5px 0 10px;
+    letter-spacing: 2px;
+    cursor: pointer;
+}
+.label-selected li .delete{
+    display: block;
+	float: right;
+	width: 15px;
+	height: 15px;
+	background-image: url(../image/x.png);
+	background-repeat: round;
+	margin-top: 8px;
+	margin-right:5px;
+	margin-left:5px;
+	transition: all 0.5s;
+}
