@@ -1,7 +1,7 @@
 .tag {
-    border: 1px solid;
     float: left;
-    height: -webkit-fill-available;
+    /*height: -webkit-fill-available;*/
+    height:50%;
     overflow: auto;
 }
 .label-selected {
@@ -82,4 +82,35 @@
 	margin-right:5px;
 	margin-left:5px;
 	transition: all 0.5s;
+}
+.label-items .selected{
+	color:#ccc;
+
+}
+.label-items .selected .glyphicon-plus{
+	color:#ccc;
+}
+.files {
+    overflow: auto;
+    position: absolute;
+}
+.files li {
+    width: 200px;
+    display:block;
+    padding:5px 10px;
+    margin: 0px 5px;
+    transition: all 0.2s;
+}
+.files li:hover{
+    background-color: #EBEBEB;
+}
+hr {
+    margin:0px !important;
+	width:100%;
+    border: 0;
+    height: 1px !important;
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(193, 193, 193, 0.8), rgba(0, 0, 0, 0));
+}
+.file {
+    width:200px;
 }

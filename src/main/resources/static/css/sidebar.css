@@ -87,6 +87,7 @@ dd>a:hover {
 	color:#00B5F9;
 }
 .main-container {
+    margin-top:65px;
 	margin-left:200px;
 	position:absolute;
 	top:0;
@@ -119,11 +120,4 @@ iframe {
     height: 60px;
     line-height: 60px;
     text-align: center;
-}
-.main-container {
-	position:absolute;
-	margin-top:65px;
-	top:0;
-	left:0;
-	right:0;
 }
