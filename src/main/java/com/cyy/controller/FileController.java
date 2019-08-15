@@ -1,7 +1,8 @@
 package com.cyy.controller;
 
-import org.apache.catalina.connector.ClientAbortException;
-import org.springframework.core.io.FileSystemResource;
+import com.cyy.domain.UploadFile;
+import com.cyy.service.FileService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -12,40 +13,51 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.util.UUID;
 
 @Controller
 public class FileController {
+    @Autowired
+    private FileService fileService;
+
     @RequestMapping(value = "/porn")
     public ModelAndView porn() {
-        ModelAndView mav = new ModelAndView("porn");
-        return mav;
+        return new ModelAndView("porn");
     }
 
     @RequestMapping(value = "/upload-file", method = RequestMethod.POST)
     @ResponseBody
-    public String upload(@RequestParam("videoFile") MultipartFile uploadfile, @RequestParam("videoTags") String tagIds) {
-        //String fileName = uploadfile.getOriginalFilename();
+    public String upload(@RequestParam("videoFile") MultipartFile uploadedFile, @RequestParam("videoTags") String tagIds) {
         String fileName = UUID.randomUUID().toString().replace("-", "").toLowerCase();
-        String filePath = "E://";
-        File dest = new File(filePath + fileName);
+        String originalName = uploadedFile.getOriginalFilename();
+        long size = uploadedFile.getSize();
+        UploadFile file = new UploadFile();
+        file.setId(fileName);
+        file.setOriginalName(originalName);
+        file.setName(fileName);
+        file.setSize(size);
+
+        // 上传到移动硬盘，并添加到数据库
         try {
-            uploadfile.transferTo(dest);
-            return "上传成功";
-        } catch (IOException e) {
+            fileService.uploadFile(file, uploadedFile);
+        } catch (Exception e) {
             e.printStackTrace();
+            return "上传失败";
         }
-        return "上传失败！";
+        return "success";
     }
 
     @RequestMapping(value = "/play-video")
     @ResponseBody
     public void play(HttpServletRequest request , HttpServletResponse response) {
-        BufferedOutputStream outputStream = null;
+        BufferedOutputStream outputStream;
         RandomAccessFile randomAccessFile = null;
         try {
-            File file = new File("E://uploadvideo/7115a6d9e67e4ef5b0468f23bedfe46f");
+            File file = new File(fileService.uploadPath + "3dc59afe6bd9480c95eb626f1bf962aa");
             //开始下载位置
             long startByte = 0;
             //结束下载位置
@@ -54,7 +66,7 @@ public class FileController {
             String range = request.getHeader("Range");
             if (range != null && range.contains("bytes=") && range.contains("-")) {
                 range = range.substring(range.lastIndexOf("=") + 1).trim();
-                String ranges[] = range.split("-");
+                String[] ranges = range.split("-");
                 //判断range的类型
                 if (ranges.length == 1) {
                     //类型一：bytes=-2343
@@ -74,10 +86,6 @@ public class FileController {
             }
             //要下载的长度
             long contentLength = endByte - startByte + 1;
-            //文件名
-            String fileName = file.getName();
-            //文件类型
-            String contentType = request.getServletContext().getMimeType(fileName);
             response.setHeader("Accept-Ranges", "bytes");
             response.setStatus(response.SC_PARTIAL_CONTENT);
             response.setHeader("Content-Range", "bytes " + startByte + "-" + endByte + "/" + file.length());
@@ -99,13 +107,12 @@ public class FileController {
             if (transmitted < contentLength) {
                 len = randomAccessFile.read(buff, 0, (int) (contentLength - transmitted));
                 outputStream.write(buff, 0, len);
-                transmitted += len;
             }
             outputStream.flush();
             response.flushBuffer();
             randomAccessFile.close();
 
-        } catch (Exception e) {
+        } catch (Exception ignored) {
 
         } finally {
             try {
