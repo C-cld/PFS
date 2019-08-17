@@ -2,6 +2,7 @@ package com.cyy.service;
 
 import com.cyy.dao.FileMapper;
 import com.cyy.domain.FileToTag;
+import com.cyy.domain.Tag;
 import com.cyy.domain.UploadFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,6 +35,9 @@ public class FileService {
             ftt.setTagId(tagId);
             fileMapper.fileToTag(ftt);
         }
+    }
 
+    public void addTag(Tag tag) throws Exception  {
+        fileMapper.addTag(tag);
     }
 }

@@ -1,5 +1,6 @@
 package com.cyy.controller;
 
+import com.cyy.domain.Tag;
 import com.cyy.domain.UploadFile;
 import com.cyy.service.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -125,5 +126,20 @@ public class FileController {
                 e.printStackTrace();
             }
         }
+    }
+
+    @RequestMapping(value = "/add-tag")
+    @ResponseBody
+    public String addTag(String tagName) {
+        Tag tag = new Tag();
+        tag.setId(UUID.randomUUID().toString().replace("-", "").toLowerCase());
+        tag.setName(tagName);
+        try {
+            fileService.addTag(tag);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "fail";
+        }
+        return "success";
     }
 }

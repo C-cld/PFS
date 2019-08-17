@@ -8,4 +8,8 @@
     <insert id="fileToTag" parameterType="com.cyy.domain.FileToTag">
         insert into file_to_tag (id, file_id, tag_id, create_date) values (#{id}, #{fileId}, #{tagId}, now())
     </insert>
+
+    <insert id="addTag" parameterType="com.cyy.domain.Tag">
+        insert into tag (id, name, create_date) values (#{id}, #{name}, now())
+    </insert>
 </mapper>

@@ -41,6 +41,19 @@ $(".label-selected").on("click", "li .delete", function(){
     $(".label-items").find("li[data='"+id+"']").removeClass("selected");
 });
 
+// 添加标签
+$(".add-tag").on("click", function(){
+    var tagName = $(".new-tag").val();
+    $.ajax({
+        url:"./add-tag?tagName=" + tagName,
+        success:function(data){
+            if (data == "success") {
+                alert("添加成功");
+            }
+        }
+    });
+});
+
 // 上传文件
 $(".upload").on("click", function(){
     var formData = new FormData();

@@ -1,6 +1,7 @@
 package com.cyy.dao;
 
 import com.cyy.domain.FileToTag;
+import com.cyy.domain.Tag;
 import com.cyy.domain.UploadFile;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -8,4 +9,5 @@ import org.apache.ibatis.annotations.Mapper;
 public interface FileMapper {
     void addFile(UploadFile uploadFile);
     void fileToTag(FileToTag fileToTag);
+    void addTag(Tag tag);
 }
