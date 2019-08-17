@@ -1,6 +1,7 @@
 package com.cyy.service;
 
 import com.cyy.dao.FileMapper;
+import com.cyy.domain.FileToTag;
 import com.cyy.domain.UploadFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -9,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.UUID;
 
 @Service
 public class FileService {
@@ -18,9 +20,20 @@ public class FileService {
     @Value("${uploadPath}")
     public String uploadPath;
 
-    public void uploadFile(UploadFile uploadFile, MultipartFile uploadedFile) throws Exception {
+    public void uploadFile(UploadFile uploadFile, MultipartFile uploadedFile, String[] tagIdArr) throws Exception {
         File dest = new File(uploadPath + uploadFile.getName());
+        // 1.保存到硬盘
         uploadedFile.transferTo(dest);
-        fileMapper.add(uploadFile);
+        // 2. 保存到数据库
+        fileMapper.addFile(uploadFile);
+        // 3. 关联标签
+        for (String tagId : tagIdArr) {
+            FileToTag ftt = new FileToTag();
+            ftt.setId(UUID.randomUUID().toString().replace("-", "").toLowerCase());
+            ftt.setFileId(uploadFile.getId());
+            ftt.setTagId(tagId);
+            fileMapper.fileToTag(ftt);
+        }
+
     }
 }

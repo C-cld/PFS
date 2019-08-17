@@ -41,9 +41,11 @@ public class FileController {
         file.setName(fileName);
         file.setSize(size);
 
+        String[] tagIdArr = tagIds.split(",");
+
         // 上传到移动硬盘，并添加到数据库
         try {
-            fileService.uploadFile(file, uploadedFile);
+            fileService.uploadFile(file, uploadedFile, tagIdArr);
         } catch (Exception e) {
             e.printStackTrace();
             return "上传失败";
