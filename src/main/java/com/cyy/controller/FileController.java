@@ -18,6 +18,7 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.List;
 import java.util.UUID;
 
 @Controller
@@ -27,7 +28,10 @@ public class FileController {
 
     @RequestMapping(value = "/porn")
     public ModelAndView porn() {
-        return new ModelAndView("porn");
+        ModelAndView mav = new ModelAndView("porn");
+        List<Tag> tagList = fileService.findTag(null);
+        mav.addObject("tagList", tagList);
+        return mav;
     }
 
     @RequestMapping(value = "/upload-file", method = RequestMethod.POST)
@@ -130,7 +134,7 @@ public class FileController {
 
     @RequestMapping(value = "/add-tag")
     @ResponseBody
-    public String addTag(String tagName) {
+    public Tag addTag(String tagName) {
         Tag tag = new Tag();
         tag.setId(UUID.randomUUID().toString().replace("-", "").toLowerCase());
         tag.setName(tagName);
@@ -138,8 +142,8 @@ public class FileController {
             fileService.addTag(tag);
         } catch (Exception e) {
             e.printStackTrace();
-            return "fail";
+            return null;
         }
-        return "success";
+        return tag;
     }
 }

@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -35,6 +36,11 @@ public class FileService {
             ftt.setTagId(tagId);
             fileMapper.fileToTag(ftt);
         }
+    }
+
+    public List<Tag> findTag(String[] tagIds) {
+        List<Tag> tagList = fileMapper.findTag(tagIds);
+        return tagList;
     }
 
     public void addTag(Tag tag) throws Exception  {

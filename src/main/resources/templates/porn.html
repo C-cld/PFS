@@ -12,33 +12,11 @@
         <div class="label-selected"></div>
         <div class="label-items">
             <div class="add"><input type="text" class="new-tag"><button class="add-tag">添加</button></div>
-            <li data="1"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span><span>1</span></li>
-            <li data="2"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span><span>中文标签</span></li>
-            <li data="3"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span><span>3</span></li>
-            <li data="4"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span><span>4</span></li>
-            <li data="5"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span><span>5</span></li>
-            <li data="6"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span><span>6</span></li>
-            <li data="7"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span><span>7</span></li>
-            <li data="8"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span><span>8</span></li>
-            <li data="9"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span><span>9</span></li>
-            <li data="1"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span><span>1</span></li>
-            <li data="2"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span><span>2</span></li>
-            <li data="3"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span><span>3</span></li>
-            <li data="4"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span><span>4</span></li>
-            <li data="5"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span><span>5</span></li>
-            <li data="6"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span><span>6</span></li>
-            <li data="7"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span><span>7</span></li>
-            <li data="8"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span><span>8</span></li>
-            <li data="9"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span><span>9</span></li>
-            <li data="1"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span><span>1</span></li>
-            <li data="2"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span><span>2</span></li>
-            <li data="3"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span><span>3</span></li>
-            <li data="4"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span><span>4</span></li>
-            <li data="5"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span><span>5</span></li>
-            <li data="6"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span><span>6</span></li>
-            <li data="7"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span><span>7</span></li>
-            <li data="8"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span><span>8</span></li>
-            <li data="9"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span><span>9</span></li>
+            <li th:each="tag,tagStat : ${tagList}" th:data="${tag.id}">
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                <span>[[${tag.name}]]</span>
+            </li>
+
         </div>
     </div>
     <div class="files">
@@ -66,7 +44,7 @@
 
 
     <div class="content">
-        <video src="./play-video" controls></video>
+        <video src="./play-video" controls class="video"></video>
     </div>
     <script th:src="@{/js/porn.js}"></script>
 </body>

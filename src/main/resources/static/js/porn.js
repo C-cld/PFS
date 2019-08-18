@@ -47,8 +47,11 @@ $(".add-tag").on("click", function(){
     $.ajax({
         url:"./add-tag?tagName=" + tagName,
         success:function(data){
-            if (data == "success") {
+            if (data != null) {
+                var labelHTML = "<li data=" + data.id + "><span class='glyphicon glyphicon-plus' aria-hidden='true'></span><span>" + data.name + "</span>";
+                $(".label-items").append(labelHTML);
                 alert("添加成功");
+                $(".new-tag").val("");
             }
         }
     });
@@ -70,6 +73,7 @@ $(".upload").on("click", function(){
         success:function(data){
             if (data == 'success') {
                 alert('上传成功！');
+                $(".file")[0].files[0] = null;
             }
         },
         error:function(request) {

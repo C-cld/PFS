@@ -12,4 +12,8 @@
     <insert id="addTag" parameterType="com.cyy.domain.Tag">
         insert into tag (id, name, create_date) values (#{id}, #{name}, now())
     </insert>
+
+    <select id="findTag" resultType="com.cyy.domain.Tag">
+        select id, name, create_date as createDate from tag
+    </select>
 </mapper>
