@@ -43,7 +43,12 @@ public class FileService {
         return tagList;
     }
 
-    public void addTag(Tag tag) throws Exception  {
+    public void addTag(Tag tag) {
         fileMapper.addTag(tag);
+    }
+
+    public List<UploadFile> findFile(String[] tagIds) {
+        List<UploadFile> uploadFileList = fileMapper.findFile(tagIds);
+        return uploadFileList;
     }
 }

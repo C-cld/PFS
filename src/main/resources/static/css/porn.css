@@ -117,3 +117,20 @@ hr {
 .video {
     margin-left:20px;
 }
+.upload {
+    width: 180px;
+    height: 30px;
+    background-color: #1E9FFF;
+    border-radius: 3px;
+    color: #fff;
+    border: none;
+    opacity: .9;
+    margin:5px 0px;
+}
+.file-upload {
+    width: 200px;
+    border: 1px solid #e6e6e6;
+    border-radius:6px;
+    padding: 5px;
+    margin:5px;
+}
