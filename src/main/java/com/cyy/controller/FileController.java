@@ -30,7 +30,7 @@ public class FileController {
     public ModelAndView porn() {
         ModelAndView mav = new ModelAndView("porn");
         List<Tag> tagList = fileService.findTag(null);
-        List<UploadFile> uploadFileList = fileService.findFile(null);
+        //List<UploadFile> uploadFileList = fileService.findFile(null);
         mav.addObject("tagList", tagList);
         return mav;
     }
