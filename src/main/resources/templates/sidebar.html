@@ -7,8 +7,9 @@
 		<script type="text/javascript" th:src="@{/layui/layui.js}"></script>
 	</head>
 	<body>
-	<div class="left">
+	<div class="layui-side layui-side-menu">
 		<ul class="layui-nav layui-nav-tree">
+			<div class="layui-logo">蔡云野的家庭管理中心</div>
 			<li class="layui-nav-item layui-nav-itemed">
 				<a href="javascript:;">默认展开</a>
 				<dl class="layui-nav-child">
@@ -34,20 +35,25 @@
 		</ul>
 	</div>
 
-	<div class="main">
-		<div class="top">
-			<ul class="layui-nav head">
-				<li class="layui-nav-item">
-					<a href=""><img src="//t.cn/RCzsdCq" class="layui-nav-img">我</a>
-					<dl class="layui-nav-child">
-						<dd><a href="javascript:;">修改信息</a></dd>
-						<dd><a href="javascript:;">安全管理</a></dd>
-						<dd><a href="javascript:;">退了</a></dd>
-					</dl>
-				</li>
-			</ul>
-		</div>
+	<div class="layui-header">
+		<ul class="layui-nav layui-layout-left">
+			<li class="layui-nav-item">
+				<a href="javascript:;"><i class="layui-icon layui-icon-shrink-right"></i> </a>
+			</li>
+		</ul>
+		<ul class="layui-nav layui-layout-right">
+			<li class="layui-nav-item">
+				<a href="javascript:;"><img src="//t.cn/RCzsdCq" class="layui-nav-img">我</a>
+				<dl class="layui-nav-child">
+					<dd><a href="javascript:;">修改信息</a></dd>
+					<dd><a href="javascript:;">安全管理</a></dd>
+					<dd><a href="javascript:;">退了</a></dd>
+				</dl>
+			</li>
+		</ul>
+	</div>
 
+	<div class="layui-body">
 		<div id="content" class="content"></div>
 	</div>
 	<script>
@@ -58,14 +64,9 @@
 		layui.use('layer', function(){
 			var $ = layui.jquery, layer = layui.layer;
 
-			$(window).on('resize', function(){
-				$('.content').height($('.left').height() - 60);
-			});
-
-			$('.layui-nav-child a').on('click', function(){
+			$('.layui-side .layui-nav-child a').on('click', function(){
 				var othis = $(this), url = othis.data('url');
 				$('#content').html("<iframe src='./" + url + "' width='100%' height='100%' name='iframe' class='iframe'></iframe>");
-				$('.content').height($('.left').height() - 60);
 			});
 		});
 	</script>

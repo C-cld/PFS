@@ -1,54 +1,50 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <link th:href="@{/css/porn.css}" rel="stylesheet" type="text/css">
-    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" type="text/css">
-    <script th:src="@{/js/jquery-2.1.1.min.js}"></script>
+    <link th:href="@{/layui/css/layui.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{/layui/css/modules/formSelects-v4.css}" rel="stylesheet" type="text/css">
+    <script type="text/javascript" th:src="@{/layui/layui.js}"></script>
 
     <title>Title</title>
 </head>
 <body>
-    <div class="tag">
-        <div class="label-selected"></div>
-        <div class="label-items">
-            <div class="add"><input type="text" class="new-tag"><button class="add-tag">添加</button></div>
-            <li th:each="tag,tagStat : ${tagList}" th:data="${tag.id}">
-                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                <span>[[${tag.name}]]</span>
-            </li>
-
+<form class="layui-form" action="">
+    <div class="layui-form-item" style="width: 500px;">
+        <label class="layui-form-label">选择框</label>
+        <div class="layui-input-block">
+            <select name="city" lay-verify="required" xm-select="select7_1" xm-select-search="">
+                <option value=""></option>
+                <option value="0">北京</option>
+                <option value="1">上海</option>
+                <option value="2">广州</option>
+                <option value="3">深圳</option>
+                <option value="4">杭州</option>
+            </select>
         </div>
     </div>
+</form>
 
-    <div class="files">
-        <div class="file-upload">
-            <input type="file" class="file">
-            <button class="upload">在当前标签下上传视频</button>
-        </div>
+<script>
+    //Demo
+    layui.use('form', function(){
+        var form = layui.form;
+    });
+    layui.use(['multiSelect'],function(){
+        var multiSelect = layui.multiSelect;
+        // 如果异步操作了数据，比如在下拉项追加了一项，使用multiSelect.render(type, filter);type, filter参数跟layui官方的form.render(type, filter)一毛一样，可前往查看
+        multiSelect.render(type, filter);
+    });
 
-        <li><span>星际穿越.mp4</span></li><hr>
-        <li><span>星际穿越2.mp4</span></li><hr>
-        <li><span>星际穿越3.mp4</span></li><hr>
-        <li><span>星际穿越4.mp4</span></li><hr>
-        <li><span>星际穿越4.mp4</span></li><hr>
-        <li><span>星际穿越4.mp4</span></li><hr>
-        <li><span>星际穿越4.mp4</span></li><hr>
-        <li><span>星际穿越4.mp4</span></li><hr>
-        <li><span>星际穿越4.mp4</span></li><hr>
-        <li><span>星际穿越4.mp4</span></li><hr>
-        <li><span>星际穿越4.mp4</span></li><hr>
-        <li><span>星际穿越4.mp4</span></li><hr>
-        <li><span>星际穿越4.mp4</span></li><hr>
-        <li><span>星际穿越4.mp4</span></li><hr>
-        <li><span>星际穿越4.mp4</span></li><hr>
-        <li><span>星际穿越4.mp4</span></li><hr>
-        <li><span>星际穿越4.mp4</span></li><hr>
-    </div>
+    layui.config({
+        base: '../pfs/layui/lay/modules/' //此处路径请自行处理, 可以使用绝对路径
+    }).extend({
+        formSelects: 'formSelects-v4.min'
+    });
+    //加载模块
+    layui.use(['jquery', 'formSelects'], function(){
+        var formSelects = layui.formSelects;
 
-
-    <div class="content">
-        <video src="./play-video" controls class="video"></video>
-    </div>
-    <script th:src="@{/js/porn.js}"></script>
+    });
+</script>
 </body>
 </html>
