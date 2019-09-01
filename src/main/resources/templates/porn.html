@@ -3,48 +3,82 @@
     <meta charset="UTF-8">
     <link th:href="@{/layui/css/layui.css}" rel="stylesheet" type="text/css">
     <link th:href="@{/layui/css/modules/formSelects-v4.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{/css/porn.css}" rel="stylesheet" type="text/css">
     <script type="text/javascript" th:src="@{/layui/layui.js}"></script>
 
     <title>Title</title>
 </head>
 <body>
-<form class="layui-form" action="">
-    <div class="layui-form-item" style="width: 500px;">
-        <label class="layui-form-label">选择框</label>
+<div class="top">
+    <div class="top-item tag-search">
+        <label class="layui-form-label">标签</label>
         <div class="layui-input-block">
-            <select name="city" lay-verify="required" xm-select="select7_1" xm-select-search="">
-                <option value=""></option>
-                <option value="0">北京</option>
-                <option value="1">上海</option>
-                <option value="2">广州</option>
-                <option value="3">深圳</option>
-                <option value="4">杭州</option>
+            <select name="tags" lay-verify="required" xm-select="tags" xm-select-search="" class="tags">
+                <option th:each="tag,tagStat : ${tagList}" th:value="${tag.id}" th:text="${tag.name }"></option>
             </select>
         </div>
+
     </div>
-</form>
+    <div class="top-item">
+        <button class="layui-btn search" ><i class="layui-icon layui-icon-search"></i>搜索</button>
+    </div>
+</div>
+<div class="file-table">
+    <table class="layui-table" lay-data="{width: 905, url:'/pfs/search-video', page:true, id:'porn-video'}" lay-filter="porn-video">
+        <thead>
+            <tr>
+                <th lay-data="{field:'originalName', width:400}">文件名</th>
+                <th lay-data="{field:'createDate', width:200, sort: true}">上传时间</th>
+                <th lay-data="{field:'size', width:100, sort: true}">大小</th>
+                <th lay-data="{width:200, align:'center', toolbar: '#opration'}"></th>
+            </tr>
+        </thead>
+    </table>
+    <script type="text/html" id="opration">
+        <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
+        <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    </script>
+</div>
 
 <script>
-    //Demo
-    layui.use('form', function(){
-        var form = layui.form;
-    });
-    layui.use(['multiSelect'],function(){
-        var multiSelect = layui.multiSelect;
-        // 如果异步操作了数据，比如在下拉项追加了一项，使用multiSelect.render(type, filter);type, filter参数跟layui官方的form.render(type, filter)一毛一样，可前往查看
-        multiSelect.render(type, filter);
-    });
 
     layui.config({
         base: '../pfs/layui/lay/modules/' //此处路径请自行处理, 可以使用绝对路径
     }).extend({
         formSelects: 'formSelects-v4.min'
     });
-    //加载模块
-    layui.use(['jquery', 'formSelects'], function(){
+    layui.use(['formSelects'], function(){
         var formSelects = layui.formSelects;
 
     });
+    layui.use('layer', function(){
+        var $ = layui.jquery, layer = layui.layer;
+
+        $('.search').on('click', function(){
+            var selectedTags = layui.formSelects.value('tags', 'val');
+            console.log(selectedTags);
+        });
+    });
+
+    layui.use('table', function() {
+        var table = layui.table;
+        //监听工具条
+        table.on('tool(porn-video)', function(obj){
+            var data = obj.data;
+            if(obj.event === 'detail'){
+                layer.msg('ID：'+ data.id + ' 的查看操作');
+            } else if(obj.event === 'del'){
+                layer.confirm('真的删除行么', function(index){
+                    obj.del();
+                    layer.close(index);
+                });
+            } else if(obj.event === 'edit'){
+                layer.alert('编辑行：<br>'+ JSON.stringify(data))
+            }
+        });
+    });
+
 </script>
 </body>
 </html>

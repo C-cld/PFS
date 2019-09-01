@@ -1,5 +1,8 @@
 package com.cyy.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.cyy.domain.Tag;
 import com.cyy.domain.UploadFile;
 import com.cyy.service.FileService;
@@ -30,10 +33,27 @@ public class FileController {
     public ModelAndView porn() {
         ModelAndView mav = new ModelAndView("porn");
         List<Tag> tagList = fileService.findTag(null);
-        //List<UploadFile> uploadFileList = fileService.findFile(null);
         mav.addObject("tagList", tagList);
         return mav;
     }
+    @RequestMapping(value = "/search-video")
+    @ResponseBody
+    public String searchVideo(@RequestParam(value = "tagIds", required = false)String tagId) {
+        String[] tagIds = null;
+        if (tagId != null) {
+            tagIds = tagId.split(",");
+        }
+        List<UploadFile> uploadFileList = fileService.findFile(tagIds);
+        JSONArray array= JSONArray.parseArray(JSON.toJSONString(uploadFileList));
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("msg", "");
+        jsonObject.put("code", 0);
+        jsonObject.put("data", array);
+        jsonObject.put("count", uploadFileList.size());
+        System.out.println(jsonObject.toString());
+        return jsonObject.toString();
+    }
+
 
     @RequestMapping(value = "/upload-file", method = RequestMethod.POST)
     @ResponseBody

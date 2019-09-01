@@ -16,4 +16,14 @@
     <select id="findTag" resultType="com.cyy.domain.Tag">
         select id, name, create_date as createDate from tag
     </select>
+
+    <select id="findFile" resultType="com.cyy.domain.UploadFile">
+        select f.id,f.original_name as originalName,f.size,f.create_date as createDate from upload_file f
+        <if test="tagIds != null">
+            left join file_to_tag ft on f.id = ft.file_id where ft.tag_id in
+            <foreach item="tag_id" index="index" collection="tagIds" open="(" separator="," close=")">
+                #{tag_id}
+            </foreach>
+        </if>
+    </select>
 </mapper>
