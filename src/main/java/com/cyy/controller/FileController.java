@@ -40,7 +40,7 @@ public class FileController {
     @ResponseBody
     public String searchVideo(@RequestParam(value = "tagIds", required = false)String tagId) {
         String[] tagIds = null;
-        if (tagId != null) {
+        if (tagId != null && !tagId.equals("")) {
             tagIds = tagId.split(",");
         }
         List<UploadFile> uploadFileList = fileService.findFile(tagIds);

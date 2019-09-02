@@ -18,12 +18,18 @@
     </select>
 
     <select id="findFile" resultType="com.cyy.domain.UploadFile">
-        select f.id,f.original_name as originalName,f.size,f.create_date as createDate from upload_file f
-        <if test="tagIds != null">
-            left join file_to_tag ft on f.id = ft.file_id where ft.tag_id in
-            <foreach item="tag_id" index="index" collection="tagIds" open="(" separator="," close=")">
-                #{tag_id}
+        select id, original_name as originalName, size, create_date as createDate from upload_file
+        <if test="tagIds != null and arrLength != 0">
+            where id in (select file_id from (select file_id,count(*) as count from file_to_tag where
+            <foreach item="tag_id" collection="tagIds" index="index">
+                <if test="index == 0">
+                    tag_id = #{tag_id}
+                </if>
+                <if test="index != 0">
+                    or tag_id = #{tag_id}
+                </if>
             </foreach>
+            GROUP BY file_id having count = #{arrLength}) tmp)
         </if>
     </select>
 </mapper>

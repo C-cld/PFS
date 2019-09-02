@@ -54,14 +54,10 @@
     });
     layui.use('layer', function(){
         var $ = layui.jquery, layer = layui.layer;
-
-        $('.search').on('click', function(){
-            var selectedTags = layui.formSelects.value('tags', 'val');
-            console.log(selectedTags);
-        });
     });
 
     layui.use('table', function() {
+        var $ = layui.jquery, layer = layui.layer;
         var table = layui.table;
         //监听工具条
         table.on('tool(porn-video)', function(obj){
@@ -76,6 +72,13 @@
             } else if(obj.event === 'edit'){
                 layer.alert('编辑行：<br>'+ JSON.stringify(data))
             }
+        });
+
+        $('.search').on('click', function(){
+            var selectedTags = layui.formSelects.value('tags', 'val');
+            table.reload('porn-video', {
+                url:'/pfs/search-video?tagIds=' + selectedTags
+            });
         });
     });
 

@@ -48,7 +48,7 @@ public class FileService {
     }
 
     public List<UploadFile> findFile(String[] tagIds) {
-        List<UploadFile> uploadFileList = fileMapper.findFile(tagIds);
+        List<UploadFile> uploadFileList = fileMapper.findFile(tagIds, tagIds == null ? 0 : tagIds.length);
         return uploadFileList;
     }
 }

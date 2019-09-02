@@ -14,5 +14,5 @@ public interface FileMapper {
     void fileToTag(FileToTag fileToTag);
     void addTag(Tag tag);
     List<Tag> findTag(@Param("tagIds") String[] tagIds);
-    List<UploadFile> findFile(@Param("tagIds") String[] tagIds);
+    List<UploadFile> findFile(@Param("tagIds") String[] tagIds, @Param("arrLength") int arrLength);
 }
