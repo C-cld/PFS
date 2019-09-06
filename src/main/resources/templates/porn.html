@@ -10,51 +10,47 @@
 </head>
 <body>
 <div class="layui-fluid">
-    <div class="layui-row">
-        <div class="layui-col-md8">
-            <div class="layui-card file-list">
-                <div class="layui-form layui-card-header">
-                    <div class="layui-form-item">
-                        <div class="layui-inline first">
-                            <label class="layui-form-label">标签</label>
-                            <div class="layui-input-block">
-                                <select name="tags" lay-verify="required" xm-select="tags" xm-select-search="" class="tags">
-                                    <option th:each="tag,tagStat : ${tagList}" th:value="${tag.id}" th:text="${tag.name }"></option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="layui-inline">
-                            <button class="layui-btn search" ><i class="layui-icon layui-icon-search"></i>搜索</button>
-                        </div>
+    <div class="layui-card file-list">
+        <div class="layui-form layui-card-header">
+            <div class="layui-form-item">
+                <div class="layui-inline first">
+                    <label class="layui-form-label">标签</label>
+                    <div class="layui-input-block">
+                        <select name="tags" lay-verify="required" xm-select="tags" xm-select-search="" class="tags">
+                            <option th:each="tag,tagStat : ${tagList}" th:value="${tag.id}" th:text="${tag.name }"></option>
+                        </select>
                     </div>
-
                 </div>
-                <div class="layui-card-body">
-                    <table class="layui-table" lay-data="{width: 905, url:'/pfs/search-video', page:true, id:'porn-video'}" lay-filter="porn-video">
-                        <thead>
-                        <tr>
-                            <th lay-data="{field:'originalName', width:400}">文件名</th>
-                            <th lay-data="{field:'createDate', width:200, sort: true, templet:'#createDate'}">上传时间</th>
-                            <th lay-data="{field:'size', width:100, sort: true}">大小</th>
-                            <th lay-data="{width:200, align:'center', toolbar: '#opration'}"></th>
-                        </tr>
-                        </thead>
-                    </table>
-                    <script type="text/html" id="opration">
-                        <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
-                        <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
-                        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
-                    </script>
-                    <!--转换layui表格日期格式-->
-                    <script id="createDate" type="text/html">
-                        {{#
-                        var date = new Date();
-                        date.setTime(d.createDate);
-                        return date.Format("yyyy-MM-dd hh:mm:ss");
-                        }}
-                    </script>
+                <div class="layui-inline">
+                    <button class="layui-btn search" ><i class="layui-icon layui-icon-search"></i>搜索</button>
                 </div>
             </div>
+
+        </div>
+        <div class="layui-card-body">
+            <table class="layui-table" lay-data="{width: 905, url:'/pfs/search-video', page:true, id:'porn-video'}" lay-filter="porn-video">
+                <thead>
+                <tr>
+                    <th lay-data="{field:'originalName', width:400}">文件名</th>
+                    <th lay-data="{field:'createDate', width:200, sort: true, templet:'#createDate'}">上传时间</th>
+                    <th lay-data="{field:'size', width:100, sort: true}">大小</th>
+                    <th lay-data="{width:200, align:'center', toolbar: '#opration'}"></th>
+                </tr>
+                </thead>
+            </table>
+            <script type="text/html" id="opration">
+                <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
+                <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+            </script>
+            <!--转换layui表格日期格式-->
+            <script id="createDate" type="text/html">
+                {{#
+                var date = new Date();
+                date.setTime(d.createDate);
+                return date.Format("yyyy-MM-dd hh:mm:ss");
+                }}
+            </script>
         </div>
     </div>
 </div>
