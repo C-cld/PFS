@@ -1,15 +1,15 @@
-.top {
-    padding-top: 15px;
-    border-bottom: 1px solid #f6f6f6;
-    height: 55px;
+body {
+    background-color: #f2f2f2;
 }
-.top .top-item {
-    float: left;
-    margin-right: 50px;
+.layui-fluid {
+    padding:15px;
 }
-.tag-search {
+. file-list {
+    height: 855px;
+}
+.file-list .layui-card-header {
+    padding:10px;
+}
+.file-list .first {
     width: 600px;
-}
-.file-table {
-    margin: 10px;
 }
