@@ -22,7 +22,7 @@ public class FileService {
     @Value("${uploadPath}")
     public String uploadPath;
 
-    public void uploadFile(UploadFile uploadFile, MultipartFile uploadedFile, String[] tagIdArr) throws Exception {
+    public boolean uploadFile(UploadFile uploadFile, MultipartFile uploadedFile, String[] tagIdArr) throws Exception {
         File dest = new File(uploadPath + uploadFile.getName());
         // 1.保存到硬盘
         uploadedFile.transferTo(dest);
@@ -36,6 +36,7 @@ public class FileService {
             ftt.setTagId(tagId);
             fileMapper.fileToTag(ftt);
         }
+        return true;
     }
 
     public List<Tag> findTag(String[] tagIds) {

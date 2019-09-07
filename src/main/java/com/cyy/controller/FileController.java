@@ -54,10 +54,9 @@ public class FileController {
         return jsonObject.toString();
     }
 
-    /*=================================================================================================================================================*/
-    @RequestMapping(value = "/upload-file", method = RequestMethod.POST)
+    @RequestMapping(value = "/upload-file")
     @ResponseBody
-    public String upload(@RequestParam("videoFile") MultipartFile uploadedFile, @RequestParam("videoTags") String tagIds) {
+    public boolean upload(@RequestParam("file") MultipartFile uploadedFile, @RequestParam("videoTags") String tagIds) {
         String fileName = UUID.randomUUID().toString().replace("-", "").toLowerCase();
         String originalName = uploadedFile.getOriginalFilename();
         long size = uploadedFile.getSize();
@@ -71,13 +70,15 @@ public class FileController {
 
         // 上传到移动硬盘，并添加到数据库
         try {
-            fileService.uploadFile(file, uploadedFile, tagIdArr);
+            return fileService.uploadFile(file, uploadedFile, tagIdArr);
         } catch (Exception e) {
             e.printStackTrace();
-            return "上传失败";
         }
-        return "success";
+        return false;
     }
+
+    /*=================================================================================================================================================*/
+
 
     @RequestMapping(value = "/play-video")
     @ResponseBody

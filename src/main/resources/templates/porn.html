@@ -10,6 +10,7 @@
 </head>
 <body>
 <div class="layui-fluid">
+    <!--视频列表-->
     <div class="layui-card file-list">
         <div class="layui-form layui-card-header">
             <div class="layui-form-item">
@@ -23,6 +24,9 @@
                 </div>
                 <div class="layui-inline">
                     <button class="layui-btn search" ><i class="layui-icon layui-icon-search"></i>搜索</button>
+                </div>
+                <div class="layui-inline">
+                    <button type="button" class="layui-btn" id="upload-video"><i class="layui-icon layui-icon-upload"></i>在当前标签下上传视频</button>
                 </div>
             </div>
 
@@ -57,24 +61,21 @@
 
 
 <script>
-
+    // 加载多选下拉框模块
     layui.config({
         base: '../pfs/layui/lay/modules/' //此处路径请自行处理, 可以使用绝对路径
     }).extend({
         formSelects: 'formSelects-v4.min'
     });
-    layui.use(['formSelects'], function(){
+    layui.use('formSelects', function(){
         var formSelects = layui.formSelects;
 
     });
-    layui.use('layer', function(){
-        var $ = layui.jquery, layer = layui.layer;
-    });
 
-    layui.use('table', function() {
+    layui.use(['table', 'upload'], function() {
         var $ = layui.jquery, layer = layui.layer;
-        var table = layui.table;
-        //监听工具条
+        var table = layui.table, upload = layui.upload;
+        //表格操作
         table.on('tool(porn-video)', function(obj){
             var data = obj.data;
             if(obj.event === 'detail'){
@@ -88,7 +89,29 @@
                 layer.alert('编辑行：<br>'+ JSON.stringify(data))
             }
         });
+        // 上传视频
+        var index = null;
+        upload.render({
+            elem: '#upload-video',
+            url: '/pfs/upload-file',
+            accept: 'video', //视频
+            before: function (obj) {
+                index = layer.load(1);
+                this.data={videoTags:layui.formSelects.value('tags', 'val')};
+            },
+            done: function(res){
+                layer.close(index);
+                if (res) {
+                    table.reload('porn-video', {
+                        url:'/pfs/search-video?tagIds=' + layui.formSelects.value('tags', 'val')
+                    });
+                } else {
+                    layer.msg("上传失败");
+                }
 
+            }
+        });
+        // 搜索视频
         $('.search').on('click', function(){
             var selectedTags = layui.formSelects.value('tags', 'val');
             table.reload('porn-video', {
