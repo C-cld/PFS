@@ -32,12 +32,12 @@
 
         </div>
         <div class="layui-card-body">
-            <table class="layui-table" lay-data="{width: 905, url:'/pfs/search-video', page:true, id:'porn-video'}" lay-filter="porn-video">
+            <table class="layui-table" lay-data="{width: 955, url:'/pfs/search-video', page:true, id:'porn-video'}" lay-filter="porn-video">
                 <thead>
                 <tr>
                     <th lay-data="{field:'originalName', width:400}">文件名</th>
                     <th lay-data="{field:'createDate', width:200, sort: true, templet:'#createDate'}">上传时间</th>
-                    <th lay-data="{field:'size', width:100, sort: true}">大小</th>
+                    <th lay-data="{field:'size', width:150, sort: true}">大小</th>
                     <th lay-data="{width:200, align:'center', toolbar: '#opration'}"></th>
                 </tr>
                 </thead>
@@ -78,8 +78,17 @@
         //表格操作
         table.on('tool(porn-video)', function(obj){
             var data = obj.data;
+            var originalName = data.originalName;
+            var id = data.id;
             if(obj.event === 'detail'){
-                layer.msg('ID：'+ data.id + ' 的查看操作');
+                layer.open({
+                    type: 2,
+                    title: originalName,
+                    maxmin: true,
+                    shade: 0,
+                    area: ['1280px', '760px'],
+                    content:'/pfs/video?videoId=' + id
+                });
             } else if(obj.event === 'del'){
                 layer.confirm('真的删除行么', function(index){
                     obj.del();

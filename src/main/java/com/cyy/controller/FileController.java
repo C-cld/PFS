@@ -77,16 +77,21 @@ public class FileController {
         return false;
     }
 
-    /*=================================================================================================================================================*/
-
+    @RequestMapping(value = "/video")
+    public ModelAndView video(String videoId) {
+        ModelAndView mav = new ModelAndView("video");
+        mav.addObject("fileId", videoId);
+        return mav;
+    }
 
     @RequestMapping(value = "/play-video")
     @ResponseBody
     public void play(HttpServletRequest request , HttpServletResponse response) {
+        String id = request.getParameter("fileId");
         BufferedOutputStream outputStream;
         RandomAccessFile randomAccessFile = null;
         try {
-            File file = new File(fileService.uploadPath + "3dc59afe6bd9480c95eb626f1bf962aa");
+            File file = new File(fileService.uploadPath + id);
             //开始下载位置
             long startByte = 0;
             //结束下载位置
@@ -153,6 +158,9 @@ public class FileController {
             }
         }
     }
+
+    /*=================================================================================================================================================*/
+
 
     @RequestMapping(value = "/add-tag")
     @ResponseBody

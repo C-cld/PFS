@@ -23,6 +23,7 @@ public class FileService {
     public String uploadPath;
 
     public boolean uploadFile(UploadFile uploadFile, MultipartFile uploadedFile, String[] tagIdArr) throws Exception {
+        System.out.println(uploadPath);
         File dest = new File(uploadPath + uploadFile.getName());
         // 1.保存到硬盘
         uploadedFile.transferTo(dest);
