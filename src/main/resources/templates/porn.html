@@ -69,7 +69,6 @@
     });
     layui.use('formSelects', function(){
         var formSelects = layui.formSelects;
-
     });
 
     layui.use(['table', 'upload'], function() {
@@ -117,7 +116,9 @@
                 } else {
                     layer.msg("上传失败");
                 }
-
+            },
+            error: function(){
+                index = layer.load(1);
             }
         });
         // 搜索视频

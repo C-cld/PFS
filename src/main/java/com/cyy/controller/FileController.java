@@ -67,6 +67,9 @@ public class FileController {
         file.setSize(size);
 
         String[] tagIdArr = tagIds.split(",");
+        if ("".equals(tagIds.trim())) {
+            tagIdArr = null;
+        }
 
         // 上传到移动硬盘，并添加到数据库
         try {

@@ -23,20 +23,22 @@ public class FileService {
     public String uploadPath;
 
     public boolean uploadFile(UploadFile uploadFile, MultipartFile uploadedFile, String[] tagIdArr) throws Exception {
-        System.out.println(uploadPath);
         File dest = new File(uploadPath + uploadFile.getName());
         // 1.保存到硬盘
         uploadedFile.transferTo(dest);
         // 2. 保存到数据库
         fileMapper.addFile(uploadFile);
         // 3. 关联标签
-        for (String tagId : tagIdArr) {
-            FileToTag ftt = new FileToTag();
-            ftt.setId(UUID.randomUUID().toString().replace("-", "").toLowerCase());
-            ftt.setFileId(uploadFile.getId());
-            ftt.setTagId(tagId);
-            fileMapper.fileToTag(ftt);
+        if (tagIdArr != null) {
+            for (String tagId : tagIdArr) {
+                FileToTag ftt = new FileToTag();
+                ftt.setId(UUID.randomUUID().toString().replace("-", "").toLowerCase());
+                ftt.setFileId(uploadFile.getId());
+                ftt.setTagId(tagId);
+                fileMapper.fileToTag(ftt);
+            }
         }
+
         return true;
     }
 
