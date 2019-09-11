@@ -55,4 +55,8 @@ public class FileService {
         List<UploadFile> uploadFileList = fileMapper.findFile(tagIds, tagIds == null ? 0 : tagIds.length);
         return uploadFileList;
     }
+
+    public void deleteVideo(String videoId) {
+        fileMapper.deleteVideo(videoId);
+    }
 }

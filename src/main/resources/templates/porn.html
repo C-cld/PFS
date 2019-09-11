@@ -90,8 +90,21 @@
                 });
             } else if(obj.event === 'del'){
                 layer.confirm('真的删除行么', function(index){
-                    obj.del();
-                    layer.close(index);
+
+                    $.ajax({
+                        url:'/pfs/delete-video?videoId=' + id,
+                        success: function(result){
+                            if (result) {
+                                layer.msg("删除成功");
+                                obj.del();
+                                layer.close(index);
+                            } else {
+                                layer.msg("删除失败");
+                            }
+
+                        }
+                    });
+
                 });
             } else if(obj.event === 'edit'){
                 layer.alert('编辑行：<br>'+ JSON.stringify(data))

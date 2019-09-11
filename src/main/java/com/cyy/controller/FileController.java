@@ -162,6 +162,19 @@ public class FileController {
         }
     }
 
+    @RequestMapping(value = "/delete-video")
+    @ResponseBody
+    public boolean deleteVideo(String videoId) {
+        try {
+            fileService.deleteVideo(videoId);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+    }
+
     /*=================================================================================================================================================*/
 
 

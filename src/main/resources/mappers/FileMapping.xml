@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cyy.dao.FileMapper">
     <insert id="addFile" parameterType="com.cyy.domain.UploadFile">
-        insert into upload_file (id, original_name, name, size, create_date) values (#{id}, #{originalName}, #{name}, round(#{size},2), now())
+        insert into upload_file (id, original_name, name, size, create_date, deleted) values (#{id}, #{originalName}, #{name}, round(#{size},2), now(), 0)
     </insert>
 
     <insert id="fileToTag" parameterType="com.cyy.domain.FileToTag">
@@ -18,9 +18,9 @@
     </select>
 
     <select id="findFile" resultType="com.cyy.domain.UploadFile">
-        select id, original_name as originalName, size, create_date as createDate from upload_file
+        select id, original_name as originalName, size, create_date as createDate, deleted from upload_file where deleted = 0
         <if test="tagIds != null and arrLength != 0">
-            where id in (select file_id from (select file_id,count(*) as count from file_to_tag where
+            and id in (select file_id from (select file_id,count(*) as count from file_to_tag where
             <foreach item="tag_id" collection="tagIds" index="index">
                 <if test="index == 0">
                     tag_id = #{tag_id}
@@ -32,4 +32,8 @@
             GROUP BY file_id having count = #{arrLength}) tmp)
         </if>
     </select>
+
+    <update id="deleteVideo">
+        update upload_file set deleted = 1 where id = #{videoId}
+    </update>
 </mapper>

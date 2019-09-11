@@ -8,6 +8,7 @@ public class UploadFile {
     private String name;
     private Double size;
     private Date createDate;
+    private int deleted;
 
     public String getId() {
         return id;
@@ -47,5 +48,13 @@ public class UploadFile {
 
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
+    }
+
+    public int getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(int deleted) {
+        this.deleted = deleted;
     }
 }
