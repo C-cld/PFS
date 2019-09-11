@@ -6,7 +6,7 @@ public class UploadFile {
     private String id;
     private String originalName;
     private String name;
-    private Long size;
+    private Double size;
     private Date createDate;
 
     public String getId() {
@@ -33,11 +33,11 @@ public class UploadFile {
         this.name = name;
     }
 
-    public Long getSize() {
+    public Double getSize() {
         return size;
     }
 
-    public void setSize(Long size) {
+    public void setSize(Double size) {
         this.size = size;
     }
 

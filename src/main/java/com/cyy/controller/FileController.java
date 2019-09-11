@@ -59,7 +59,7 @@ public class FileController {
     public boolean upload(@RequestParam("file") MultipartFile uploadedFile, @RequestParam("videoTags") String tagIds) {
         String fileName = UUID.randomUUID().toString().replace("-", "").toLowerCase();
         String originalName = uploadedFile.getOriginalFilename();
-        long size = uploadedFile.getSize();
+        double size = (double)uploadedFile.getSize() / 1048576;
         UploadFile file = new UploadFile();
         file.setId(fileName);
         file.setOriginalName(originalName);

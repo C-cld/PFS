@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cyy.dao.FileMapper">
     <insert id="addFile" parameterType="com.cyy.domain.UploadFile">
-        insert into upload_file (id, original_name, name, size, create_date) values (#{id}, #{originalName}, #{name}, #{size}, now())
+        insert into upload_file (id, original_name, name, size, create_date) values (#{id}, #{originalName}, #{name}, round(#{size},2), now())
     </insert>
 
     <insert id="fileToTag" parameterType="com.cyy.domain.FileToTag">
