@@ -36,4 +36,8 @@
     <update id="deleteVideo">
         update upload_file set deleted = 1 where id = #{videoId}
     </update>
+
+    <delete id="deleteFileToTag">
+        delete from file_to_tag where file_id = #{videoId}
+    </delete>
 </mapper>

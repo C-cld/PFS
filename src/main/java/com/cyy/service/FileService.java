@@ -58,5 +58,8 @@ public class FileService {
 
     public void deleteVideo(String videoId) {
         fileMapper.deleteVideo(videoId);
+        // 删除标签关联
+        fileMapper.deleteFileToTag(videoId);
+
     }
 }
