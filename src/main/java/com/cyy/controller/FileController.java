@@ -177,6 +177,19 @@ public class FileController {
 
     /*=================================================================================================================================================*/
 
+    @RequestMapping(value = "/tag-list")
+    @ResponseBody
+    public String tagList() {
+        List<Tag> tagList = fileService.findTag(null);
+        JSONArray array= JSONArray.parseArray(JSON.toJSONString(tagList));
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("msg", "");
+        jsonObject.put("code", 0);
+        jsonObject.put("data", array);
+        jsonObject.put("count", tagList.size());
+        System.out.println(jsonObject.toString());
+        return jsonObject.toString();
+    }
 
     @RequestMapping(value = "/add-tag")
     @ResponseBody

@@ -1,16 +1,19 @@
 body {
     background-color: #f2f2f2;
 }
-.layui-fluid {
-    padding:15px;
+.layui-row {
+    margin:0px;
+    padding: 5px;
 }
 .file-list {
     height: 855px;
-    width: 1200px;
 }
 .file-list .layui-card-header {
     padding:10px;
 }
 .file-list .first {
     width: 600px;
+}
+.tag-list {
+
 }
