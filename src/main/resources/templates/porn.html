@@ -60,35 +60,34 @@
     </div>
     <div class="layui-col-md3">
         <div class="layui-card tag-list">
-            <div class="layui-card-header">标签管理</div>
+            <div class="layui-card-header">
+
+                <div class="layui-form-item">
+                        标签管理
+                    <div class="layui-inline add-tag">
+                        <button class="layui-btn layui-btn-sm layui-bg-gray addTag"><i class="layui-icon layui-icon-add-1"></i></button>
+                    </div>
+                </div>
+            </div>
             <div class="layui-card-body">
                 <table class="layui-table" lay-data="{url:'/pfs/tag-list', page:true, id:'tagList'}" lay-filter="tagList">
                     <thead>
                     <tr>
                         <th lay-data="{field:'id', hide:true}"></th>
-                        <th lay-data="{field:'name'}">文件名</th>
+                        <th lay-data="{field:'name', edit: 'text'}">标签名</th>
                         <th lay-data="{align:'center',width:'110', toolbar: '#tagOpration'}"></th>
                     </tr>
                     </thead>
                 </table>
                 <script type="text/html" id="tagOpration">
-                    <div class="layui-btn-group">
-                        <button type="button" class="layui-btn layui-btn-sm">
-                            <i class="layui-icon">&#xe642;</i>
-                        </button>
-                        <button type="button" class="layui-btn layui-btn-sm">
-                            <i class="layui-icon">&#xe640;</i>
-                        </button>
-                    </div>
+                    <button type="button" class="layui-btn layui-btn-sm" lay-event="del">
+                        <i class="layui-icon">&#xe640;</i>
+                    </button>
                 </script>
             </div>
         </div>
     </div>
-
-
-
 </div>
-
 
 <script>
     // 加载多选下拉框模块
@@ -139,6 +138,67 @@
             } else if(obj.event === 'edit'){
                 layer.alert('编辑行：<br>'+ JSON.stringify(data))
             }
+        });
+        //编辑标签名称
+        table.on('edit(tagList)', function(obj){
+            var value = obj.value; //得到修改后的值
+            var id = obj.data.id; //得到所在行所有键值
+            $.ajax({
+                url: '/pfs/edit-tag-name?tagId=' + id + '&newName=' + value,
+                success: function(result) {
+                    if (result) {
+                        layer.msg("修改成功");
+                    } else {
+                        layer.msg("修改失败");
+                    }
+                }
+            });
+        });
+        // 删除标签
+        table.on('tool(tagList)', function(obj) {
+            var id = obj.data.id;
+            if (obj.event === 'del') {
+                layer.confirm('真的删除么', function(index){
+                    $.ajax({
+                        url:'/pfs/delete-tag?tagId=' + id,
+                        success: function(result){
+                            if (result) {
+                                layer.msg("删除成功");
+                                obj.del();
+                                layer.close(index);
+                            } else {
+                                layer.msg("删除失败");
+                            }
+                        }
+                    });
+                });
+            }
+        });
+        // 添加标签
+        $('.addTag').on('click', function(){
+            var index = layer.open({
+                type: 1,
+                content: '<div class="layui-form-item">' +
+                            '<input type="text" class="layui-input tag-name" placeholder="请输入标签名称" autofocus="autofocus">' +
+                         '</div>',
+                btn:['确定'],
+                btn1: function () {
+                    var tagName = $('.tag-name').val();
+                    $.ajax({
+                        url: '/pfs/add-tag?tagName=' + tagName,
+                        success: function(result) {
+                            if (result) {
+                                table.reload('tagList', {
+                                    url:'/pfs/tag-list'
+                                });
+                                layer.close(index);
+                            } else {
+                                layer.msg("新增失败");
+                            }
+                        }
+                    });
+                },
+            });
         });
         // 上传视频
         var index = null;

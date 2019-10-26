@@ -62,4 +62,12 @@ public class FileService {
         fileMapper.deleteFileToTag(videoId);
 
     }
+
+    public void updateTag(String tagId, String newTagName) {
+        fileMapper.updateTagNameById(tagId, newTagName);
+    }
+
+    public void deleteTag(String tagId) {
+        fileMapper.deleteTag(tagId);
+    }
 }

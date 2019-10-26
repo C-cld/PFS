@@ -175,8 +175,6 @@ public class FileController {
 
     }
 
-    /*=================================================================================================================================================*/
-
     @RequestMapping(value = "/tag-list")
     @ResponseBody
     public String tagList() {
@@ -190,6 +188,34 @@ public class FileController {
         System.out.println(jsonObject.toString());
         return jsonObject.toString();
     }
+
+    @RequestMapping(value = "/edit-tag-name")
+    @ResponseBody
+    public boolean editTagName(String tagId, String newName) {
+        try {
+            fileService.updateTag(tagId, newName);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @RequestMapping(value = "/delete-tag")
+    @ResponseBody
+    public boolean deleteTag(String tagId) {
+        try {
+            fileService.deleteTag(tagId);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /*=================================================================================================================================================*/
+
+
 
     @RequestMapping(value = "/add-tag")
     @ResponseBody

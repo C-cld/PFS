@@ -14,7 +14,7 @@
     </insert>
 
     <select id="findTag" resultType="com.cyy.domain.Tag">
-        select id, name, create_date as createDate from tag
+        select id, name, create_date as createDate from tag where deleted = 0
     </select>
 
     <select id="findFile" resultType="com.cyy.domain.UploadFile">
@@ -39,5 +39,13 @@
 
     <delete id="deleteFileToTag">
         delete from file_to_tag where file_id = #{videoId}
+    </delete>
+
+    <update id="updateTagNameById">
+        update tag set name = #{newTagName} where id = #{tagId}
+    </update>
+
+    <delete id="deleteTag">
+        update tag set deleted = 1 where id = #{tagId}
     </delete>
 </mapper>

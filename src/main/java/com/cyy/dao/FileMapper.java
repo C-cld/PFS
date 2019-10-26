@@ -17,4 +17,6 @@ public interface FileMapper {
     List<UploadFile> findFile(@Param("tagIds") String[] tagIds, @Param("arrLength") int arrLength);
     void deleteVideo(@Param("videoId") String videoId);
     void deleteFileToTag(@Param("videoId") String videoId);
+    void updateTagNameById(@Param("tagId") String tagId, @Param("newTagName") String newTagName);
+    void deleteTag(@Param("tagId") String tagId);
 }
