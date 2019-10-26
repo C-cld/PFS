@@ -38,19 +38,24 @@ public class FileController {
     }
     @RequestMapping(value = "/search-video")
     @ResponseBody
-    public String searchVideo(@RequestParam(value = "tagIds", required = false)String tagId) {
+    public String searchVideo(@RequestParam(value = "tagIds", required = false)String tagId, @RequestParam(value = "page") int page, @RequestParam(value = "limit") int limit) {
+        System.out.println(page + "======" + limit);
+
         String[] tagIds = null;
         if (tagId != null && !tagId.equals("")) {
             tagIds = tagId.split(",");
         }
-        List<UploadFile> uploadFileList = fileService.findFile(tagIds);
+
+        int total = fileService.getTotal(tagIds); // 总数
+        int index = (page - 1) * limit; // 起始位置
+
+        List<UploadFile> uploadFileList = fileService.findFile(tagIds, index, limit);
         JSONArray array= JSONArray.parseArray(JSON.toJSONString(uploadFileList));
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("msg", "");
         jsonObject.put("code", 0);
         jsonObject.put("data", array);
-        jsonObject.put("count", uploadFileList.size());
-        System.out.println(jsonObject.toString());
+        jsonObject.put("count", total);
         return jsonObject.toString();
     }
 
@@ -177,15 +182,20 @@ public class FileController {
 
     @RequestMapping(value = "/tag-list")
     @ResponseBody
-    public String tagList() {
+    public String tagList(@RequestParam(value = "page") int page, @RequestParam(value = "limit") int limit) {
         List<Tag> tagList = fileService.findTag(null);
-        JSONArray array= JSONArray.parseArray(JSON.toJSONString(tagList));
+        int startIndex = (page - 1) * limit;
+        int endIndex = startIndex + limit;
+        int total = tagList.size();
+        // 分页截取，标签不多，所以直接用假分页
+        List<Tag> subList = tagList.subList(startIndex, endIndex > total ? total : endIndex);
+        System.out.println("第" + page + "页，" + startIndex + "-" + endIndex);
+        JSONArray array= JSONArray.parseArray(JSON.toJSONString(subList));
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("msg", "");
         jsonObject.put("code", 0);
         jsonObject.put("data", array);
-        jsonObject.put("count", tagList.size());
-        System.out.println(jsonObject.toString());
+        jsonObject.put("count", total);
         return jsonObject.toString();
     }
 

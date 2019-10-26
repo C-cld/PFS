@@ -51,8 +51,13 @@ public class FileService {
         fileMapper.addTag(tag);
     }
 
-    public List<UploadFile> findFile(String[] tagIds) {
-        List<UploadFile> uploadFileList = fileMapper.findFile(tagIds, tagIds == null ? 0 : tagIds.length);
+    public int getTotal(String[] tagIds) {
+        int total = fileMapper.getTotal(tagIds, tagIds == null ? 0 : tagIds.length);
+        return total;
+    }
+
+    public List<UploadFile> findFile(String[] tagIds, int index, int limit) {
+        List<UploadFile> uploadFileList = fileMapper.findFile(tagIds, tagIds == null ? 0 : tagIds.length, index, limit);
         return uploadFileList;
     }
 
@@ -70,4 +75,6 @@ public class FileService {
     public void deleteTag(String tagId) {
         fileMapper.deleteTag(tagId);
     }
+
+
 }

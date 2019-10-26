@@ -5,9 +5,7 @@ body {
     margin:0px;
     padding: 5px;
 }
-.file-list {
-    height: 855px;
-}
+
 .file-list .layui-card-header {
     padding:10px;
 }

@@ -70,7 +70,7 @@
                 </div>
             </div>
             <div class="layui-card-body">
-                <table class="layui-table" lay-data="{url:'/pfs/tag-list', page:true, id:'tagList'}" lay-filter="tagList">
+                <table class="layui-table" lay-data="{url:'/pfs/tag-list', page:{layout:['prev', 'page', 'next', 'count', 'limit'], groups:1}, id:'tagList'}" lay-filter="tagList">
                     <thead>
                     <tr>
                         <th lay-data="{field:'id', hide:true}"></th>
@@ -103,7 +103,7 @@
     layui.use(['table', 'upload'], function() {
         var $ = layui.jquery, layer = layui.layer;
         var table = layui.table, upload = layui.upload;
-        //表格操作
+        //视频列表表格操作
         table.on('tool(porn-video)', function(obj){
             var data = obj.data;
             var originalName = data.originalName;
@@ -139,7 +139,7 @@
                 layer.alert('编辑行：<br>'+ JSON.stringify(data))
             }
         });
-        //编辑标签名称
+        //标签列表，编辑标签名称
         table.on('edit(tagList)', function(obj){
             var value = obj.value; //得到修改后的值
             var id = obj.data.id; //得到所在行所有键值
