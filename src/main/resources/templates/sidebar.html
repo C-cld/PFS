@@ -21,17 +21,18 @@
 			<li class="layui-nav-item">
 				<a href="javascript:;">财务</a>
 				<dl class="layui-nav-child">
-					<dd><a href="javascript:;" data-url="fund-investment-record">基金</a></dd>
+					<dd><a href="javascript:;" class="redirect" data-url="fund-investment-record">基金</a></dd>
 				</dl>
 			</li>
 			<li class="layui-nav-item">
 				<a href="javascript:;">文件</a>
 				<dl class="layui-nav-child">
-					<dd><a href="javascript:;" data-url="video">视频</a></dd>
+					<dd><a href="javascript:;" class="redirect" data-url="video">视频</a></dd>
 				</dl>
 			</li>
-			<li class="layui-nav-item"><a href="">产品</a></li>
-			<li class="layui-nav-item"><a href="">大数据</a></li>
+			<li class="layui-nav-item">
+				<a href="javascript:;" class="redirect" data-url="release-note">版本更新记录</a>
+			</li>
 		</ul>
 	</div>
 
@@ -64,7 +65,7 @@
 		layui.use('layer', function(){
 			var $ = layui.jquery, layer = layui.layer;
 
-			$('.layui-side .layui-nav-child a').on('click', function(){
+			$('.redirect').on('click', function(){
 				var othis = $(this), url = othis.data('url');
 				$('#content').html("<iframe src='./" + url + "' width='100%' height='100%' name='iframe' class='iframe'></iframe>");
 			});

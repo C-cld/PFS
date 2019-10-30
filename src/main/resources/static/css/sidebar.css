@@ -68,3 +68,7 @@
 .layui-body {
 	top:50px;
 }
+/* 版本更新记录 */
+.release-note {
+	padding-left: 30px;
+}

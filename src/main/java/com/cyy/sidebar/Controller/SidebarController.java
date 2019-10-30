@@ -7,12 +7,23 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class SidebarController {
     @RequestMapping(value = "/")
-    public ModelAndView sidebar(){
+    public ModelAndView sidebar() {
         try {
             ModelAndView mav=new ModelAndView("sidebar");
             return mav;
         }
         catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @RequestMapping(value = "/release-note")
+    public ModelAndView releaseNote() {
+        try {
+            ModelAndView mav=new ModelAndView("release-note");
+            return mav;
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
