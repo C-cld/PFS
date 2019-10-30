@@ -3,7 +3,7 @@
     <meta charset="UTF-8">
     <link th:href="@{/layui/css/layui.css}" rel="stylesheet" type="text/css">
     <link th:href="@{/layui/css/modules/formSelects-v4.css}" rel="stylesheet" type="text/css">
-    <link th:href="@{/css/porn.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{/css/video.css}" rel="stylesheet" type="text/css">
     <script type="text/javascript" th:src="@{/layui/layui.js}"></script>
 
     <title>Title</title>
@@ -32,12 +32,12 @@
                 </div>
             </div>
             <div class="layui-card-body">
-                <table class="layui-table" lay-data="{url:'/pfs/search-video', page:true, id:'porn-video'}" lay-filter="porn-video">
+                <table class="layui-table" lay-data="{url:'/search-video', page:true, id:'video-table'}" lay-filter="video-table">
                     <thead>
                     <tr>
                         <th lay-data="{field:'originalName'}">文件名</th>
-                        <th lay-data="{field:'createDate', sort: true, templet:'#createDate'}">上传时间</th>
-                        <th lay-data="{field:'size', sort: true}">大小(MB)</th>
+                        <th lay-data="{field:'createDate', templet:'#createDate'}">上传时间</th>
+                        <th lay-data="{field:'size'}">大小(MB)</th>
                         <th lay-data="{align:'center', toolbar: '#opration'}"></th>
                     </tr>
                     </thead>
@@ -63,14 +63,14 @@
             <div class="layui-card-header">
 
                 <div class="layui-form-item">
-                        标签管理
+                    标签管理
                     <div class="layui-inline add-tag">
                         <button class="layui-btn layui-btn-sm layui-bg-gray addTag"><i class="layui-icon layui-icon-add-1"></i></button>
                     </div>
                 </div>
             </div>
             <div class="layui-card-body">
-                <table class="layui-table" lay-data="{url:'/pfs/tag-list', page:{layout:['prev', 'page', 'next', 'count', 'limit'], groups:1}, id:'tagList'}" lay-filter="tagList">
+                <table class="layui-table" lay-data="{url:'/search-tag', page:{layout:['prev', 'page', 'next', 'count', 'limit'], groups:1}, id:'tag-table'}" lay-filter="tag-table">
                     <thead>
                     <tr>
                         <th lay-data="{field:'id', hide:true}"></th>
@@ -92,7 +92,7 @@
 <script>
     // 加载多选下拉框模块
     layui.config({
-        base: '../pfs/layui/lay/modules/' //此处路径请自行处理, 可以使用绝对路径
+        base: '../layui/lay/modules/' //此处路径请自行处理, 可以使用绝对路径
     }).extend({
         formSelects: 'formSelects-v4.min'
     });
@@ -103,8 +103,41 @@
     layui.use(['table', 'upload'], function() {
         var $ = layui.jquery, layer = layui.layer;
         var table = layui.table, upload = layui.upload;
-        //视频列表表格操作
-        table.on('tool(porn-video)', function(obj){
+        // 搜索视频
+        $('.search').on('click', function(){
+            var selectedTags = layui.formSelects.value('tags', 'val');
+            table.reload('video-table', {
+                url:'/search-video?tagIds=' + selectedTags
+            });
+        });
+
+        // 上传视频
+        var index = null;
+        upload.render({
+            elem: '#upload-video',
+            url: '/upload-video',
+            accept: 'video', //视频
+            before: function (obj) {
+                index = layer.load(1);
+                this.data={videoTags:layui.formSelects.value('tags', 'val')};
+            },
+            done: function(res){
+                layer.close(index);
+                if (res) {
+                    table.reload('video-table', {
+                        url:'/search-video?tagIds=' + layui.formSelects.value('tags', 'val')
+                    });
+                } else {
+                    layer.msg("上传失败");
+                }
+            },
+            error: function(){
+                index = layer.load(1);
+            }
+        });
+
+        //播放，删除，编辑
+        table.on('tool(video-table)', function(obj){
             var data = obj.data;
             var originalName = data.originalName;
             var id = data.id;
@@ -115,13 +148,13 @@
                     maxmin: true,
                     shade: 0,
                     area: ['1280px', '760px'],
-                    content:'/pfs/video?videoId=' + id
+                    content:'/video-player?videoId=' + id
                 });
             } else if(obj.event === 'del'){
                 layer.confirm('真的删除行么', function(index){
 
                     $.ajax({
-                        url:'/pfs/delete-video?videoId=' + id,
+                        url:'/delete-video?videoId=' + id,
                         success: function(result){
                             if (result) {
                                 layer.msg("删除成功");
@@ -139,12 +172,39 @@
                 layer.alert('编辑行：<br>'+ JSON.stringify(data))
             }
         });
+        // 添加标签
+        $('.addTag').on('click', function(){
+            var index = layer.open({
+                type: 1,
+                content: '<div class="layui-form-item">' +
+                    '<input type="text" class="layui-input tag-name" placeholder="请输入标签名称" autofocus="autofocus">' +
+                    '</div>',
+                btn:['确定'],
+                btn1: function () {
+                    var tagName = $('.tag-name').val();
+                    $.ajax({
+                        url: '/insert-tag?tagName=' + tagName,
+                        success: function(result) {
+                            if (result) {
+                                table.reload('tagList', {
+                                    url:'/search-tag'
+                                });
+                                layer.close(index);
+                                layer.msg("新增成功");
+                            } else {
+                                layer.msg("新增失败");
+                            }
+                        }
+                    });
+                },
+            });
+        });
         //标签列表，编辑标签名称
-        table.on('edit(tagList)', function(obj){
+        table.on('edit(tag-table)', function(obj){
             var value = obj.value; //得到修改后的值
             var id = obj.data.id; //得到所在行所有键值
             $.ajax({
-                url: '/pfs/edit-tag-name?tagId=' + id + '&newName=' + value,
+                url: '/update-tag-name?tagId=' + id + '&newName=' + value,
                 success: function(result) {
                     if (result) {
                         layer.msg("修改成功");
@@ -155,12 +215,12 @@
             });
         });
         // 删除标签
-        table.on('tool(tagList)', function(obj) {
+        table.on('tool(tag-table)', function(obj) {
             var id = obj.data.id;
             if (obj.event === 'del') {
                 layer.confirm('真的删除么', function(index){
                     $.ajax({
-                        url:'/pfs/delete-tag?tagId=' + id,
+                        url:'/delete-tag?tagId=' + id,
                         success: function(result){
                             if (result) {
                                 layer.msg("删除成功");
@@ -173,63 +233,6 @@
                     });
                 });
             }
-        });
-        // 添加标签
-        $('.addTag').on('click', function(){
-            var index = layer.open({
-                type: 1,
-                content: '<div class="layui-form-item">' +
-                            '<input type="text" class="layui-input tag-name" placeholder="请输入标签名称" autofocus="autofocus">' +
-                         '</div>',
-                btn:['确定'],
-                btn1: function () {
-                    var tagName = $('.tag-name').val();
-                    $.ajax({
-                        url: '/pfs/add-tag?tagName=' + tagName,
-                        success: function(result) {
-                            if (result) {
-                                table.reload('tagList', {
-                                    url:'/pfs/tag-list'
-                                });
-                                layer.close(index);
-                            } else {
-                                layer.msg("新增失败");
-                            }
-                        }
-                    });
-                },
-            });
-        });
-        // 上传视频
-        var index = null;
-        upload.render({
-            elem: '#upload-video',
-            url: '/pfs/upload-file',
-            accept: 'video', //视频
-            before: function (obj) {
-                index = layer.load(1);
-                this.data={videoTags:layui.formSelects.value('tags', 'val')};
-            },
-            done: function(res){
-                layer.close(index);
-                if (res) {
-                    table.reload('porn-video', {
-                        url:'/pfs/search-video?tagIds=' + layui.formSelects.value('tags', 'val')
-                    });
-                } else {
-                    layer.msg("上传失败");
-                }
-            },
-            error: function(){
-                index = layer.load(1);
-            }
-        });
-        // 搜索视频
-        $('.search').on('click', function(){
-            var selectedTags = layui.formSelects.value('tags', 'val');
-            table.reload('porn-video', {
-                url:'/pfs/search-video?tagIds=' + selectedTags
-            });
         });
     });
 

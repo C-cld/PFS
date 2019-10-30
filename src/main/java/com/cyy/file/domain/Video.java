@@ -1,8 +1,8 @@
-package com.cyy.domain;
+package com.cyy.file.domain;
 
 import java.util.Date;
 
-public class UploadFile {
+public class Video {
     private String id;
     private String originalName;
     private String name;

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cyy.file.dao.VideoMapper">
+    <select id="total" resultType="java.lang.Integer">
+        select count(*) from video where deleted = 0
+        <if test="tagIds != null and arrLength != 0">
+            and id in (select video_id from (select video_id,count(*) as count from video_to_tag where
+            <foreach item="tag_id" collection="tagIds" index="index">
+                <if test="index == 0">
+                    tag_id = #{tag_id}
+                </if>
+                <if test="index != 0">
+                    or tag_id = #{tag_id}
+                </if>
+            </foreach>
+            GROUP BY video_id having count = #{arrLength}) tmp)
+        </if>
+    </select>
+
+    <select id="searchVideo" resultType="com.cyy.file.domain.Video">
+        select id, original_name as originalName, size, create_date as createDate, deleted from video where deleted = 0
+        <if test="tagIds != null and arrLength != 0">
+            and id in (select video_id from (select video_id,count(*) as count from video_to_tag where
+            <foreach item="tag_id" collection="tagIds" index="index">
+                <if test="index == 0">
+                    tag_id = #{tag_id}
+                </if>
+                <if test="index != 0">
+                    or tag_id = #{tag_id}
+                </if>
+            </foreach>
+            GROUP BY video_id having count = #{arrLength}) tmp)
+        </if>
+        limit #{index}, #{limit}
+    </select>
+
+    <insert id="insertVideo" parameterType="com.cyy.file.domain.Video">
+        insert into video (id, original_name, name, size, create_date, deleted) values (#{id}, #{originalName}, #{name}, round(#{size},2), now(), 0)
+    </insert>
+
+    <insert id="insertVideoToTag" parameterType="com.cyy.file.domain.VideoToTag">
+        insert into video_to_tag (id, video_id, tag_id, create_date) values (#{id}, #{fileId}, #{tagId}, now())
+    </insert>
+
+    <update id="deleteVideo">
+        update video set deleted = 1 where id = #{videoId}
+    </update>
+
+    <delete id="deleteVideoToTag">
+        delete from file_to_tag where video_id = #{videoId}
+    </delete>
+
+</mapper>

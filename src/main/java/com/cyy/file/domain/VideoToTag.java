@@ -1,8 +1,8 @@
-package com.cyy.domain;
+package com.cyy.file.domain;
 
 import java.util.Date;
 
-public class FileToTag {
+public class VideoToTag {
     private String id;
     private String tagId;
     private String fileId;

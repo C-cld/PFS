@@ -1,15 +1,15 @@
-package com.cyy.controller;
+package com.cyy.file.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.cyy.domain.Tag;
-import com.cyy.domain.UploadFile;
-import com.cyy.service.FileService;
+import com.cyy.file.domain.Tag;
+import com.cyy.file.domain.Video;
+import com.cyy.file.service.TagService;
+import com.cyy.file.service.VideoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,32 +25,55 @@ import java.util.List;
 import java.util.UUID;
 
 @Controller
-public class FileController {
+public class VideoController {
     @Autowired
-    private FileService fileService;
+    private VideoService videoService;
+    @Autowired
+    private TagService tagService;
 
-    @RequestMapping(value = "/porn")
-    public ModelAndView porn() {
-        ModelAndView mav = new ModelAndView("porn");
-        List<Tag> tagList = fileService.findTag(null);
+    /**
+     * 视频页面
+     * @return
+     */
+    @RequestMapping(value = "/video")
+    public ModelAndView videoPage() {
+        ModelAndView mav = new ModelAndView("/file/video");
+        List<Tag> tagList = tagService.searchTag(null);
         mav.addObject("tagList", tagList);
         return mav;
     }
+
+    /**
+     * 播放页面
+     * @param videoId
+     * @return
+     */
+    @RequestMapping(value = "/video-player")
+    public ModelAndView videoPlayerPage(String videoId) {
+        ModelAndView mav = new ModelAndView("/file/video-player");
+        mav.addObject("fileId", videoId);
+        return mav;
+    }
+
+    /**
+     * 条件查询视频
+     * @param tagId
+     * @param page
+     * @param limit
+     * @return
+     */
     @RequestMapping(value = "/search-video")
     @ResponseBody
     public String searchVideo(@RequestParam(value = "tagIds", required = false)String tagId, @RequestParam(value = "page") int page, @RequestParam(value = "limit") int limit) {
-        System.out.println(page + "======" + limit);
-
         String[] tagIds = null;
         if (tagId != null && !tagId.equals("")) {
             tagIds = tagId.split(",");
         }
-
-        int total = fileService.getTotal(tagIds); // 总数
+        int total = videoService.getTotal(tagIds); // 总数
         int index = (page - 1) * limit; // 起始位置
 
-        List<UploadFile> uploadFileList = fileService.findFile(tagIds, index, limit);
-        JSONArray array= JSONArray.parseArray(JSON.toJSONString(uploadFileList));
+        List<Video> videoList = videoService.searchVideo(tagIds, index, limit);
+        JSONArray array= JSONArray.parseArray(JSON.toJSONString(videoList));
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("msg", "");
         jsonObject.put("code", 0);
@@ -59,17 +82,23 @@ public class FileController {
         return jsonObject.toString();
     }
 
-    @RequestMapping(value = "/upload-file")
+    /**
+     * 上传视频
+     * @param uploadedVideo
+     * @param tagIds
+     * @return
+     */
+    @RequestMapping(value = "/upload-video")
     @ResponseBody
-    public boolean upload(@RequestParam("file") MultipartFile uploadedFile, @RequestParam("videoTags") String tagIds) {
-        String fileName = UUID.randomUUID().toString().replace("-", "").toLowerCase();
-        String originalName = uploadedFile.getOriginalFilename();
-        double size = (double)uploadedFile.getSize() / 1048576;
-        UploadFile file = new UploadFile();
-        file.setId(fileName);
-        file.setOriginalName(originalName);
-        file.setName(fileName);
-        file.setSize(size);
+    public boolean upload(@RequestParam("file") MultipartFile uploadedVideo, @RequestParam("videoTags") String tagIds) {
+        String videoName = UUID.randomUUID().toString().replace("-", "").toLowerCase();
+        String originalName = uploadedVideo.getOriginalFilename();
+        double size = (double)uploadedVideo.getSize() / 1048576;
+        Video video = new Video();
+        video.setId(videoName);
+        video.setOriginalName(originalName);
+        video.setName(videoName);
+        video.setSize(size);
 
         String[] tagIdArr = tagIds.split(",");
         if ("".equals(tagIds.trim())) {
@@ -78,20 +107,35 @@ public class FileController {
 
         // 上传到移动硬盘，并添加到数据库
         try {
-            return fileService.uploadFile(file, uploadedFile, tagIdArr);
+            return videoService.uploadVideo(video, uploadedVideo, tagIdArr);
         } catch (Exception e) {
             e.printStackTrace();
         }
         return false;
     }
 
-    @RequestMapping(value = "/video")
-    public ModelAndView video(String videoId) {
-        ModelAndView mav = new ModelAndView("video");
-        mav.addObject("fileId", videoId);
-        return mav;
+    /**
+     * 删除视频
+     * @param videoId
+     * @return
+     */
+    @RequestMapping(value = "/delete-video")
+    @ResponseBody
+    public boolean deleteVideo(String videoId) {
+        try {
+            videoService.deleteVideo(videoId);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
+    /**
+     * 播放视频
+     * @param request
+     * @param response
+     */
     @RequestMapping(value = "/play-video")
     @ResponseBody
     public void play(HttpServletRequest request , HttpServletResponse response) {
@@ -99,7 +143,7 @@ public class FileController {
         BufferedOutputStream outputStream;
         RandomAccessFile randomAccessFile = null;
         try {
-            File file = new File(fileService.uploadPath + id);
+            File file = new File(videoService.uploadPath + id);
             //开始下载位置
             long startByte = 0;
             //结束下载位置
@@ -165,80 +209,5 @@ public class FileController {
                 e.printStackTrace();
             }
         }
-    }
-
-    @RequestMapping(value = "/delete-video")
-    @ResponseBody
-    public boolean deleteVideo(String videoId) {
-        try {
-            fileService.deleteVideo(videoId);
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-
-    }
-
-    @RequestMapping(value = "/tag-list")
-    @ResponseBody
-    public String tagList(@RequestParam(value = "page") int page, @RequestParam(value = "limit") int limit) {
-        List<Tag> tagList = fileService.findTag(null);
-        int startIndex = (page - 1) * limit;
-        int endIndex = startIndex + limit;
-        int total = tagList.size();
-        // 分页截取，标签不多，所以直接用假分页
-        List<Tag> subList = tagList.subList(startIndex, endIndex > total ? total : endIndex);
-        System.out.println("第" + page + "页，" + startIndex + "-" + endIndex);
-        JSONArray array= JSONArray.parseArray(JSON.toJSONString(subList));
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("msg", "");
-        jsonObject.put("code", 0);
-        jsonObject.put("data", array);
-        jsonObject.put("count", total);
-        return jsonObject.toString();
-    }
-
-    @RequestMapping(value = "/edit-tag-name")
-    @ResponseBody
-    public boolean editTagName(String tagId, String newName) {
-        try {
-            fileService.updateTag(tagId, newName);
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    @RequestMapping(value = "/delete-tag")
-    @ResponseBody
-    public boolean deleteTag(String tagId) {
-        try {
-            fileService.deleteTag(tagId);
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    /*=================================================================================================================================================*/
-
-
-
-    @RequestMapping(value = "/add-tag")
-    @ResponseBody
-    public Tag addTag(String tagName) {
-        Tag tag = new Tag();
-        tag.setId(UUID.randomUUID().toString().replace("-", "").toLowerCase());
-        tag.setName(tagName);
-        try {
-            fileService.addTag(tag);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-        return tag;
     }
 }

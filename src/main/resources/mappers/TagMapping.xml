@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cyy.file.dao.TagMapper">
+
+    <select id="searchTag" resultType="com.cyy.file.domain.Tag">
+        select id, name, create_date as createDate from tag where deleted = 0
+    </select>
+
+    <insert id="insertTag" parameterType="com.cyy.file.domain.Tag">
+        insert into tag (id, name, create_date) values (#{id}, #{name}, now())
+    </insert>
+
+    <update id="updateTagNameById">
+        update tag set name = #{newTagName} where id = #{tagId}
+    </update>
+
+    <delete id="deleteTag">
+        update tag set deleted = 1 where id = #{tagId}
+    </delete>
+
+</mapper>
