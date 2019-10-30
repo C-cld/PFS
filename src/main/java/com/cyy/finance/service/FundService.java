@@ -1,6 +1,6 @@
-package com.cyy.service;
+package com.cyy.finance.service;
 
-import com.cyy.domain.FundInvestmentRecord;
+import com.cyy.finance.domain.FundInvestmentRecord;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -8,8 +8,10 @@ import java.util.Date;
 import java.util.List;
 
 @Service
-public class FinanceService {
+public class FundService {
+
     public List<FundInvestmentRecord> search() {
+        // TODO: 2019/10/30 各种过滤条件
         List<FundInvestmentRecord> fundInvestmentRecordList = new ArrayList<>();
         FundInvestmentRecord fundInvestmentRecord = new FundInvestmentRecord();
         fundInvestmentRecord.setId("1");
