@@ -1,0 +1,65 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link th:href="@{/layui/css/layui.css}" rel="stylesheet" type="text/css">
+    <script type="text/javascript" th:src="@{/layui/layui.js}"></script>
+    <title>Title</title>
+</head>
+<body>
+<form class="layui-form" action="">
+    <div class="layui-form-item">
+        <label class="layui-form-label">基金</label>
+        <div class="layui-input-inline">
+            <select name="modules" lay-verify="required" lay-search="">
+                <option value="1">易方达上证50A</option>
+                <option value="2">form</option>
+                <option value="3">layim</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">确认份额</label>
+        <div class="layui-input-block">
+            <input type="text" name="share" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">确认净值</label>
+        <div class="layui-input-block">
+            <input type="text" name="net" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">确认金额</label>
+        <div class="layui-input-block">
+            <input type="text" name="confirm" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">手续费</label>
+        <div class="layui-input-block">
+            <input type="text" name="serviceFee" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">买入日期</label>
+        <div class="layui-input-block">
+            <input type="text" name="createDate" id="createDate" placeholder="yyyy-MM-dd" class="layui-input">
+        </div>
+    </div>
+</form>
+<script>
+    layui.use(['form', 'layedit', 'laydate'], function(){
+        var form = layui.form
+        var layer = layui.layer
+        var layedit = layui.layedit
+        var laydate = layui.laydate;
+
+        //日期
+        laydate.render({
+          elem: '#createDate'
+        });
+    });
+</script>
+</body>
+</html>

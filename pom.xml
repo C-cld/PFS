@@ -4,7 +4,7 @@
   <groupId>com.cyy</groupId>
   <artifactId>PFS</artifactId>
   <packaging>jar</packaging>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>1.1.0</version>
   <name>PFS</name>
   <description>Personal Finance System</description>
   <url>http://maven.apache.org</url>
