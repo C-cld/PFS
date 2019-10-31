@@ -2,7 +2,7 @@
 <head>
     <meta charset="UTF-8">
     <link th:href="@{/layui/css/layui.css}" rel="stylesheet" type="text/css">
-    <link th:href="@{/css/fund-investment-record.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{/css/fund.css}" rel="stylesheet" type="text/css">
     <script type="text/javascript" th:src="@{/layui/layui.js}"></script>
     <title>Title</title>
 </head>
@@ -15,7 +15,7 @@
                 资金变动记录
             </div>
             <div class="layui-card-body">
-                <table class="layui-table" lay-data="{url:'/search-record', toolbar:'#addToolBar', defaultToolbar:['filter', 'exports', 'print'], page:true, id:'record-table'}" lay-filter="record-table">
+                <table class="layui-table" lay-data="{url:'/fund-investment-record', toolbar:'#addToolBar', defaultToolbar:['filter', 'exports', 'print'], page:true, id:'record-table'}" lay-filter="record-table">
                     <thead>
                     <tr>
                         <th lay-data="{field:'productId'}">基金代码</th>
@@ -53,20 +53,13 @@
                 </div>
             </div>
             <div class="layui-card-body">
-                <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
-                    <ul class="layui-tab-title">
-                        <li class="layui-this">网站设置</li>
-                        <li>用户管理</li>
-                        <li>权限分配</li>
-                        <li>商品管理</li>
-                        <li>订单管理</li>
-                    </ul>
-                    <div class="layui-tab-content" style="height: 100px;">
-                        <div class="layui-tab-item layui-show">内容不一样是要有，因为你可以监听tab事件（阅读下文档就是了）</div>
-                        <div class="layui-tab-item">内容2</div>
-                        <div class="layui-tab-item">内容3</div>
-                        <div class="layui-tab-item">内容4</div>
-                        <div class="layui-tab-item">内容5</div>
+                <div class="layui-carousel" id="fund-carousel">
+                    <div carousel-item>
+                        <div>条目1</div>
+                        <div>条目2</div>
+                        <div>条目3</div>
+                        <div>条目4</div>
+                        <div>条目5</div>
                     </div>
                 </div>
             </div>
@@ -87,11 +80,12 @@
 
 
 <script>
-    layui.use(['table', 'element'], function() {
+    layui.use(['table', 'element', 'carousel'], function() {
         var $ = layui.jquery;
         var layer = layui.layer;
         var table = layui.table;
         var element = layui.element;
+        var carousel = layui.carousel;
         // 头工具栏事件（新增）
         table.on('toolbar(record-table)', function(obj){
             if (obj.event == 'addRecord') {
@@ -103,6 +97,11 @@
                     content: '/fund-investment-record-add'
                 });
             }
+        });
+        carousel.render({
+            elem: '#fund-carousel',
+            width: '100%',
+            arrow: 'hover' //始终显示箭头
         });
     });
     //对Date的扩展，将 Date 转化为指定格式的String

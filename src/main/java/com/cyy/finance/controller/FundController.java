@@ -23,9 +23,9 @@ public class FundController {
      * 基金定投记录页
      * @return
      */
-    @RequestMapping(value = "/fund-investment-record")
-    public ModelAndView fundInvestmentRecordPage() {
-        ModelAndView mav = new ModelAndView("/finance/fund-investment-record");
+    @RequestMapping(value = "/fund")
+    public ModelAndView fundPage() {
+        ModelAndView mav = new ModelAndView("/finance/fund");
         return mav;
     }
 
@@ -43,9 +43,9 @@ public class FundController {
      * 基金定投记录页表格数据
      * @return
      */
-    @RequestMapping(value = "/search-record")
+    @RequestMapping(value = "/fund-investment-record")
     @ResponseBody
-    public String searchRecord() {
+    public String fundInvestmentRecord() {
         List<FundInvestmentRecord> fundInvestmentRecordList = fundService.search();
         JSONArray array= JSONArray.parseArray(JSON.toJSONString(fundInvestmentRecordList));
         JSONObject jsonObject = new JSONObject();
