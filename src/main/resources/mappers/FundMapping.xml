@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cyy.finance.dao.FundMapper">
+
+    <select id="searchFund" resultType="com.cyy.finance.domain.Fund">
+        select id, name, type from fund;
+    </select>
+
+    <insert id="insertFund" parameterType="com.cyy.finance.domain.Fund">
+        insert into fund (id, name, type) values (#{id}, #{name}, #{type})
+    </insert>
+
+</mapper>

@@ -3,6 +3,7 @@ package com.cyy.finance.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.cyy.finance.domain.Fund;
 import com.cyy.finance.domain.FundInvestmentRecord;
 import com.cyy.finance.service.FundService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -26,6 +28,8 @@ public class FundController {
     @RequestMapping(value = "/fund")
     public ModelAndView fundPage() {
         ModelAndView mav = new ModelAndView("/finance/fund");
+        List<Fund> fundList = fundService.searchFund();
+        mav.addObject("fundList", fundList);
         return mav;
     }
 
@@ -46,7 +50,7 @@ public class FundController {
     @RequestMapping(value = "/fund-investment-record")
     @ResponseBody
     public String fundInvestmentRecord() {
-        List<FundInvestmentRecord> fundInvestmentRecordList = fundService.search();
+        List<FundInvestmentRecord> fundInvestmentRecordList = fundService.searchInvestmentRecord();
         JSONArray array= JSONArray.parseArray(JSON.toJSONString(fundInvestmentRecordList));
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("msg", "");
@@ -55,4 +59,18 @@ public class FundController {
         jsonObject.put("count", fundInvestmentRecordList.size());
         return jsonObject.toString();
     }
+
+    @RequestMapping(value = "/insert-fund")
+    @ResponseBody
+    public boolean insertFund(String fundCode) {
+        try {
+            fundService.insertFund(fundCode);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+    }
+
 }

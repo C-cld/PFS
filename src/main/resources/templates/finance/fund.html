@@ -54,12 +54,11 @@
                 </div>
                 <div class="layui-card-body">
                     <div class="layui-carousel" id="fund-carousel">
-                        <div carousel-item>
-                            <div>条目1</div>
-                            <div>条目2</div>
-                            <div>条目3</div>
-                            <div>条目4</div>
-                            <div>条目5</div>
+                        <div class="fund-item" carousel-item>
+                            <div th:each="fund,fundStat : ${fundList}">
+                                [[${fund.name}]]
+
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -75,78 +74,6 @@
         </div>
     </div>
 </div>
-
-<!--<div class="layui-row layui-col-space20">
-    <div class="layui-col-md9">
-        &lt;!&ndash;记录列表&ndash;&gt;
-        <div class="layui-card record-list">
-            <div class="layui-form layui-card-header">
-                资金变动记录
-            </div>
-            <div class="layui-card-body">
-                <table class="layui-table" lay-data="{url:'/fund-investment-record', toolbar:'#addToolBar', defaultToolbar:['filter', 'exports', 'print'], page:true, id:'record-table'}" lay-filter="record-table">
-                    <thead>
-                    <tr>
-                        <th lay-data="{field:'productId'}">基金代码</th>
-                        <th lay-data="{field:'share'}">确认份额</th>
-                        <th lay-data="{field:'net'}">确认净值</th>
-                        <th lay-data="{field:'confirm'}">确认金额</th>
-                        <th lay-data="{field:'serviceFee'}">手续费</th>
-                        <th lay-data="{field:'createDate', templet:'#createDate'}">买入时间</th>
-                    </tr>
-                    </thead>
-                </table>
-                <script type="text/html" id="addToolBar">
-                    <div class="layui-btn-container">
-                        <button class="layui-btn layui-btn-sm" lay-event="addRecord">新增</button>
-                    </div>
-                </script>
-                <script id="createDate" type="text/html">
-                    {{#
-                    var date = new Date();
-                    date.setTime(d.createDate);
-                    return date.Format("yyyy-MM-dd hh:mm:ss");
-                    }}
-                </script>
-            </div>
-        </div>
-    </div>
-    <div class="layui-col-md3">
-        <div class="layui-card">
-            <div class="layui-card-header">
-                <div class="layui-form-item">
-                    我的基金
-                    <div class="layui-inline add-fund">
-                        <button class="layui-btn layui-btn-sm layui-bg-gray addFund"><i class="layui-icon layui-icon-add-1"></i></button>
-                    </div>
-                </div>
-            </div>
-            <div class="layui-card-body">
-                <div class="layui-carousel" id="fund-carousel">
-                    <div carousel-item>
-                        <div>条目1</div>
-                        <div>条目2</div>
-                        <div>条目3</div>
-                        <div>条目4</div>
-                        <div>条目5</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="layui-col-md3">
-        <div class="layui-card">
-            <div class="layui-card-header">
-                投资比重
-            </div>
-            <div class="layui-card-body">
-
-            </div>
-        </div>
-    </div>
-</div>-->
-
 
 <script>
     layui.use(['table', 'element', 'carousel'], function() {
@@ -167,10 +94,34 @@
                 });
             }
         });
-        carousel.render({
+        var ins = carousel.render({
             elem: '#fund-carousel',
             width: '100%',
             arrow: 'hover' //始终显示箭头
+        });
+        // 添加基金
+        $('.addFund').on('click', function(){
+            var index = layer.open({
+                type: 1,
+                content: '<div class="layui-form-item">' +
+                    '<input type="text" class="layui-input fund-code" placeholder="请输入基金代码" autofocus="autofocus">' +
+                    '</div>',
+                btn:['确定'],
+                btn1: function () {
+                    var fundCode = $('.fund-code').val();
+                    $.ajax({
+                        url: '/insert-fund?fundCode=' + fundCode,
+                        success: function(result) {
+                            if (result) {
+                                location.reload();
+
+                            } else {
+                                layer.msg("新增失败");
+                            }
+                        }
+                    });
+                },
+            });
         });
     });
     //对Date的扩展，将 Date 转化为指定格式的String
