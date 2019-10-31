@@ -9,85 +9,86 @@
     <title>Title</title>
 </head>
 <body>
-<div class="layui-row layui-col-space20">
-    <div class="layui-col-md9">
-        <!--视频列表-->
-        <div class="layui-card file-list">
-            <div class="layui-form layui-card-header">
-                <div class="layui-form-item">
-                    <div class="layui-inline first">
-                        <label class="layui-form-label">标签</label>
-                        <div class="layui-input-block">
-                            <select name="tags" lay-verify="required" xm-select="tags" xm-select-search="" class="tags">
-                                <option th:each="tag,tagStat : ${tagList}" th:value="${tag.id}" th:text="${tag.name }"></option>
-                            </select>
+    <div class="layui-fluid">
+        <div class="layui-row layui-col-space12">
+            <div class="layui-col-md9">
+                <div class="layui-card file-list">
+                    <div class="layui-form layui-card-header">
+                        <div class="layui-form-item">
+                            <div class="layui-inline first">
+                                <label class="layui-form-label">标签</label>
+                                <div class="layui-input-block">
+                                    <select name="tags" lay-verify="required" xm-select="tags" xm-select-search="" class="tags">
+                                        <option th:each="tag,tagStat : ${tagList}" th:value="${tag.id}" th:text="${tag.name }"></option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <button class="layui-btn search" ><i class="layui-icon layui-icon-search"></i>搜索</button>
+                            </div>
+                            <div class="layui-inline">
+                                <button type="button" class="layui-btn" id="upload-video"><i class="layui-icon layui-icon-upload"></i>在当前标签下上传视频</button>
+                            </div>
                         </div>
                     </div>
-                    <div class="layui-inline">
-                        <button class="layui-btn search" ><i class="layui-icon layui-icon-search"></i>搜索</button>
-                    </div>
-                    <div class="layui-inline">
-                        <button type="button" class="layui-btn" id="upload-video"><i class="layui-icon layui-icon-upload"></i>在当前标签下上传视频</button>
+                    <div class="layui-card-body">
+                        <table class="layui-table" lay-data="{url:'/search-video', page:true, id:'video-table'}" lay-filter="video-table">
+                            <thead>
+                            <tr>
+                                <th lay-data="{field:'originalName'}">文件名</th>
+                                <th lay-data="{field:'createDate', templet:'#createDate'}">上传时间</th>
+                                <th lay-data="{field:'size'}">大小(MB)</th>
+                                <th lay-data="{align:'center', toolbar: '#opration'}"></th>
+                            </tr>
+                            </thead>
+                        </table>
+                        <script type="text/html" id="opration">
+                            <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
+                            <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+                            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+                        </script>
+                        &lt;!&ndash;转换layui表格日期格式&ndash;&gt;
+                        <script id="createDate" type="text/html">
+                            {{#
+                            var date = new Date();
+                            date.setTime(d.createDate);
+                            return date.Format("yyyy-MM-dd hh:mm:ss");
+                            }}
+                        </script>
                     </div>
                 </div>
             </div>
-            <div class="layui-card-body">
-                <table class="layui-table" lay-data="{url:'/search-video', page:true, id:'video-table'}" lay-filter="video-table">
-                    <thead>
-                    <tr>
-                        <th lay-data="{field:'originalName'}">文件名</th>
-                        <th lay-data="{field:'createDate', templet:'#createDate'}">上传时间</th>
-                        <th lay-data="{field:'size'}">大小(MB)</th>
-                        <th lay-data="{align:'center', toolbar: '#opration'}"></th>
-                    </tr>
-                    </thead>
-                </table>
-                <script type="text/html" id="opration">
-                    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
-                    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
-                    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
-                </script>
-                <!--转换layui表格日期格式-->
-                <script id="createDate" type="text/html">
-                    {{#
-                    var date = new Date();
-                    date.setTime(d.createDate);
-                    return date.Format("yyyy-MM-dd hh:mm:ss");
-                    }}
-                </script>
-            </div>
-        </div>
-    </div>
-    <div class="layui-col-md3">
-        <div class="layui-card tag-list">
-            <div class="layui-card-header">
+            <div class="layui-col-md3">
+                <div class="layui-card tag-list">
+                    <div class="layui-card-header">
 
-                <div class="layui-form-item">
-                    标签管理
-                    <div class="layui-inline add-tag">
-                        <button class="layui-btn layui-btn-sm layui-bg-gray addTag"><i class="layui-icon layui-icon-add-1"></i></button>
+                        <div class="layui-form-item">
+                            标签管理
+                            <div class="layui-inline add-tag">
+                                <button class="layui-btn layui-btn-sm layui-bg-gray addTag"><i class="layui-icon layui-icon-add-1"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-card-body">
+                        <table class="layui-table" lay-data="{url:'/search-tag', page:{layout:['prev', 'page', 'next', 'count', 'limit'], groups:1}, id:'tag-table'}" lay-filter="tag-table">
+                            <thead>
+                            <tr>
+                                <th lay-data="{field:'id', hide:true}"></th>
+                                <th lay-data="{field:'name', edit: 'text'}">标签名</th>
+                                <th lay-data="{align:'center',width:'110', toolbar: '#tagOpration'}"></th>
+                            </tr>
+                            </thead>
+                        </table>
+                        <script type="text/html" id="tagOpration">
+                            <button type="button" class="layui-btn layui-btn-sm" lay-event="del">
+                                <i class="layui-icon">&#xe640;</i>
+                            </button>
+                        </script>
                     </div>
                 </div>
             </div>
-            <div class="layui-card-body">
-                <table class="layui-table" lay-data="{url:'/search-tag', page:{layout:['prev', 'page', 'next', 'count', 'limit'], groups:1}, id:'tag-table'}" lay-filter="tag-table">
-                    <thead>
-                    <tr>
-                        <th lay-data="{field:'id', hide:true}"></th>
-                        <th lay-data="{field:'name', edit: 'text'}">标签名</th>
-                        <th lay-data="{align:'center',width:'110', toolbar: '#tagOpration'}"></th>
-                    </tr>
-                    </thead>
-                </table>
-                <script type="text/html" id="tagOpration">
-                    <button type="button" class="layui-btn layui-btn-sm" lay-event="del">
-                        <i class="layui-icon">&#xe640;</i>
-                    </button>
-                </script>
-            </div>
         </div>
     </div>
-</div>
 
 <script>
     // 加载多选下拉框模块
