@@ -7,70 +7,75 @@
     <title>Title</title>
 </head>
 <body>
-<div class="layui-col-md9">
-    <div class="layui-card record-list">
-        <div class="layui-form layui-card-header">
-            资金变动记录
-        </div>
-        <div class="layui-card-body">
-            <table class="layui-table" lay-data="{url:'/fund-investment-record', toolbar:'#addToolBar', defaultToolbar:['filter', 'exports', 'print'], page:true, id:'record-table'}" lay-filter="record-table">
-                <thead>
-                <tr>
-                    <th lay-data="{field:'productId'}">基金代码</th>
-                    <th lay-data="{field:'share'}">确认份额</th>
-                    <th lay-data="{field:'net'}">确认净值</th>
-                    <th lay-data="{field:'confirm'}">确认金额</th>
-                    <th lay-data="{field:'serviceFee'}">手续费</th>
-                    <th lay-data="{field:'createDate', templet:'#createDate'}">买入时间</th>
-                </tr>
-                </thead>
-            </table>
-            <script type="text/html" id="addToolBar">
-                <div class="layui-btn-container">
-                    <button class="layui-btn layui-btn-sm" lay-event="addRecord">新增</button>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space12">
+        <div class="layui-col-md9">
+            <div class="layui-card record-list">
+                <div class="layui-form layui-card-header">
+                    资金变动记录
                 </div>
-            </script>
-            <script id="createDate" type="text/html">
-                {{#
-                var date = new Date();
-                date.setTime(d.createDate);
-                return date.Format("yyyy-MM-dd hh:mm:ss");
-                }}
-            </script>
-        </div>
-    </div>
-</div>
-<div class="layui-col-md3">
-    <div class="layui-card">
-        <div class="layui-card-header">
-            <div class="layui-form-item">
-                我的基金
-                <div class="layui-inline add-fund">
-                    <button class="layui-btn layui-btn-sm layui-bg-gray addFund"><i class="layui-icon layui-icon-add-1"></i></button>
+                <div class="layui-card-body">
+                    <table class="layui-table" lay-data="{url:'/fund-investment-record', toolbar:'#addToolBar', defaultToolbar:['filter', 'exports', 'print'], page:true, id:'record-table'}" lay-filter="record-table">
+                        <thead>
+                        <tr>
+                            <th lay-data="{field:'productId'}">基金代码</th>
+                            <th lay-data="{field:'share'}">确认份额</th>
+                            <th lay-data="{field:'net'}">确认净值</th>
+                            <th lay-data="{field:'confirm'}">确认金额</th>
+                            <th lay-data="{field:'serviceFee'}">手续费</th>
+                            <th lay-data="{field:'createDate', templet:'#createDate'}">买入时间</th>
+                        </tr>
+                        </thead>
+                    </table>
+                    <script type="text/html" id="addToolBar">
+                        <div class="layui-btn-container">
+                            <button class="layui-btn layui-btn-sm" lay-event="addRecord">新增</button>
+                        </div>
+                    </script>
+                    <script id="createDate" type="text/html">
+                        {{#
+                        var date = new Date();
+                        date.setTime(d.createDate);
+                        return date.Format("yyyy-MM-dd hh:mm:ss");
+                        }}
+                    </script>
                 </div>
             </div>
         </div>
-        <div class="layui-card-body">
-            <div class="layui-carousel" id="fund-carousel">
-                <div carousel-item>
-                    <div>条目1</div>
-                    <div>条目2</div>
-                    <div>条目3</div>
-                    <div>条目4</div>
-                    <div>条目5</div>
+        <div class="layui-col-md3">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    <div class="layui-form-item">
+                        我的基金
+                        <div class="layui-inline add-fund">
+                            <button class="layui-btn layui-btn-sm layui-bg-gray addFund"><i class="layui-icon layui-icon-add-1"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-card-body">
+                    <div class="layui-carousel" id="fund-carousel">
+                        <div carousel-item>
+                            <div>条目1</div>
+                            <div>条目2</div>
+                            <div>条目3</div>
+                            <div>条目4</div>
+                            <div>条目5</div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
-    <div class="layui-card">
-        <div class="layui-card-header">
-            投资比重
-        </div>
-        <div class="layui-card-body">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    投资比重
+                </div>
+                <div class="layui-card-body">
 
+                </div>
+            </div>
         </div>
     </div>
 </div>
+
 <!--<div class="layui-row layui-col-space20">
     <div class="layui-col-md9">
         &lt;!&ndash;记录列表&ndash;&gt;
