@@ -28,8 +28,13 @@ public class FundController {
     @RequestMapping(value = "/fund")
     public ModelAndView fundPage() {
         ModelAndView mav = new ModelAndView("/finance/fund");
-        List<Fund> fundList = fundService.searchFund();
-        mav.addObject("fundList", fundList);
+        try {
+            // 我的基金
+            List<Fund> fundList = fundService.searchFund();
+            mav.addObject("fundList", fundList);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return mav;
     }
 
@@ -50,14 +55,38 @@ public class FundController {
     @RequestMapping(value = "/fund-investment-record")
     @ResponseBody
     public String fundInvestmentRecord() {
-        List<FundInvestmentRecord> fundInvestmentRecordList = fundService.searchInvestmentRecord();
-        JSONArray array= JSONArray.parseArray(JSON.toJSONString(fundInvestmentRecordList));
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("msg", "");
-        jsonObject.put("code", 0);
-        jsonObject.put("data", array);
-        jsonObject.put("count", fundInvestmentRecordList.size());
-        return jsonObject.toString();
+        try {
+            List<FundInvestmentRecord> fundInvestmentRecordList = fundService.searchInvestmentRecord(null);
+            JSONArray array= JSONArray.parseArray(JSON.toJSONString(fundInvestmentRecordList));
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("msg", "");
+            jsonObject.put("code", 0);
+            jsonObject.put("data", array);
+            jsonObject.put("count", fundInvestmentRecordList.size());
+            return jsonObject.toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+
+    /**
+     * 获取图表标记点
+     * @param fundCode
+     * @return
+     */
+    @RequestMapping(value = "/getMarkPoint")
+    @ResponseBody
+    public List<FundInvestmentRecord> getMarkPoint(String fundCode) {
+        try {
+            List<FundInvestmentRecord> fundInvestmentRecordList = fundService.searchInvestmentRecord(fundCode);
+            return fundInvestmentRecordList;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
     }
 
     @RequestMapping(value = "/insert-fund")

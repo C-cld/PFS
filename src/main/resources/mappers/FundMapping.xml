@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cyy.finance.dao.FundMapper">
+    <resultMap type="com.cyy.finance.domain.FundInvestmentRecord" id="fundInvestmentRecordMap">
+        <id property="id" column="id" />
+        <result property="productId" column="product_id" />
+        <result property="share" column="share" />
+        <result property="net" column="net" />
+        <result property="confirm" column="confirm" />
+        <result property="serviceFee" column="service_fee" />
+        <result property="createDate" column="create_date" />
+    </resultMap>
 
     <select id="searchFund" resultType="com.cyy.finance.domain.Fund">
         select id, name, type from fund;
@@ -9,5 +18,12 @@
     <insert id="insertFund" parameterType="com.cyy.finance.domain.Fund">
         insert into fund (id, name, type) values (#{id}, #{name}, #{type})
     </insert>
+
+    <select id="searchInvestmentRecord" resultMap="fundInvestmentRecordMap">
+        select product_id, share, net, confirm, service_fee, create_date from fund_investment_record
+         <if test="fundCode != null">
+             where product_id = #{fundCode}
+         </if>
+    </select>
 
 </mapper>

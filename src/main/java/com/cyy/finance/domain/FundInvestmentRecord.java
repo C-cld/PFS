@@ -1,5 +1,7 @@
 package com.cyy.finance.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 public class FundInvestmentRecord {
@@ -9,6 +11,7 @@ public class FundInvestmentRecord {
     private Float net; // 确认净值
     private Float confirm; // 确认金额
     private Float serviceFee; // 手续费
+    @JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
     private Date createDate;
 
     public String getId() {
