@@ -159,94 +159,89 @@
 
 
 <script th:inline="javascript">
-    // 渲染图表
     function paint(fundCode) {
-        var data = []; // echarts图表数据
-        var markPointData = markPoint(fundCode); // 标记点
-        var fundList = [[${fundList}]];
-        var fundListLength = fundList.length;
-        for (var i = 0; i < fundListLength; i++) {
-            var fund = fundList[i]; //当前基金
-            if (fund.id == fundCode) {
-                var fundNet = fund.fundNet; // 当前基金的净值
-                var fundNetLength = fundNet.length;
-                // 将基金净值数据转化为echarts的格式
-                for (var j = 0; j < fundNetLength; j++) {
-                    data.push({
-                        name: fundNet[j].ndate,
-                        value: [fundNet[j].ndate, fundNet[j].net]
-                    });
-                }
-                var myChart = echarts.init(document.getElementById(fundList[i].id));
-                var option = {
-                    title: {
-                        text: fund.name
-                    },
-                    tooltip: {
-                        trigger: 'axis',
-                        formatter: function (params) {
-                            params = params[0];
-                            var date = new Date(params.name);
-                            return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate() + ':' + params.value[1];
-                        },
-                        axisPointer: {
-                            animation: false
-                        }
-                    },
-                    xAxis: {
-                        type: 'time',
-                        splitLine: {
-                            show: false
-                        }
-                    },
-                    yAxis: {
-                        type: 'value',
-                        boundaryGap: [0, '100%'],
-                        splitLine: {
-                            show: true
-                        }
-                    },
-                    series: [{
-                        name: '基金净值',
-                        type: 'line',
-                        color: '#1E90FF',
-                        showSymbol: false,
-                        hoverAnimation: false,
-                        data: data,
-                        markPoint: {
-                            symbol: 'circle',
-                            symbolSize: 5,
-                            label: {
-                                show: false,
-                            },
-                            itemStyle: {
-                                color: '#FF4500'
-                            },
-                            data: markPointData,
-                        }
-                    }]
-                };
-                myChart.setOption(option);
-            }
-        }
-    }
-    // 获取标记点
-    function markPoint(fundCode) {
         var $ = layui.jquery;
-        var markPointData = [];
+        // 基金净值
+        var net = [];
         $.ajax({
-            url: '/getMarkPoint?fundCode=' + fundCode,
-            async: false, // 设为同步传输，既等success回调函数执行完才会继续往下执行
-            success: function(result) {
-                for (var j = 0; j < result.length; j++) {
-                    markPointData.push({
-                        name: result[j].net + '',
-                        coord: [result[j].createDate, result[j].net]
+            url: "/getFundNet?fundCode=" + fundCode,
+            async: false,
+            success: function(fundNetList) {
+                var length = fundNetList.length;
+                for (var i = 0; i < length; i++) {
+                    net.push({
+                        name: fundNetList[i].ndate,
+                        value: [fundNetList[i].ndate, fundNetList[i].net]
                     });
                 }
             }
         });
-        return markPointData;
+        //净值标记点
+        var markPoint = [];
+        $.ajax({
+           url: "/getFundMarkPoint?fundCode=" + fundCode,
+           async: false,
+           success: function(markPointList) {
+               var length = markPointList.length;
+               for (var j = 0; j < length; j++) {
+                   markPoint.push({
+                       name: markPointList[j].net + '',
+                       coord: [markPointList[j].createDate, markPointList[j].net]
+                   });
+               }
+           }
+        });
+        // 开始渲染
+        var myChart = echarts.init(document.getElementById(fundCode));
+        var option = {
+            title: {
+                text: fundCode
+            },
+            tooltip: {
+                trigger: 'axis',
+                formatter: function (params) {
+                    params = params[0];
+                    var date = new Date(params.name);
+                    return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate() + ':' + params.value[1];
+                },
+                axisPointer: {
+                    animation: false
+                }
+            },
+            xAxis: {
+                type: 'time',
+                splitLine: {
+                    show: false
+                }
+            },
+            yAxis: {
+                type: 'value',
+                boundaryGap: [0, '100%'],
+                splitLine: {
+                    show: true
+                }
+            },
+            series: [{
+                name: '基金净值',
+                type: 'line',
+                color: '#1E90FF',
+                showSymbol: false,
+                hoverAnimation: false,
+                data: net,
+                markPoint: {
+                    symbol: 'circle',
+                    symbolSize: 5,
+                    label: {
+                        show: false,
+                    },
+                    itemStyle: {
+                        color: '#FF4500'
+                    },
+                    data: markPoint,
+                }
+            }]
+        };
+        myChart.setOption(option);
     }
 
 </script>

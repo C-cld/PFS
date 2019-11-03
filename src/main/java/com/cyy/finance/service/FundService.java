@@ -24,19 +24,13 @@ public class FundService {
     FundMapper fundMapper;
 
     public List<FundInvestmentRecord> searchInvestmentRecord(String fundCode) throws ParseException {
-
         // TODO: 2019/10/30 各种过滤条件
         List<FundInvestmentRecord> fundInvestmentRecordList = fundMapper.searchInvestmentRecord(fundCode);
         return fundInvestmentRecordList;
     }
 
-    public List<Fund> searchFund() throws DocumentException {
+    public List<Fund> searchFund() {
         List<Fund> fundList = fundMapper.searchFund();
-        int fundListSize = fundList.size();
-        for (int i = 0; i < fundListSize; i ++) {
-            Fund fund = fundList.get(i);
-            addFundNet(fund);
-        }
         return fundList;
     }
 
@@ -49,12 +43,12 @@ public class FundService {
     }
 
     /**
-     * 给查出来的fund添加历史净值数据
-     * @param fund
+     * 从和讯接口查历史净值数据
+     * @param fundCode
      * @return
      * @throws DocumentException
      */
-    private Fund addFundNet(Fund fund) throws DocumentException {
+    public List<FundNet> getFundNet(String fundCode) throws DocumentException {
         List<FundNet> fundNetList = new ArrayList<>();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date date = new Date();//获取当前时间    
@@ -64,12 +58,11 @@ public class FundService {
 
         String startDate = simpleDateFormat.format(calendar.getTime());
         String endDate = simpleDateFormat.format(date);
-        String url = "http://data.funds.hexun.com/outxml/detail/openfundnetvalue.aspx?fundcode=" + fund.getId() + "&startdate=" + startDate + "&enddate=" + endDate;
+        String url = "http://data.funds.hexun.com/outxml/detail/openfundnetvalue.aspx?fundcode=" + fundCode + "&startdate=" + startDate + "&enddate=" + endDate;
         String result = HttpUtil.sendGetRequest(url).replace("\r\n", "");
-        SAXReader reader = new SAXReader();
         Document document = DocumentHelper.parseText(result);
         Element rootElement = document.getRootElement();
-        String fundName = rootElement.element("fundname").getStringValue();
+        // String fundName = rootElement.element("fundname").getStringValue();
         Iterator iterator = rootElement.elementIterator("Data");
         while (iterator.hasNext()) {
             Element dataElement = (Element) iterator.next();
@@ -80,7 +73,6 @@ public class FundService {
             fundNet.net = net;
             fundNetList.add(fundNet);
         }
-        fund.setFundNet(fundNetList);
-        return fund;
+        return fundNetList;
     }
 }

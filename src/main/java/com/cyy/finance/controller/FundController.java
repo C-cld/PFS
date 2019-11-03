@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.cyy.finance.domain.Fund;
 import com.cyy.finance.domain.FundInvestmentRecord;
+import com.cyy.finance.domain.FundNet;
 import com.cyy.finance.service.FundService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -87,6 +88,40 @@ public class FundController {
             return null;
         }
 
+    }
+
+    /**
+     * 获取基金净值
+     * @param fundCode
+     * @return
+     */
+    @RequestMapping(value = "/getFundNet")
+    @ResponseBody
+    public List<FundNet> getFundNet(String fundCode) {
+        List<FundNet> fundNetList = new ArrayList<>();
+        try {
+            fundNetList = fundService.getFundNet(fundCode);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return fundNetList;
+    }
+
+    /**
+     * 获取基金标记点
+     * @param fundCode
+     * @return
+     */
+    @RequestMapping(value = "/getFundMarkPoint")
+    @ResponseBody
+    public List<FundInvestmentRecord> getFundMarkPoint(String fundCode) {
+        List<FundInvestmentRecord> fundInvestmentRecordList = new ArrayList<>();
+        try {
+            fundInvestmentRecordList = fundService.searchInvestmentRecord(fundCode);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return fundInvestmentRecordList;
     }
 
     @RequestMapping(value = "/insert-fund")
