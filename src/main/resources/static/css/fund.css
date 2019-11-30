@@ -9,6 +9,9 @@ body {
     margin-top: 5px;
     margin-right: 0px;
 }
+.my-fund .layui-card-body {
+    height: 280px;
+}
 .fund-code {
     border: none;
 }
