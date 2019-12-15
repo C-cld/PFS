@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cyy.finance.dao.ProfitMapper">
+    <resultMap type="com.cyy.finance.domain.Profit" id="profitMap">
+        <id property="id" column="id" />
+        <result property="fundId" column="fund_id" />
+        <result property="share" column="share" />
+        <result property="profit" column="profit" />
+        <result property="createDate" column="create_date" />
+    </resultMap>
+
+    <resultMap type="com.cyy.finance.dto.ProfitSumPerDay" id="profitSumPerDayMap">
+        <result property="sum" column="sum" />
+        <result property="createDate" column="create_date" />
+    </resultMap>
+
+    <resultMap type="com.cyy.finance.dto.ProfitSum" id="profitSumMap">
+        <result property="fundId" column="fundId" />
+        <result property="fundName" column="fundName" />
+        <result property="sumProfit" column="sumProfit" />
+    </resultMap>
+
+    <select id="getProfitSumPerDayList" resultMap="profitSumPerDayMap">
+        select round(sum(profit),2) as sum, create_date from profit group by create_date ORDER BY create_date asc
+    </select>
+
+    <select id="getProfitSumList" resultMap="profitSumMap">
+        select f.id as fundId, f.name as fundName, t.sumProfit as sumProfit
+        from fund f LEFT JOIN (select fund_id, round(sum(profit),2) as sumProfit from profit GROUP BY fund_id) t
+        on f.id = t.fund_id
+        order by sumProfit desc
+    </select>
+
+    <select id="getProfitDetailList" resultMap="profitMap">
+        select profit, create_date from profit where fund_id = #{fundId} order by create_date desc limit #{index}, #{pageSize}
+    </select>
+
+    <select id="getCount" resultType="Integer">
+        select count(id) from profit where fund_id = #{fundId}
+    </select>
+
+    <insert id="addProfitDetail" parameterType="com.cyy.finance.domain.Profit">
+        insert into profit (id, fund_id, profit, create_date) values (#{id}, #{fundId}, #{profit}, #{createDate})
+    </insert>
+
+</mapper>

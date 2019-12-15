@@ -1,0 +1,150 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link th:href="@{/layui/css/layui.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{/css/profit.css}" rel="stylesheet" type="text/css">
+    <script type="text/javascript" th:src="@{/layui/layui.js}"></script>
+    <script type="text/javascript" th:src="@{/js/echarts.min.js}"></script>
+    <title>Title</title>
+</head>
+<body>
+    <div class="layui-fluid">
+        <div class="layui-row layui-col-space12">
+            <div class="layui-col-md8">
+                <div class="layui-card">
+                    <div class="layui-card-header">
+                        每日收益曲线
+                    </div>
+                    <div class="layui-card-body">
+                        <div id="curve" style="height:400px;"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md4">
+                <div class="layui-card">
+                    asdfasdfasdfasdf
+                </div>
+            </div>
+            <div class="layui-col-md4">
+                <div class="layui-card">
+                    <div class="layui-card-header">
+                        我的基金
+                    </div>
+                    <div class="layui-card-body">
+                        <table id="my-fund" lay-filter="my-fund"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script th:inline="javascript">
+
+
+
+
+
+
+
+        // 加载我的基金表格
+        layui.use("table", function(){
+            var $ = layui.jquery;
+            var table = layui.table;
+
+            paint();
+
+            table.render({
+                elem: "#my-fund",
+                id: "my-fund",
+                url: "/my-fund",
+                skin: "nob",
+                cols: [
+                    [
+                        {field: "fundId", title: "ID", hide:true},
+                        {field: "fundName", title: "基金", width: "70%"},
+                        {field: "sumProfit", title: "总收益", event: "profitDetail"}
+                    ]
+                ]
+            });
+
+            table.on("tool(my-fund)", function(obj){
+                var fundId = obj.data.fundId;
+                if (obj.event == "profitDetail") {
+                    layer.open({
+                        type: 2,
+                        area: ['800px', '500px'],
+                        content: "/profit-detail?fundId=" + fundId,
+                        cancel: function(index, layero) {
+                            console.log(123);
+                            paint();
+                            table.reload("my-fund");
+                        }
+                    });
+                }
+            });
+
+            function paint() {
+                var profitSumPerDayList;
+                var profit = [];
+
+                $.ajax({
+                    url:"/profit-sum-per-day",
+                    async: false,
+                    success: function(result) {
+                        profitSumPerDayList = result;
+                    }
+                });
+
+                var length = profitSumPerDayList.length;
+                for (var i = 0; i < length; i++) {
+                    profit.push({
+                        name: profitSumPerDayList[i].createDate,
+                        value: [profitSumPerDayList[i].createDate, profitSumPerDayList[i].sum]
+                    });
+                }
+
+                // 渲染每日收益曲线图
+                var myChart = echarts.init(document.getElementById("curve"));
+                var option = {
+                    title: {
+                        text: "每日收益"
+                    },
+                    tooltip: {
+                        trigger: 'axis',
+                        formatter: function (params) {
+                            params = params[0];
+                            var date = new Date(params.name);
+                            return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate() + ':' + params.value[1];
+                        },
+                        axisPointer: {
+                            animation: false
+                        }
+                    },
+                    xAxis: {
+                        type: 'time',
+                        splitLine: {
+                            show: false
+                        }
+                    },
+                    yAxis: {
+                        type: 'value',
+                        boundaryGap: [0, '100%'],
+                        splitLine: {
+                            show: true
+                        }
+                    },
+                    series: [{
+                        name: '每日收益2',
+                        type: 'line',
+                        color: '#1E90FF',
+                        showSymbol: false,
+                        hoverAnimation: false,
+                        data: profit,
+                    }]
+                };
+                myChart.setOption(option);
+            }
+        });
+
+
+    </script>
+</body>

@@ -5,7 +5,7 @@ import java.util.Date;
 public class Tag {
     private String id;
     private String name;
-    Date createDate;
+    private Date createDate;
 
     public String getId() {
         return id;
