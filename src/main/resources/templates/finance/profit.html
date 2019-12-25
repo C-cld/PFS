@@ -98,7 +98,7 @@
                 for (var i = 0; i < length; i++) {
                     profit.push({
                         name: profitSumPerDayList[i].createDate,
-                        value: [profitSumPerDayList[i].createDate, profitSumPerDayList[i].sum]
+                        value: [profitSumPerDayList[i].createDate, profitSumPerDayList[i].hisSum]
                     });
                 }
 
@@ -106,7 +106,7 @@
                 var myChart = echarts.init(document.getElementById("curve"));
                 var option = {
                     title: {
-                        text: "每日收益"
+                        text: "累计收益"
                     },
                     tooltip: {
                         trigger: 'axis',
@@ -133,7 +133,7 @@
                         }
                     },
                     series: [{
-                        name: '每日收益2',
+                        name: '累计收益2',
                         type: 'line',
                         color: '#1E90FF',
                         showSymbol: false,

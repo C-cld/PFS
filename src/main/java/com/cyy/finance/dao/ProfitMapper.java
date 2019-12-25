@@ -9,7 +9,7 @@ import java.util.List;
 
 @Mapper
 public interface ProfitMapper {
-    List<ProfitSumPerDay> getProfitSumPerDayList();
+    List<Profit> getProfitSumPerDayList();
 
     List<ProfitSum> getProfitSumList();
 

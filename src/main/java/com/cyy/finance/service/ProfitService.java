@@ -18,7 +18,7 @@ public class ProfitService {
     @Autowired
     ProfitMapper profitMapper;
 
-    public List<ProfitSumPerDay> getProfitSumPerDayList() {
+    public List<Profit> getProfitSumPerDayList() {
         return profitMapper.getProfitSumPerDayList();
     }
 

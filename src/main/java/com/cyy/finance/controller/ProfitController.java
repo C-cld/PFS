@@ -27,7 +27,7 @@ public class ProfitController {
 
     @RequestMapping(value = "/profit-sum-per-day")
     @ResponseBody
-    List<ProfitSumPerDay> getProfitSumPerDayList() {
+    List<Profit> getProfitSumPerDayList() {
         return profitService.getProfitSumPerDayList();
     }
 
