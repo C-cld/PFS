@@ -45,11 +45,6 @@
           <groupId>dom4j</groupId>
           <artifactId>dom4j</artifactId>
       </dependency>
-      <dependency>
-          <groupId>log4j</groupId>
-          <artifactId>log4j</artifactId>
-          <version>1.2.17</version>
-      </dependency>
   </dependencies>
   <build>
     <finalName>PFS</finalName>
