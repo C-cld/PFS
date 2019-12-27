@@ -21,7 +21,7 @@ public class ProfitController {
 
     @RequestMapping(value = "/profit")
     public ModelAndView profitPage() {
-        ModelAndView modelAndView = new ModelAndView("/finance/profit");
+        ModelAndView modelAndView = new ModelAndView("finance/profit");
         return modelAndView;
     }
 
@@ -47,7 +47,7 @@ public class ProfitController {
 
     @RequestMapping(value = "/profit-detail")
     public ModelAndView profitDetailPage(String fundId) {
-        ModelAndView modelAndView = new ModelAndView("/finance/profit-detail");
+        ModelAndView modelAndView = new ModelAndView("finance/profit-detail");
         modelAndView.addObject("fundId", fundId);
         return modelAndView;
     }

@@ -28,7 +28,7 @@ public class FundController {
      */
     @RequestMapping(value = "/fund")
     public ModelAndView fundPage() {
-        ModelAndView mav = new ModelAndView("/finance/fund");
+        ModelAndView mav = new ModelAndView("finance/fund");
         try {
             // 我的基金
             List<Fund> fundList = fundService.searchFund();
@@ -45,7 +45,7 @@ public class FundController {
      */
     @RequestMapping(value = "/fund-investment-record-add")
     public ModelAndView fundInvestmentRecordAddPage() {
-        ModelAndView mav = new ModelAndView("/finance/fund-investment-record-add");
+        ModelAndView mav = new ModelAndView("finance/fund-investment-record-add");
         return mav;
     }
 

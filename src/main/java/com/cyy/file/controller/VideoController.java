@@ -37,7 +37,7 @@ public class VideoController {
      */
     @RequestMapping(value = "/video")
     public ModelAndView videoPage() {
-        ModelAndView mav = new ModelAndView("/file/video");
+        ModelAndView mav = new ModelAndView("file/video");
         List<Tag> tagList = tagService.searchTag(null);
         mav.addObject("tagList", tagList);
         return mav;
@@ -50,7 +50,7 @@ public class VideoController {
      */
     @RequestMapping(value = "/video-player")
     public ModelAndView videoPlayerPage(String videoId) {
-        ModelAndView mav = new ModelAndView("/file/video-player");
+        ModelAndView mav = new ModelAndView("file/video-player");
         mav.addObject("fileId", videoId);
         return mav;
     }
