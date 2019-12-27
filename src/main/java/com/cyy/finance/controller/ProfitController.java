@@ -3,8 +3,8 @@ package com.cyy.finance.controller;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.cyy.finance.domain.Profit;
-import com.cyy.finance.dto.ProfitSum;
-import com.cyy.finance.dto.ProfitSumPerDay;
+import com.cyy.finance.model.ProfitSum;
+import com.cyy.finance.model.ProfitSumPerDay;
 import com.cyy.finance.service.ProfitService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,8 +27,9 @@ public class ProfitController {
 
     @RequestMapping(value = "/profit-sum-per-day")
     @ResponseBody
-    List<Profit> getProfitSumPerDayList() {
+    List<ProfitSumPerDay> getProfitSumPerDayList() {
         return profitService.getProfitSumPerDayList();
+
     }
 
     @RequestMapping(value = "/my-fund")

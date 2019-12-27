@@ -2,13 +2,13 @@ package com.cyy.finance.service;
 
 import com.cyy.finance.dao.ProfitMapper;
 import com.cyy.finance.domain.Profit;
-import com.cyy.finance.dto.ProfitSum;
-import com.cyy.finance.dto.ProfitSumPerDay;
+import com.cyy.finance.model.ProfitSum;
+import com.cyy.finance.model.ProfitSumPerDay;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -18,8 +18,16 @@ public class ProfitService {
     @Autowired
     ProfitMapper profitMapper;
 
-    public List<Profit> getProfitSumPerDayList() {
-        return profitMapper.getProfitSumPerDayList();
+    public List<ProfitSumPerDay> getProfitSumPerDayList() {
+        List<ProfitSumPerDay> profitSumPerDayList = profitMapper.getProfitSumPerDayList();
+        int size = profitSumPerDayList.size();
+        float sum = 0;
+        for (int i = 0; i < size; i ++) {
+            ProfitSumPerDay profitSumPerDay = profitSumPerDayList.get(i);
+            sum = sum + profitSumPerDay.getSum();
+            profitSumPerDay.setSum(sum);
+        }
+        return profitSumPerDayList;
     }
 
     public List<ProfitSum> getProfitSumList() {

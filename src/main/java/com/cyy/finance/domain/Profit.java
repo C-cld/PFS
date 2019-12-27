@@ -6,7 +6,6 @@ public class Profit {
     private String id;
     private String fundId;
     private Float profit;
-    private Float hisSum;
     private Date createDate;
 
     public String getId() {
@@ -31,14 +30,6 @@ public class Profit {
 
     public void setProfit(Float profit) {
         this.profit = profit;
-    }
-
-    public Float getHisSum() {
-        return hisSum;
-    }
-
-    public void setHisSum(Float hisSum) {
-        this.hisSum = hisSum;
     }
 
     public Date getCreateDate() {

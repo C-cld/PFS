@@ -1,4 +1,4 @@
-package com.cyy.finance.dto;
+package com.cyy.finance.model;
 
 import java.util.Date;
 

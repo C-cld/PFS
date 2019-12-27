@@ -1,5 +1,8 @@
-package com.cyy.finance.dto;
+package com.cyy.finance.model;
 
+/**
+ * 我的基金列表
+ */
 public class ProfitSum {
     private String fundId;
     private String fundName;

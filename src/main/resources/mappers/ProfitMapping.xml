@@ -5,27 +5,22 @@
         <id property="id" column="id" />
         <result property="fundId" column="fund_id" />
         <result property="profit" column="profit" />
-        <result property="hisSum" column="his_sum" />
         <result property="createDate" column="create_date" />
     </resultMap>
 
-    <!--<resultMap type="com.cyy.finance.dto.ProfitSumPerDay" id="profitSumPerDayMap">
+    <resultMap type="com.cyy.finance.model.ProfitSumPerDay" id="profitSumPerDayMap">
         <result property="sum" column="sum" />
         <result property="createDate" column="create_date" />
-    </resultMap>-->
+    </resultMap>
 
-    <resultMap type="com.cyy.finance.dto.ProfitSum" id="profitSumMap">
+    <resultMap type="com.cyy.finance.model.ProfitSum" id="profitSumMap">
         <result property="fundId" column="fundId" />
         <result property="fundName" column="fundName" />
         <result property="sumProfit" column="sumProfit" />
     </resultMap>
 
-    <!--<select id="getProfitSumPerDayList" resultMap="profitSumPerDayMap">
+    <select id="getProfitSumPerDayList" resultMap="profitSumPerDayMap">
         select round(sum(profit),2) as sum, create_date from profit group by create_date ORDER BY create_date asc
-    </select>-->
-
-    <select id="getProfitSumPerDayList" resultMap="profitMap">
-        select his_sum, create_date from profit ORDER BY create_date asc
     </select>
 
     <select id="getProfitSumList" resultMap="profitSumMap">
@@ -44,8 +39,8 @@
     </select>
 
     <insert id="addProfitDetail" parameterType="com.cyy.finance.domain.Profit">
-        insert into profit (id, fund_id, profit, his_sum, create_date)
-        select #{id}, #{fundId}, #{profit}, (select ifnull(round(sum(profit),2),0) + #{profit} from profit where create_date &lt; now()), #{createDate}
+        insert into profit (id, fund_id, profit, create_date)
+        values (#{id}, #{fundId}, #{profit}, #{createDate})
     </insert>
 
 </mapper>
