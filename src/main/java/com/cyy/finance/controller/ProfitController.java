@@ -6,6 +6,7 @@ import com.cyy.finance.domain.Profit;
 import com.cyy.finance.model.ProfitSum;
 import com.cyy.finance.model.ProfitSumPerDay;
 import com.cyy.finance.service.ProfitService;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,8 +20,11 @@ public class ProfitController {
     @Autowired
     ProfitService profitService;
 
+    private static Logger logger = Logger.getLogger(ProfitController.class);
+
     @RequestMapping(value = "/profit")
     public ModelAndView profitPage() {
+        logger.debug("testt");
         ModelAndView modelAndView = new ModelAndView("finance/profit");
         return modelAndView;
     }
@@ -70,6 +74,7 @@ public class ProfitController {
     @ResponseBody
     public boolean addProfitDetail(String fundId, String createDate, Float profit) {
         try {
+            logger.debug("test");
             return profitService.addProfitDetail(fundId, createDate, profit);
         } catch (Exception e) {
             e.printStackTrace();
