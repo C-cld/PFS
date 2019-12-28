@@ -24,8 +24,10 @@ public class ProfitService {
         float sum = 0;
         for (int i = 0; i < size; i ++) {
             ProfitSumPerDay profitSumPerDay = profitSumPerDayList.get(i);
-            sum = sum + profitSumPerDay.getSum();
+            // 保留两位小数
+            sum = (float)(Math.round((sum + profitSumPerDay.getSum())*100))/100;
             profitSumPerDay.setSum(sum);
+
         }
         return profitSumPerDayList;
     }
