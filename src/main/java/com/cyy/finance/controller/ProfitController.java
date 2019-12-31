@@ -23,6 +23,10 @@ public class ProfitController {
 
     private static final Logger log = LoggerFactory.getLogger(ProfitController.class);
 
+    /**
+     * 收益页
+     * @return ModelAndView
+     */
     @RequestMapping(value = "/profit")
     public ModelAndView profitPage() {
         log.info("666{}", "jb");
@@ -30,6 +34,10 @@ public class ProfitController {
         return modelAndView;
     }
 
+    /**
+     * 每日历史总收益
+     * @return List
+     */
     @RequestMapping(value = "/profit-sum-per-day")
     @ResponseBody
     List<ProfitSumPerDay> getProfitSumPerDayList() {
@@ -37,6 +45,10 @@ public class ProfitController {
 
     }
 
+    /**
+     * 我的基金表格
+     * @return String
+     */
     @RequestMapping(value = "/my-fund")
     @ResponseBody
     public String myFund() {
@@ -50,6 +62,11 @@ public class ProfitController {
         return jsonObject.toString();
     }
 
+    /**
+     * 基金收益详情页
+     * @param fundId 基金代码
+     * @return ModelAndView
+     */
     @RequestMapping(value = "/profit-detail")
     public ModelAndView profitDetailPage(String fundId) {
         ModelAndView modelAndView = new ModelAndView("finance/profit-detail");
@@ -57,6 +74,13 @@ public class ProfitController {
         return modelAndView;
     }
 
+    /**
+     * 基金收益详情表格
+     * @param page 当前页
+     * @param limit 每页大小
+     * @param fundId 基金代码
+     * @return String
+     */
     @RequestMapping(value = "/profit-detail-list")
     @ResponseBody
     public String getProfitDetailList(Integer page, Integer limit, String fundId) {
@@ -71,6 +95,13 @@ public class ProfitController {
         return jsonObject.toString();
     }
 
+    /**
+     * 录入每日收益
+     * @param fundId 基金代码
+     * @param createDate 日期
+     * @param profit 收益
+     * @return
+     */
     @RequestMapping(value = "/add-profit-detail")
     @ResponseBody
     public boolean addProfitDetail(String fundId, String createDate, Float profit) {
@@ -80,7 +111,12 @@ public class ProfitController {
             e.printStackTrace();
             return false;
         }
+    }
 
+    @RequestMapping(value = "/get-total-profit")
+    @ResponseBody
+    public Float getTotalProfit() {
+        return profitService.getTotalProfit();
     }
 
 

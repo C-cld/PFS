@@ -43,4 +43,8 @@
         values (#{id}, #{fundId}, #{profit}, #{createDate})
     </insert>
 
+    <select id="getTotalProfit" resultType="Float">
+        select round(sum(profit),2) from profit
+    </select>
+
 </mapper>

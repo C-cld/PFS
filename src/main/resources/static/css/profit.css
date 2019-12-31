@@ -19,3 +19,12 @@ body {
     margin-left: auto;
     margin-right: auto;
 }
+legend {
+    font-size: 15px !important;
+    margin-left: 15px !important;
+}
+.layui-field-box {
+    padding: 10px 15px;
+    font-size: 30px;
+    color: red;
+}

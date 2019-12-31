@@ -54,4 +54,8 @@ public class ProfitService {
         profit.setCreateDate(simpleDateFormat.parse(createDate));
         return profitMapper.addProfitDetail(profit);
     }
+
+    public Float getTotalProfit() {
+        return profitMapper.getTotalProfit();
+    }
 }

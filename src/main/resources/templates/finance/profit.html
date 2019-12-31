@@ -22,7 +22,26 @@
             </div>
             <div class="layui-col-md4">
                 <div class="layui-card">
-                    asdfasdfasdfasdf
+                    <div class="layui-card-body">
+                        <div class="layui-row">
+                            <div class="layui-col-xs6">
+                                <fieldset class="layui-elem-field">
+                                    <legend>总收益</legend>
+                                    <div class="layui-field-box total-profit">
+                                    </div>
+                                </fieldset>
+                            </div>
+                            <div class="layui-col-xs6">
+                                <fieldset class="layui-elem-field">
+                                    <legend>复合收益率</legend>
+                                    <div class="layui-field-box">
+                                        999%
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
             </div>
             <div class="layui-col-md4">
@@ -40,18 +59,16 @@
     <script th:inline="javascript">
 
 
-
-
-
-
-
         // 加载我的基金表格
         layui.use("table", function(){
             var $ = layui.jquery;
             var table = layui.table;
 
+            // 加载曲线
             paint();
-
+            // 加载总收益
+            totalProfit();
+            // 加载我的基金表格
             table.render({
                 elem: "#my-fund",
                 id: "my-fund",
@@ -142,7 +159,25 @@
                 };
                 myChart.setOption(option);
             }
+
+            function totalProfit() {
+                $.ajax({
+                    url: "/get-total-profit",
+                    success: function(result) {
+                        if (result != null) {
+                            $(".total-profit").text(result);
+                            if (result < 0) {
+                                $(".total-profit").css("color", "green");
+                            }
+
+                        }
+                    }
+                });
+            }
         });
+
+
+
 
 
     </script>

@@ -18,4 +18,6 @@ public interface ProfitMapper {
     int getCount(String fundId);
 
     boolean addProfitDetail(Profit profit);
+
+    Float getTotalProfit();
 }
