@@ -2,14 +2,13 @@ package com.cyy.finance.service;
 
 import com.cyy.finance.dao.FundMapper;
 import com.cyy.finance.domain.Fund;
-import com.cyy.finance.domain.FundInvestmentRecord;
+import com.cyy.finance.domain.Record;
 import com.cyy.finance.domain.FundNet;
 import com.cyy.util.HttpUtil;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
-import org.dom4j.io.SAXReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,10 +22,10 @@ public class FundService {
     @Autowired
     FundMapper fundMapper;
 
-    public List<FundInvestmentRecord> searchInvestmentRecord(String fundCode) throws ParseException {
+    public List<Record> searchInvestmentRecord(String fundCode) throws ParseException {
         // TODO: 2019/10/30 各种过滤条件
-        List<FundInvestmentRecord> fundInvestmentRecordList = fundMapper.searchInvestmentRecord(fundCode);
-        return fundInvestmentRecordList;
+        List<Record> recordList = fundMapper.searchInvestmentRecord(fundCode);
+        return recordList;
     }
 
     public List<Fund> searchFund() {

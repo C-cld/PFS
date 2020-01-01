@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.cyy.finance.domain.Fund;
-import com.cyy.finance.domain.FundInvestmentRecord;
+import com.cyy.finance.domain.Record;
 import com.cyy.finance.domain.FundNet;
 import com.cyy.finance.service.FundService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,13 +57,13 @@ public class FundController {
     @ResponseBody
     public String fundInvestmentRecord() {
         try {
-            List<FundInvestmentRecord> fundInvestmentRecordList = fundService.searchInvestmentRecord(null);
-            JSONArray array= JSONArray.parseArray(JSON.toJSONString(fundInvestmentRecordList));
+            List<Record> recordList = fundService.searchInvestmentRecord(null);
+            JSONArray array= JSONArray.parseArray(JSON.toJSONString(recordList));
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("msg", "");
             jsonObject.put("code", 0);
             jsonObject.put("data", array);
-            jsonObject.put("count", fundInvestmentRecordList.size());
+            jsonObject.put("count", recordList.size());
             return jsonObject.toString();
         } catch (Exception e) {
             e.printStackTrace();
@@ -79,10 +79,10 @@ public class FundController {
      */
     @RequestMapping(value = "/getMarkPoint")
     @ResponseBody
-    public List<FundInvestmentRecord> getMarkPoint(String fundCode) {
+    public List<Record> getMarkPoint(String fundCode) {
         try {
-            List<FundInvestmentRecord> fundInvestmentRecordList = fundService.searchInvestmentRecord(fundCode);
-            return fundInvestmentRecordList;
+            List<Record> recordList = fundService.searchInvestmentRecord(fundCode);
+            return recordList;
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -114,14 +114,14 @@ public class FundController {
      */
     @RequestMapping(value = "/getFundMarkPoint")
     @ResponseBody
-    public List<FundInvestmentRecord> getFundMarkPoint(String fundCode) {
-        List<FundInvestmentRecord> fundInvestmentRecordList = new ArrayList<>();
+    public List<Record> getFundMarkPoint(String fundCode) {
+        List<Record> recordList = new ArrayList<>();
         try {
-            fundInvestmentRecordList = fundService.searchInvestmentRecord(fundCode);
+            recordList = fundService.searchInvestmentRecord(fundCode);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return fundInvestmentRecordList;
+        return recordList;
     }
 
     @RequestMapping(value = "/insert-fund")

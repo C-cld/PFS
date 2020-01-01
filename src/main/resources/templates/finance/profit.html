@@ -35,7 +35,7 @@
                                 <fieldset class="layui-elem-field">
                                     <legend>复合收益率</legend>
                                     <div class="layui-field-box">
-                                        999%
+                                        --%
                                     </div>
                                 </fieldset>
                             </div>
@@ -43,8 +43,7 @@
 
                     </div>
                 </div>
-            </div>
-            <div class="layui-col-md4">
+
                 <div class="layui-card">
                     <div class="layui-card-header">
                         我的基金
@@ -53,19 +52,21 @@
                         <table id="my-fund" lay-filter="my-fund"></table>
                     </div>
                 </div>
+
+                <div class="layui-card">
+                    <div class="layui-card-body">
+                        <div id="pie" style="height:250px;"></div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
     <script th:inline="javascript">
-
-
-        // 加载我的基金表格
         layui.use("table", function(){
             var $ = layui.jquery;
             var table = layui.table;
 
-            // 加载曲线
-            paint();
+
             // 加载总收益
             totalProfit();
             // 加载我的基金表格
@@ -98,7 +99,69 @@
                 }
             });
 
-            function paint() {
+            // 加载收益曲线
+            curvePaint();
+
+            // 加载比重饼图
+            piePaint();
+
+            function piePaint() {
+                var data = [];
+                var total = 0;
+
+                $.ajax({
+                    url: "/percentage",
+                    async: false,
+                    success: function (result) {
+                        for (var key in result) {
+                            total = total + result[key];
+                            if (key == 0) {
+                                data.push({value:result[key], name:'股票基金'});
+                            } else if (key == 1) {
+                                data.push({value:result[key], name:'债券基金'});
+                            } else if (key == 2) {
+                                data.push({value:result[key], name:'货币基金'});
+                            }
+                        }
+                    }
+                });
+                var myChart = echarts.init(document.getElementById("pie"));
+                var option = {
+                    title : {
+                        text: '各类基金占比',
+                        subtext: '总额：' + total,
+                        x:'left'
+                    },
+                    tooltip : {
+                        trigger: 'item',
+                        formatter: "{b}：{c} <br/> {a}：{d}%"
+                    },
+                    legend: {
+                        orient: 'vertical',
+                        left: 'right',
+                        data: ['股票基金','债券基金','货币基金']
+                    },
+                    series : [
+                        {
+                            name: '占比',
+                            type: 'pie',
+                            radius : '55%',
+                            center: ['50%', '50%'],
+                            data: data,
+                            itemStyle: {
+                                emphasis: {
+                                    shadowBlur: 10,
+                                    shadowOffsetX: 0,
+                                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                }
+                            }
+                        }
+                    ]
+                };
+                myChart.setOption(option);
+            }
+
+            function curvePaint() {
                 var profitSumPerDayList;
                 var profit = [];
 

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class ProfitController {
@@ -119,5 +120,9 @@ public class ProfitController {
         return profitService.getTotalProfit();
     }
 
-
+    @RequestMapping(value = "/percentage")
+    @ResponseBody
+    public Map<Integer, Float> getPercentage() {
+        return profitService.getPercentage();
+    }
 }

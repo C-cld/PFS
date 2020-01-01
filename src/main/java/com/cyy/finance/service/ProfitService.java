@@ -8,9 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class ProfitService {
@@ -57,5 +55,13 @@ public class ProfitService {
 
     public Float getTotalProfit() {
         return profitMapper.getTotalProfit();
+    }
+
+    public Map<Integer, Float> getPercentage() {
+        Map<Integer, Float> map = new HashMap<>();
+        map.put(0, 30000.01F);
+        map.put(1, 20000.01F);
+        map.put(2, 10000.01F);
+        return map;
     }
 }
