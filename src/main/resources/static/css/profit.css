@@ -28,3 +28,9 @@ legend {
     font-size: 30px;
     color: red;
 }
+.sum-profit {
+    text-decoration: underline;
+}
+.my-fund {
+    height: 400px;
+}

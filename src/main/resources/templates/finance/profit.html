@@ -46,14 +46,20 @@
 
                 <div class="layui-card">
                     <div class="layui-card-header">
-                        我的基金
+                        我的投资
                     </div>
-                    <div class="layui-card-body">
-                        <table id="my-fund" lay-filter="my-fund"></table>
+                    <div class="layui-card-body my-fund">
+                        <table id="my-fund-table" lay-filter="my-fund-table"></table>
                     </div>
                 </div>
 
                 <div class="layui-card">
+                    <div class="layui-card-header">
+                        配置
+                        <div class="layui-inline ">
+                            <button class="layui-btn layui-btn-sm layui-bg-gray addFund"><i class="layui-icon layui-icon-add-1"></i></button>
+                        </div>
+                    </div>
                     <div class="layui-card-body">
                         <div id="pie" style="height:250px;"></div>
                     </div>
@@ -71,20 +77,31 @@
             totalProfit();
             // 加载我的基金表格
             table.render({
-                elem: "#my-fund",
-                id: "my-fund",
+                elem: "#my-fund-table",
+                id: "my-fund-table",
                 url: "/my-fund",
                 skin: "nob",
                 cols: [
                     [
-                        {field: "fundId", title: "ID", hide:true},
-                        {field: "fundName", title: "基金", width: "70%"},
-                        {field: "sumProfit", title: "总收益", event: "profitDetail"}
+                        {
+                            field: "fundId",
+                            title: "ID",
+                            hide:true},
+                        {
+                            field: "fundName",
+                            title: "基金",
+                            width: "70%"},
+                        {
+                            field: "sumProfit",
+                            title: "总收益",
+                            templet: "<div><a href='#' class='sum-profit'>{{d.sumProfit}}</a></div>",
+                            event: "profitDetail"
+                        }
                     ]
                 ]
             });
 
-            table.on("tool(my-fund)", function(obj){
+            table.on("tool(my-fund-table)", function(obj){
                 var fundId = obj.data.fundId;
                 if (obj.event == "profitDetail") {
                     layer.open({
@@ -92,8 +109,8 @@
                         area: ['800px', '500px'],
                         content: "/profit-detail?fundId=" + fundId,
                         cancel: function(index, layero) {
-                            paint();
-                            table.reload("my-fund");
+                            curvePaint();
+                            table.reload("my-fund-table");
                         }
                     });
                 }
@@ -128,8 +145,7 @@
                 var myChart = echarts.init(document.getElementById("pie"));
                 var option = {
                     title : {
-                        text: '各类基金占比',
-                        subtext: '总额：' + total,
+                        text: '总额：' + total,
                         x:'left'
                     },
                     tooltip : {
@@ -139,15 +155,41 @@
                     legend: {
                         orient: 'vertical',
                         left: 'right',
-                        data: ['股票基金','债券基金','货币基金']
+                        data: ['股票','基金','股票基金','债券基金','货币基金']
                     },
                     series : [
                         {
                             name: '占比',
                             type: 'pie',
-                            radius : '55%',
-                            center: ['50%', '50%'],
-                            data: data,
+                            radius: [0, '50%'],
+                            label: {
+                                position: 'inner'
+                            },
+                            labelLine: {
+                                show: false
+                            },
+                            data: [
+                                {value: 335, name: '股票'},
+                                {value: 679, name: '基金'}
+                            ],
+                            itemStyle: {
+                                emphasis: {
+                                    shadowBlur: 10,
+                                    shadowOffsetX: 0,
+                                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                }
+                            }
+                        },
+                        {
+                            name: '占比',
+                            type: 'pie',
+                            radius: ['51%', '70%'],
+                            data: [
+                                {value: 335, name: '股票'},
+                                {value: 310, name: '股票基金'},
+                                {value: 234, name: '债券基金'},
+                                {value: 135, name: '货币基金'}
+                            ],
                             itemStyle: {
                                 emphasis: {
                                     shadowBlur: 10,
