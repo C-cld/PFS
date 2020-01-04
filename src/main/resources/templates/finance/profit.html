@@ -35,12 +35,37 @@
                                 <fieldset class="layui-elem-field">
                                     <legend>复合收益率</legend>
                                     <div class="layui-field-box">
-                                        --%
+                                        &#45;&#45;%
                                     </div>
                                 </fieldset>
                             </div>
                         </div>
+                    </div>
+                </div>
 
+                <div class="layui-card">
+                    <div class="layui-card-header">
+                        录入今日收益
+                    </div>
+                    <div class="layui-card-body">
+                        <form class="layui-form add-profit-detail-form" action="">
+                            <div class="layui-form-item">
+                                <div class="layui-inline" style="width: 150px">
+                                    <select lay-verify="required" class="product-select" name="product">
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                                <div class="layui-inline" style="width: 150px">
+                                    <input type="text" class="layui-input create-date" name="createdate" autocomplete="off" placeholder="请选择日期">
+                                </div>
+                                <div class="layui-inline" style="width: 100px">
+                                    <input type="text" class="layui-input profit" name="profit" autocomplete="off" placeholder="收益">
+                                </div>
+                                <div class="layui-inline">
+                                    <button class="layui-btn" lay-submit lay-filter="add-profit-detail">录入</button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
 
@@ -48,48 +73,47 @@
                     <div class="layui-card-header">
                         我的投资
                     </div>
-                    <div class="layui-card-body my-fund">
-                        <table id="my-fund-table" lay-filter="my-fund-table"></table>
+                    <div class="layui-card-body my-product">
+                        <table id="my-product-table" lay-filter="my-product-table"></table>
                     </div>
                 </div>
 
-                <div class="layui-card">
-                    <div class="layui-card-header">
-                        配置
-                        <div class="layui-inline ">
-                            <button class="layui-btn layui-btn-sm layui-bg-gray addFund"><i class="layui-icon layui-icon-add-1"></i></button>
-                        </div>
-                    </div>
-                    <div class="layui-card-body">
-                        <div id="pie" style="height:250px;"></div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
-    <script th:inline="javascript">
-        layui.use("table", function(){
+    <script>
+        layui.use(["form","table","laydate"], function(){
             var $ = layui.jquery;
+            var form = layui.form;
             var table = layui.table;
+            var laydate = layui.laydate;
 
-
+            // 加载收益曲线
+            paintCurve();
             // 加载总收益
             totalProfit();
+            // 加载下拉菜单
+            loadSelect();
+
+            laydate.render({
+                elem: '.create-date' //指定元素
+            });
+
             // 加载我的基金表格
             table.render({
-                elem: "#my-fund-table",
-                id: "my-fund-table",
-                url: "/my-fund",
+                elem: "#my-product-table",
+                id: "my-product-table",
+                url: "/my-product",
                 skin: "nob",
                 cols: [
                     [
                         {
-                            field: "fundId",
+                            field: "productId",
                             title: "ID",
                             hide:true},
                         {
-                            field: "fundName",
-                            title: "基金",
+                            field: "productName",
+                            title: "名称",
                             width: "70%"},
                         {
                             field: "sumProfit",
@@ -101,109 +125,23 @@
                 ]
             });
 
-            table.on("tool(my-fund-table)", function(obj){
-                var fundId = obj.data.fundId;
+            table.on("tool(my-product-table)", function(obj){
+                var productId = obj.data.productId;
                 if (obj.event == "profitDetail") {
                     layer.open({
-                        type: 2,
-                        area: ['800px', '500px'],
-                        content: "/profit-detail?fundId=" + fundId,
-                        cancel: function(index, layero) {
-                            curvePaint();
-                            table.reload("my-fund-table");
+                        type: 1,
+                        title: "收益明细",
+                        area: ['700px', '555px'],
+                        content: "<div class='layui-fluid'><table id='profit-detail-table'></table></div>",
+                        success: function (layero, index) {
+                            console.log(123);
+                            loadProfitDetail(productId);
                         }
                     });
                 }
             });
 
-            // 加载收益曲线
-            curvePaint();
-
-            // 加载比重饼图
-            piePaint();
-
-            function piePaint() {
-                var data = [];
-                var total = 0;
-
-                $.ajax({
-                    url: "/percentage",
-                    async: false,
-                    success: function (result) {
-                        for (var key in result) {
-                            total = total + result[key];
-                            if (key == 0) {
-                                data.push({value:result[key], name:'股票基金'});
-                            } else if (key == 1) {
-                                data.push({value:result[key], name:'债券基金'});
-                            } else if (key == 2) {
-                                data.push({value:result[key], name:'货币基金'});
-                            }
-                        }
-                    }
-                });
-                var myChart = echarts.init(document.getElementById("pie"));
-                var option = {
-                    title : {
-                        text: '总额：' + total,
-                        x:'left'
-                    },
-                    tooltip : {
-                        trigger: 'item',
-                        formatter: "{b}：{c} <br/> {a}：{d}%"
-                    },
-                    legend: {
-                        orient: 'vertical',
-                        left: 'right',
-                        data: ['股票','基金','股票基金','债券基金','货币基金']
-                    },
-                    series : [
-                        {
-                            name: '占比',
-                            type: 'pie',
-                            radius: [0, '50%'],
-                            label: {
-                                position: 'inner'
-                            },
-                            labelLine: {
-                                show: false
-                            },
-                            data: [
-                                {value: 335, name: '股票'},
-                                {value: 679, name: '基金'}
-                            ],
-                            itemStyle: {
-                                emphasis: {
-                                    shadowBlur: 10,
-                                    shadowOffsetX: 0,
-                                    shadowColor: 'rgba(0, 0, 0, 0.5)'
-                                }
-                            }
-                        },
-                        {
-                            name: '占比',
-                            type: 'pie',
-                            radius: ['51%', '70%'],
-                            data: [
-                                {value: 335, name: '股票'},
-                                {value: 310, name: '股票基金'},
-                                {value: 234, name: '债券基金'},
-                                {value: 135, name: '货币基金'}
-                            ],
-                            itemStyle: {
-                                emphasis: {
-                                    shadowBlur: 10,
-                                    shadowOffsetX: 0,
-                                    shadowColor: 'rgba(0, 0, 0, 0.5)'
-                                }
-                            }
-                        }
-                    ]
-                };
-                myChart.setOption(option);
-            }
-
-            function curvePaint() {
+            function paintCurve() {
                 var profitSumPerDayList;
                 var profit = [];
 
@@ -279,11 +217,61 @@
                     }
                 });
             }
+
+            function loadSelect() {
+                var html = $(".product-select").html();
+                $.ajax({
+                    url: "/get-product-list",
+                    success: function(result) {
+                        for (var i = 0; i < result.length; i ++) {
+                            html = html + "<option value='" + result[i].id + "'>" + result[i].name + "</option>";
+                        }
+                        $(".product-select").html(html);
+                        form.render("select");
+                    }
+                });
+            }
+
+            function loadProfitDetail(productId) {
+                console.log(456);
+                table.render({
+                    elem: "#profit-detail-table",
+                    id: "profit-detail-table",
+                    url: "/profit-detail-list?productId=" + productId,
+                    page: true,
+                    limit: 10,
+                    skin: "nob",
+                    cols: [
+                        [
+                            {
+                                field: "createDate",
+                                title: "日期",
+                                width: "70%",
+                                templet: "<a>{{ layui.util.toDateString(d.createDate, 'yyyy年MM月dd日') }}</a>"
+                            },
+                            {field: "profit", title: "收益"}
+                        ]
+                    ]
+                });
+            }
+
+            form.on('submit(add-profit-detail)', function(data){
+                var productId = data.field.product;
+                var createDate = data.field.createdate;
+                var profit = data.field.profit;
+                $.ajax({
+                    url:"/add-profit-detail?productId=" + productId + "&createDate=" + createDate + "&profit=" + profit,
+                    success:function(result) {
+                        if (result) {
+                            layer.msg("添加成功");
+                            table.reload("my-product-table");
+                            paintCurve();
+                            totalProfit();
+                        }
+                    }
+                });
+                return false;
+            });
         });
-
-
-
-
-
     </script>
 </body>

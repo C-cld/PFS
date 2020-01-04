@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class Profit {
     private String id;
-    private String fundId;
+    private String productId;
     private Float profit;
     private Date createDate;
 
@@ -16,12 +16,12 @@ public class Profit {
         this.id = id;
     }
 
-    public String getFundId() {
-        return fundId;
+    public String getProductId() {
+        return productId;
     }
 
-    public void setFundId(String fundId) {
-        this.fundId = fundId;
+    public void setProductId(String productId) {
+        this.productId = productId;
     }
 
     public Float getProfit() {

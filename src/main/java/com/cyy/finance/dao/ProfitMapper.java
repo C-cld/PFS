@@ -13,9 +13,9 @@ public interface ProfitMapper {
 
     List<ProfitSum> getProfitSumList();
 
-    List<Profit> getProfitDetailList(Integer index, Integer pageSize, String fundId);
+    List<Profit> getProfitDetailList(Integer index, Integer pageSize, String productId);
 
-    int getCount(String fundId);
+    int getCount(String productId);
 
     boolean addProfitDetail(Profit profit);
 

@@ -34,20 +34,20 @@ public class ProfitService {
         return profitMapper.getProfitSumList();
     }
 
-    public List<Profit> getProfitDetailList(Integer page, Integer limit, String fundId) {
+    public List<Profit> getProfitDetailList(Integer page, Integer limit, String productId) {
         int index = (page - 1) * limit;
-        return profitMapper.getProfitDetailList(index, limit, fundId);
+        return profitMapper.getProfitDetailList(index, limit, productId);
     }
 
-    public int getCount(String fundId) {
-        return profitMapper.getCount(fundId);
+    public int getCount(String productId) {
+        return profitMapper.getCount(productId);
     }
 
-    public boolean addProfitDetail(String fundId, String createDate, Float value) throws Exception {
+    public boolean addProfitDetail(String productId, String createDate, Float value) throws Exception {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Profit profit = new Profit();
         profit.setId(UUID.randomUUID().toString().replace("-", "").toLowerCase());
-        profit.setFundId(fundId);
+        profit.setProductId(productId);
         profit.setProfit(value);
         profit.setCreateDate(simpleDateFormat.parse(createDate));
         return profitMapper.addProfitDetail(profit);

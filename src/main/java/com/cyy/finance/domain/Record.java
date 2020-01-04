@@ -8,7 +8,6 @@ public class Record {
     private String id;
     private String productId; // 基金代码
     private Float confirm; // 确认金额
-    @JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
     private Date createDate;
 
     public String getId() {

@@ -50,9 +50,9 @@ public class ProfitController {
      * 我的基金表格
      * @return String
      */
-    @RequestMapping(value = "/my-fund")
+    @RequestMapping(value = "/my-product")
     @ResponseBody
-    public String myFund() {
+    public String myProduct() {
         List<ProfitSum> profitSumList = profitService.getProfitSumList();
         JSONArray jsonArray = (JSONArray) JSONArray.toJSON(profitSumList);
         JSONObject jsonObject = new JSONObject();
@@ -64,29 +64,17 @@ public class ProfitController {
     }
 
     /**
-     * 基金收益详情页
-     * @param fundId 基金代码
-     * @return ModelAndView
-     */
-    @RequestMapping(value = "/profit-detail")
-    public ModelAndView profitDetailPage(String fundId) {
-        ModelAndView modelAndView = new ModelAndView("finance/profit-detail");
-        modelAndView.addObject("fundId", fundId);
-        return modelAndView;
-    }
-
-    /**
      * 基金收益详情表格
      * @param page 当前页
      * @param limit 每页大小
-     * @param fundId 基金代码
+     * @param productId 代码
      * @return String
      */
     @RequestMapping(value = "/profit-detail-list")
     @ResponseBody
-    public String getProfitDetailList(Integer page, Integer limit, String fundId) {
-        List<Profit> profitDetailList = profitService.getProfitDetailList(page, limit, fundId);
-        int count = profitService.getCount(fundId);
+    public String getProfitDetailList(Integer page, Integer limit, String productId) {
+        List<Profit> profitDetailList = profitService.getProfitDetailList(page, limit, productId);
+        int count = profitService.getCount(productId);
         JSONArray jsonArray = (JSONArray) JSONArray.toJSON(profitDetailList);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("msg", "");
@@ -98,16 +86,16 @@ public class ProfitController {
 
     /**
      * 录入每日收益
-     * @param fundId 基金代码
+     * @param productId 代码
      * @param createDate 日期
      * @param profit 收益
      * @return
      */
     @RequestMapping(value = "/add-profit-detail")
     @ResponseBody
-    public boolean addProfitDetail(String fundId, String createDate, Float profit) {
+    public boolean addProfitDetail(String productId, String createDate, Float profit) {
         try {
-            return profitService.addProfitDetail(fundId, createDate, profit);
+            return profitService.addProfitDetail(productId, createDate, profit);
         } catch (Exception e) {
             e.printStackTrace();
             return false;

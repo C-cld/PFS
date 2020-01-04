@@ -4,24 +4,24 @@ package com.cyy.finance.model;
  * 我的基金列表
  */
 public class ProfitSum {
-    private String fundId;
-    private String fundName;
+    private String productId;
+    private String productName;
     private String sumProfit;
 
-    public String getFundId() {
-        return fundId;
+    public String getProductId() {
+        return productId;
     }
 
-    public void setFundId(String fundId) {
-        this.fundId = fundId;
+    public void setProductId(String productId) {
+        this.productId = productId;
     }
 
-    public String getFundName() {
-        return fundName;
+    public String getProductName() {
+        return productName;
     }
 
-    public void setFundName(String fundName) {
-        this.fundName = fundName;
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 
     public String getSumProfit() {
