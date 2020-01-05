@@ -3,7 +3,7 @@ package com.cyy.finance.model;
 /**
  * 我的基金列表
  */
-public class ProfitSum {
+public class ProfitSumVO {
     private String productId;
     private String productName;
     private String sumProfit;

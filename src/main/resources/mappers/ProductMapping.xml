@@ -7,9 +7,29 @@
         <result property="confirm" column="confirm" />
         <result property="createDate" column="create_date" />
     </resultMap>
+    <resultMap type="com.cyy.finance.model.ConfirmSumVO" id="confirmSumVOMap">
+        <result property="productName" column="name" />
+        <result property="sumConfirm" column="confirm" />
+    </resultMap>
 
     <select id="getProductList" resultType="com.cyy.finance.domain.Product">
         select id, name, type from product;
+    </select>
+
+    <select id="productChangeRecord" resultType="com.cyy.finance.model.RecordVO">
+        select r.id, p.name as productName, r.operation, r.confirm, r.create_date from record r, product p where r.product_id = p.id;
+    </select>
+
+    <select id="getProductChangeRecordCount" resultType="Integer">
+        select count(id) from record;
+    </select>
+
+    <insert id="addProductChangeRecord" parameterType="com.cyy.finance.domain.Record">
+        insert into record values (#{id}, #{productId}, #{confirm}, #{createDate}, #{operation})
+    </insert>
+
+    <select id="productConfirmSum" resultMap="confirmSumVOMap">
+        select p.name, sum(r.confirm) as confirm from record r, product p where r.product_id = p.id GROUP BY r.product_id
     </select>
 
 </mapper>

@@ -1,0 +1,32 @@
+body {
+    background-color: #f2f2f2;
+}
+.layui-fluid {
+    padding: 15px;
+}
+.layui-badge {
+    font-size: 20px;
+    padding: 5px 10px 5px 10px;
+    float: right;
+    top: 20%;
+    cursor:pointer;
+}
+#pie {
+    height: 400px;
+}
+.product-confirm-sum-div {
+    border-left: 1px solid #EEE;
+    height: 400px;
+    color: #666;
+}
+.product-confirm-sum-ul {
+    padding: 10px;
+}
+.product-confirm-sum-ul li {
+    padding: 10px;
+    border-bottom: 1px solid #EEE;
+}
+.product-confirm-sum-ul li:hover {
+    background-color: #f2f2f2;
+    -webkit-transition: all .3s;
+}

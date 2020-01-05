@@ -2,8 +2,8 @@ package com.cyy.finance.service;
 
 import com.cyy.finance.dao.ProfitMapper;
 import com.cyy.finance.domain.Profit;
-import com.cyy.finance.model.ProfitSum;
-import com.cyy.finance.model.ProfitSumPerDay;
+import com.cyy.finance.model.ProfitSumPerDayVO;
+import com.cyy.finance.model.ProfitSumVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,22 +16,22 @@ public class ProfitService {
     @Autowired
     ProfitMapper profitMapper;
 
-    public List<ProfitSumPerDay> getProfitSumPerDayList() {
-        List<ProfitSumPerDay> profitSumPerDayList = profitMapper.getProfitSumPerDayList();
-        int size = profitSumPerDayList.size();
+    public List<ProfitSumPerDayVO> getProfitSumPerDayVOList() {
+        List<ProfitSumPerDayVO> profitSumPerDayVOList = profitMapper.getProfitSumPerDayVOList();
+        int size = profitSumPerDayVOList.size();
         float sum = 0;
         for (int i = 0; i < size; i ++) {
-            ProfitSumPerDay profitSumPerDay = profitSumPerDayList.get(i);
+            ProfitSumPerDayVO profitSumPerDayVO = profitSumPerDayVOList.get(i);
             // 保留两位小数
-            sum = (float)(Math.round((sum + profitSumPerDay.getSum())*100))/100;
-            profitSumPerDay.setSum(sum);
+            sum = (float)(Math.round((sum + profitSumPerDayVO.getSum())*100))/100;
+            profitSumPerDayVO.setSum(sum);
 
         }
-        return profitSumPerDayList;
+        return profitSumPerDayVOList;
     }
 
-    public List<ProfitSum> getProfitSumList() {
-        return profitMapper.getProfitSumList();
+    public List<ProfitSumVO> getProfitSumVOList() {
+        return profitMapper.getProfitSumVOList();
     }
 
     public List<Profit> getProfitDetailList(Integer page, Integer limit, String productId) {

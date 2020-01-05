@@ -8,22 +8,22 @@
         <result property="createDate" column="create_date" />
     </resultMap>
 
-    <resultMap type="com.cyy.finance.model.ProfitSumPerDay" id="profitSumPerDayMap">
+    <resultMap type="com.cyy.finance.model.ProfitSumPerDayVO" id="profitSumPerDayVOMap">
         <result property="sum" column="sum" />
         <result property="createDate" column="create_date" />
     </resultMap>
 
-    <resultMap type="com.cyy.finance.model.ProfitSum" id="profitSumMap">
+    <resultMap type="com.cyy.finance.model.ProfitSumVO" id="profitSumVOMap">
         <result property="productId" column="productId" />
         <result property="productName" column="productName" />
         <result property="sumProfit" column="sumProfit" />
     </resultMap>
 
-    <select id="getProfitSumPerDayList" resultMap="profitSumPerDayMap">
+    <select id="getProfitSumPerDayVOList" resultMap="profitSumPerDayVOMap">
         select round(sum(profit),2) as sum, create_date from profit group by create_date ORDER BY create_date asc
     </select>
 
-    <select id="getProfitSumList" resultMap="profitSumMap">
+    <select id="getProfitSumVOList" resultMap="profitSumVOMap">
         select p.id as productId, p.name as productName, t.sumProfit as sumProfit
         from product p LEFT JOIN (select product_id, round(sum(profit),2) as sumProfit from profit GROUP BY product_id) t
         on p.id = t.product_id

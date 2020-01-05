@@ -9,6 +9,7 @@ public class Record {
     private String productId; // 基金代码
     private Float confirm; // 确认金额
     private Date createDate;
+    private Integer operation;
 
     public String getId() {
         return id;
@@ -40,5 +41,13 @@ public class Record {
 
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
+    }
+
+    public Integer getOperation() {
+        return operation;
+    }
+
+    public void setOperation(Integer operation) {
+        this.operation = operation;
     }
 }

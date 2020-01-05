@@ -142,22 +142,22 @@
             });
 
             function paintCurve() {
-                var profitSumPerDayList;
+                var profitSumPerDayVOList;
                 var profit = [];
 
                 $.ajax({
                     url:"/profit-sum-per-day",
                     async: false,
                     success: function(result) {
-                        profitSumPerDayList = result;
+                        profitSumPerDayVOList = result;
                     }
                 });
 
-                var length = profitSumPerDayList.length;
+                var length = profitSumPerDayVOList.length;
                 for (var i = 0; i < length; i++) {
                     profit.push({
-                        name: profitSumPerDayList[i].createDate,
-                        value: [profitSumPerDayList[i].createDate, profitSumPerDayList[i].sum]
+                        name: profitSumPerDayVOList[i].createDate,
+                        value: [profitSumPerDayVOList[i].createDate, profitSumPerDayVOList[i].sum]
                     });
                 }
 
@@ -248,8 +248,9 @@
                                 title: "日期",
                                 width: "70%",
                                 templet: "<a>{{ layui.util.toDateString(d.createDate, 'yyyy年MM月dd日') }}</a>"
-                            },
-                            {field: "profit", title: "收益"}
+                            }, {
+                                field: "profit", title: "收益"
+                            }
                         ]
                     ]
                 });

@@ -1,17 +1,17 @@
 package com.cyy.finance.dao;
 
 import com.cyy.finance.domain.Profit;
-import com.cyy.finance.model.ProfitSum;
-import com.cyy.finance.model.ProfitSumPerDay;
+import com.cyy.finance.model.ProfitSumPerDayVO;
+import com.cyy.finance.model.ProfitSumVO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 
 @Mapper
 public interface ProfitMapper {
-    List<ProfitSumPerDay> getProfitSumPerDayList();
+    List<ProfitSumPerDayVO> getProfitSumPerDayVOList();
 
-    List<ProfitSum> getProfitSumList();
+    List<ProfitSumVO> getProfitSumVOList();
 
     List<Profit> getProfitDetailList(Integer index, Integer pageSize, String productId);
 

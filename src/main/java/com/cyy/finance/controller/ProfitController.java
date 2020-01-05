@@ -3,8 +3,8 @@ package com.cyy.finance.controller;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.cyy.finance.domain.Profit;
-import com.cyy.finance.model.ProfitSum;
-import com.cyy.finance.model.ProfitSumPerDay;
+import com.cyy.finance.model.ProfitSumVO;
+import com.cyy.finance.model.ProfitSumPerDayVO;
 import com.cyy.finance.service.ProfitService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +30,6 @@ public class ProfitController {
      */
     @RequestMapping(value = "/profit")
     public ModelAndView profitPage() {
-        log.info("666{}", "jb");
         ModelAndView modelAndView = new ModelAndView("finance/profit");
         return modelAndView;
     }
@@ -41,8 +40,8 @@ public class ProfitController {
      */
     @RequestMapping(value = "/profit-sum-per-day")
     @ResponseBody
-    List<ProfitSumPerDay> getProfitSumPerDayList() {
-        return profitService.getProfitSumPerDayList();
+    List<ProfitSumPerDayVO> getProfitSumPerDayList() {
+        return profitService.getProfitSumPerDayVOList();
 
     }
 
@@ -53,13 +52,13 @@ public class ProfitController {
     @RequestMapping(value = "/my-product")
     @ResponseBody
     public String myProduct() {
-        List<ProfitSum> profitSumList = profitService.getProfitSumList();
-        JSONArray jsonArray = (JSONArray) JSONArray.toJSON(profitSumList);
+        List<ProfitSumVO> profitSumVOList = profitService.getProfitSumVOList();
+        JSONArray jsonArray = (JSONArray) JSONArray.toJSON(profitSumVOList);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("msg", "");
         jsonObject.put("code", 0);
         jsonObject.put("data", jsonArray);
-        jsonObject.put("count", profitSumList.size());
+        jsonObject.put("count", profitSumVOList.size());
         return jsonObject.toString();
     }
 
