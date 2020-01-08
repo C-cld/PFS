@@ -23,7 +23,7 @@
     </select>
 
     <select id="productChangeRecord" resultMap="recordVOMap">
-        select r.id, p.name, r.operation, r.confirm, r.create_date from record r, product p where r.product_id = p.id order by r.create_date desc;
+        select r.id, p.name, r.confirm, r.create_date from record r, product p where r.product_id = p.id order by r.create_date desc;
     </select>
 
     <select id="getProductChangeRecordCount" resultType="Integer">
@@ -31,7 +31,7 @@
     </select>
 
     <insert id="addProductChangeRecord" parameterType="com.cyy.finance.domain.Record">
-        insert into record values (#{id}, #{productId}, #{confirm}, #{createDate}, #{operation})
+        insert into record values (#{id}, #{productId}, #{confirm}, #{createDate})
     </insert>
 
     <select id="productConfirmSum" resultMap="confirmSumVOMap">

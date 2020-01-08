@@ -91,7 +91,7 @@
         loadProductConfirmSumUl();
 
         function loadProductConfirmSumUl() {
-            var html = $(".product-confirm-sum-ul").html();
+            var html = "";
             $.ajax({
                 url: "/product-confirm-sum",
                 async: false,
@@ -156,11 +156,25 @@
                     }, {
                         field: "operation",
                         title: "操作",
-                        width: "15%"
+                        width: "15%",
+                        templet: function(d) {
+                            if (d.confirm < 0) {
+                                return "卖出";
+                            } else {
+                                return "买入";
+                            }
+                        }
                     }, {
                         field: "confirm",
                         title: "金额",
-                        width: "15%"
+                        width: "15%",
+                        templet: function(d) {
+                            if (d.confirm < 0) {
+                                return -(d.confirm);
+                            } else {
+                                return d.confirm;
+                            }
+                        }
                     }, {
                         field: "createTime",
                         title: "交易时间",
@@ -171,23 +185,27 @@
         });
 
         form.on('submit(add-product-change-record-submit)', function(data){
-            var data = {
+            var confirm = data.field.confirm;
+            if (data.field.operation == 1) {
+                confirm = -confirm;
+            }
+            var _data = {
                 productId : data.field.product,
-                operation : data.field.operation,
-                confirm : data.field.confirm,
+                confirm : confirm,
                 createDate : data.field.createdate
             };
 
             $.ajax({
                 url:"/add-product-change-record",
                 type: "POST",
-                data: JSON.stringify(data),
+                data: JSON.stringify(_data),
                 contentType: "application/json;charset:UTF-8",
                 success:function(result) {
                     if (result) {
                         layer.msg("添加成功");
                         layer.closeAll();
                         table.reload("product-change-record-table");
+                        loadProductConfirmSumUl();
                     }
                 }
             });
