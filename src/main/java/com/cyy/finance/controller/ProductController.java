@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.cyy.finance.domain.Product;
 import com.cyy.finance.domain.Record;
+import com.cyy.finance.model.PieVO;
 import com.cyy.finance.model.ConfirmSumVO;
 import com.cyy.finance.model.RecordVO;
 import com.cyy.finance.service.ProductService;
@@ -63,6 +64,12 @@ public class ProductController {
     @ResponseBody
     public List<ConfirmSumVO> productConfirmSum() {
         return productService.productConfirmSum();
+    }
+
+    @RequestMapping(value = "/getPieData")
+    @ResponseBody
+    public PieVO getPieData() {
+        return productService.getPieData();
     }
 
 }

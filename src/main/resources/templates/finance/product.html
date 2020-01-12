@@ -12,6 +12,10 @@
     <div class="layui-row layui-col-space12">
         <div class="layui-col-md8">
             <div class="layui-card">
+                <div class="layui-card-header">
+                    资金变动记录
+                    <span class="layui-badge layui-bg-gray product-add"><i class="layui-icon">&#xe654;</i></span>
+                </div>
                 <div class="layui-card-body">
                     <div class="layui-row layui-col-space12">
                         <div class="layui-col-md8">
@@ -213,12 +217,41 @@
         });
 
         function paintPie() {
-            var data = [];
+            var categories = [];
+            var parentData = [];
+            var childData = [];
             var total = 0;
+            $.ajax({
+                url: "/getPieData",
+                async: false,
+                success: function(result) {
+                    console.log(result);
+                    if (result != null) {
+                        for (var i = 0; i < result.parents.length; i ++) {
+                            console.log()
+                            categories.push(result.parents[i].name);
+                            parentData.push({
+                                value: result.parents[i].categoriesConfirm,
+                                name: result.parents[i].name
+                            });
+                        }
+                        for (var j = 0; j < result.children.length; j ++) {
+                            categories.push(result.children[j].name);
+                            childData.push({
+                                value: result.children[j].categoriesConfirm,
+                                name: result.children[j].name
+                            });
+                        }
+
+                        console.log(parentData);
+                        console.log(childData);
+                    }
+                }
+            });
             var myChart = echarts.init(document.getElementById("pie"));
             var option = {
                 title : {
-                    text: '总额：' + 45658,
+                    text: '总额：' + total,
                     x:'left'
                 },
                 tooltip : {
@@ -228,7 +261,7 @@
                 legend: {
                     orient: 'vertical',
                     left: 'right',
-                    data: ['股票','基金','股票基金','债券基金','货币基金']
+                    data: categories
                 },
                 series : [
                     {
@@ -241,10 +274,7 @@
                         labelLine: {
                             show: false
                         },
-                        data: [
-                            {value: 335, name: '股票'},
-                            {value: 679, name: '基金'}
-                        ],
+                        data: parentData,
                         itemStyle: {
                             emphasis: {
                                 shadowBlur: 10,
@@ -257,12 +287,7 @@
                         name: '占比',
                         type: 'pie',
                         radius: ['55%', '75%'],
-                        data: [
-                            {value: 335, name: '股票'},
-                            {value: 310, name: '股票基金'},
-                            {value: 234, name: '债券基金'},
-                            {value: 135, name: '货币基金'}
-                        ],
+                        data: childData,
                         itemStyle: {
                             emphasis: {
                                 shadowBlur: 10,

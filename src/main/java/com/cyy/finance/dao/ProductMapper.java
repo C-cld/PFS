@@ -2,10 +2,11 @@ package com.cyy.finance.dao;
 
 import com.cyy.finance.domain.Product;
 import com.cyy.finance.domain.Record;
+import com.cyy.finance.model.CategoriesVO;
+import com.cyy.finance.model.PieVO;
 import com.cyy.finance.model.ConfirmSumVO;
 import com.cyy.finance.model.RecordVO;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -16,4 +17,6 @@ public interface ProductMapper {
     Integer getProductChangeRecordCount();
     boolean addProductChangeRecord(Record record);
     List<ConfirmSumVO> productConfirmSum();
+    List<CategoriesVO> getParentCategoriesData();
+    List<CategoriesVO> getChildCategoriesData();
 }

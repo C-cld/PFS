@@ -17,6 +17,12 @@
         <result property="confirm" column="confirm" />
         <result property="createDate" column="create_date" />
     </resultMap>
+    <resultMap type="com.cyy.finance.model.CategoriesVO" id="categoriesVOMap">
+        <id property="id" column="id" />
+        <result property="parentId" column="parent_id" />
+        <result property="name" column="name" />
+        <result property="categoriesConfirm" column="confirm" />
+    </resultMap>
 
     <select id="getProductList" resultType="com.cyy.finance.domain.Product">
         select id, name, type from product;
@@ -36,6 +42,23 @@
 
     <select id="productConfirmSum" resultMap="confirmSumVOMap">
         select p.name, sum(r.confirm) as confirm from record r, product p where r.product_id = p.id GROUP BY r.product_id order by confirm desc
+    </select>
+
+    <select id="getParentCategoriesData" resultMap="categoriesVOMap">
+        select ca.id, ca.parent_id, t.confirm, ca.`name`
+        from (select c.parent_id, sum(r.confirm) as confirm from record r, product p, categories c where r.product_id = p.id and p.type = c.id GROUP BY c.parent_id) t
+        left join categories ca
+        on t.parent_id = ca.id
+        where (ca.parent_id = 0 || ca.id = ca.parent_id)
+        order by ca.id asc
+    </select>
+
+    <select id="getChildCategoriesData" resultMap="categoriesVOMap">
+        select c.id, c.parent_id, c.name, sum(r.confirm) as confirm
+        from record r, product p, categories c
+        where r.product_id = p.id and p.type = c.id
+        group by c.id
+        order by c.parent_id asc
     </select>
 
 </mapper>
