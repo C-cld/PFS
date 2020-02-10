@@ -225,15 +225,14 @@
                 url: "/getPieData",
                 async: false,
                 success: function(result) {
-                    console.log(result);
                     if (result != null) {
                         for (var i = 0; i < result.parents.length; i ++) {
-                            console.log()
                             categories.push(result.parents[i].name);
                             parentData.push({
                                 value: result.parents[i].categoriesConfirm,
                                 name: result.parents[i].name
                             });
+                            total = total + result.parents[i].categoriesConfirm;
                         }
                         for (var j = 0; j < result.children.length; j ++) {
                             categories.push(result.children[j].name);
