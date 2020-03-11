@@ -10,25 +10,46 @@
 <body>
     <div class="layui-fluid">
         <div class="layui-row layui-col-space12">
-            <div class="layui-col-md8">
+            <div class="layui-col-md7">
                 <div class="layui-card">
+                    <div class="layui-card-header" style="height:50px">
+                        <form class="layui-form" action="">
+                            <div class="layui-form-item" style="line-height:50px">
+                                <div class="layui-inline">
+                                    <input type="text" class="layui-input layui-input-inline" id="start-date" autocomplete="off">
+                                    <div class="layui-form-mid">-</div>
+                                    <input type="text" class="layui-input layui-input-inline" id="end-date" autocomplete="off">
+                                </div>
+                                <div class="layui-inline">
+                                    <select id="category"  lay-filter="categories">
+                                        <option value=""></option>
+                                        <option value="010">股票</option>
+                                        <option value="021" >基金</option>
+                                        <option value="0571">黄金</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                     <div class="layui-card-body">
                         <div class="layui-row">
                             <div id="curve" style="height:400px;"></div>
                         </div>
                         <div class="layui-row layui-col-space12">
                             <div class="layui-col-md4">
-                                456
+                                <div class="current-month-profit">
+                                    <div class="layui-row current-month-profit-head">当月收益</div>
+                                </div>
                             </div>
                             <div class="layui-col-md8">
-                                <div id="bar" style="height:430px;"></div>
+                                <div id="bar" style="height:394px;"></div>
                             </div>
 
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="layui-col-md4">
+            <div class="layui-col-md5">
 
             </div>
         </div>
@@ -40,16 +61,61 @@
             var table = layui.table;
             var laydate = layui.laydate;
 
+            laydate.render({
+                elem: '#start-date',
+                done: function() {
+                    // 加载收益曲线
+                    paintCurve();
+                    // 加载月柱状图
+                    paintBar();
+                }
+            });
+            laydate.render({
+                elem: '#end-date',
+                done: function() {
+                    // 加载收益曲线
+                    paintCurve();
+                    // 加载月柱状图
+                    paintBar();
+                }
+            });
+
+            form.on('select(categories)', function(data) {
+                // 加载收益曲线
+                paintCurve();
+                // 加载月柱状图
+                paintBar();
+            });
+
             // 加载收益曲线
             paintCurve();
             // 加载月柱状图
             paintBar();
+            // 加载当月收益
+            loadCurrentMonthProfit();
+
+            function loadCurrentMonthProfit() {
+                $.ajax({
+                    url: "/get-current-month-profit",
+                    success: function(result) {
+                        for (var i = 0; i < result.length; i ++) {
+                        var html;
+                            if (result[i].value < 0) {
+                                html = "<div class='layui-row current-month-profit-item'>" + result[i].name + ": <a style='color:green;padding-left:20px'>" + result[i].value.toFixed(2) + "</a></div>";
+                            } else {
+                                html = "<div class='layui-row current-month-profit-item'>" + result[i].name + ": <a style='color:red;padding-left:20px'>" + result[i].value.toFixed(2) + "</a></div>";
+                            }
+                            $(".current-month-profit").append(html);
+                        }
+                    }
+                });
+            }
 
             function paintBar() {
                 var xData = [];
                 var yData = [];
                 $.ajax({
-                    url: "/get-month-profit",
+                    url: "/get-month-profit?start-date=" + $("#startDate").val() + "&end-date=" + $("#endDate").val() + "&category=" + $("#category").val(),
                     async: false,
                     success: function(result) {
                         for (var i = 0; i < result.length; i ++) {
@@ -71,7 +137,6 @@
                         show: true,
                         feature: {
                             magicType: {show: true, type: ['line', 'bar']},
-                            restore: {show: true},
                             saveAsImage: {show: true}
                         }
                     },
@@ -106,7 +171,7 @@
                 var data = [];
                 var total;
                 $.ajax({
-                    url: "/get-curve-data",
+                    url: "/get-curve-data?startDate=" + $("#start-date").val() + "&endDate=" + $("#end-date").val() + "&category=" + $("#category").val(),
                     async: false,
                     success: function(result) {
                         var length = result.length;
@@ -141,7 +206,6 @@
                         show: true,
                         feature: {
                             magicType: {show: true, type: ['line', 'bar']},
-                            restore: {show: true},
                             saveAsImage: {show: true}
                         }
                     },

@@ -36,7 +36,8 @@ public class ProfitController {
      */
     @RequestMapping(value = "/get-curve-data")
     @ResponseBody
-    public List<SumProfitPerDay> getCurveData() {
+    public List<SumProfitPerDay> getCurveData(String startDate, String endDate, Integer category) {
+        System.out.println(startDate + endDate + category);
         return profitService.getCurveData();
     }
 
@@ -52,7 +53,7 @@ public class ProfitController {
 
     @RequestMapping(value = "/get-month-profit")
     @ResponseBody
-    public List<MonthProfit> getMonthProfit() {
+    public List<MonthProfit> getMonthProfit(String startDate, String endDate, Integer category) {
         return profitService.getMonthProfit();
     }
 
