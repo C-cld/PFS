@@ -12,71 +12,23 @@
         <div class="layui-row layui-col-space12">
             <div class="layui-col-md8">
                 <div class="layui-card">
-                    <div class="layui-card-header">
-                        每日收益曲线
-                    </div>
                     <div class="layui-card-body">
-                        <div id="curve" style="height:400px;"></div>
+                        <div class="layui-row">
+                            <div id="curve" style="height:400px;"></div>
+                        </div>
+                        <div class="layui-row layui-col-space12">
+                            <div class="layui-col-md4">
+                                456
+                            </div>
+                            <div class="layui-col-md8">
+                                <div id="bar" style="height:430px;"></div>
+                            </div>
+
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="layui-col-md4">
-                <div class="layui-card">
-                    <div class="layui-card-body">
-                        <div class="layui-row">
-                            <div class="layui-col-xs6">
-                                <fieldset class="layui-elem-field">
-                                    <legend>总收益</legend>
-                                    <div class="layui-field-box total-profit">
-                                    </div>
-                                </fieldset>
-                            </div>
-                            <div class="layui-col-xs6">
-                                <fieldset class="layui-elem-field">
-                                    <legend>复合收益率</legend>
-                                    <div class="layui-field-box">
-                                        &#45;&#45;%
-                                    </div>
-                                </fieldset>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="layui-card">
-                    <div class="layui-card-header">
-                        录入今日收益
-                    </div>
-                    <div class="layui-card-body">
-                        <form class="layui-form add-profit-detail-form" action="">
-                            <div class="layui-form-item">
-                                <div class="layui-inline" style="width: 150px">
-                                    <select lay-verify="required" class="product-select" name="product">
-                                        <option value=""></option>
-                                    </select>
-                                </div>
-                                <div class="layui-inline" style="width: 150px">
-                                    <input type="text" class="layui-input create-date" name="createdate" autocomplete="off" placeholder="请选择日期">
-                                </div>
-                                <div class="layui-inline" style="width: 100px">
-                                    <input type="text" class="layui-input profit" name="profit" autocomplete="off" placeholder="收益">
-                                </div>
-                                <div class="layui-inline">
-                                    <button class="layui-btn" lay-submit lay-filter="add-profit-detail">录入</button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-
-                <div class="layui-card">
-                    <div class="layui-card-header">
-                        我的投资
-                    </div>
-                    <div class="layui-card-body my-product">
-                        <table id="my-product-table" lay-filter="my-product-table"></table>
-                    </div>
-                </div>
 
             </div>
         </div>
@@ -90,82 +42,89 @@
 
             // 加载收益曲线
             paintCurve();
-            // 加载总收益
-            totalProfit();
-            // 加载下拉菜单
-            loadSelect();
+            // 加载月柱状图
+            paintBar();
 
-            laydate.render({
-                elem: '.create-date' //指定元素
-            });
-
-            // 加载我的基金表格
-            table.render({
-                elem: "#my-product-table",
-                id: "my-product-table",
-                url: "/my-product",
-                skin: "nob",
-                cols: [
-                    [
-                        {
-                            field: "productId",
-                            title: "ID",
-                            hide:true},
-                        {
-                            field: "productName",
-                            title: "名称",
-                            width: "70%"},
-                        {
-                            field: "sumProfit",
-                            title: "总收益",
-                            templet: "<div><a href='#' class='sum-profit'>{{d.sumProfit}}</a></div>",
-                            event: "profitDetail"
-                        }
-                    ]
-                ]
-            });
-
-            table.on("tool(my-product-table)", function(obj){
-                var productId = obj.data.productId;
-                if (obj.event == "profitDetail") {
-                    layer.open({
-                        type: 1,
-                        title: "收益明细",
-                        area: ['700px', '555px'],
-                        content: "<div class='layui-fluid'><table id='profit-detail-table'></table></div>",
-                        success: function (layero, index) {
-                            console.log(123);
-                            loadProfitDetail(productId);
-                        }
-                    });
-                }
-            });
-
-            function paintCurve() {
-                var profitSumPerDayVOList;
-                var profit = [];
-
+            function paintBar() {
+                var xData = [];
+                var yData = [];
                 $.ajax({
-                    url:"/profit-sum-per-day",
+                    url: "/get-month-profit",
                     async: false,
                     success: function(result) {
-                        profitSumPerDayVOList = result;
+                        for (var i = 0; i < result.length; i ++) {
+                            xData.push(result[i].date);
+                            yData.push(result[i].value.toFixed(2));
+                        }
+                    }
+                });
+                var myChart = echarts.init(document.getElementById("bar"));
+                var option = {
+                    color: ['#3398DB'],
+                    title: {
+                        text: "每月收益"
+                    },
+                    tooltip: {
+                        trigger: "axis"
+                    },
+                    toolbox: {
+                        show: true,
+                        feature: {
+                            magicType: {show: true, type: ['line', 'bar']},
+                            restore: {show: true},
+                            saveAsImage: {show: true}
+                        }
+                    },
+                    xAxis: [
+                        {
+                            type: 'category',
+                            data: xData
+                        }
+                    ],
+                    yAxis: [
+                        {
+                            type: 'value'
+                        }
+                    ],
+                    series: [
+                        {
+                            name: '收益',
+                            type: 'bar',
+                            data: yData,
+                            markLine: {
+                                data: [
+                                    {type: 'average', name: '平均值'}
+                                ]
+                            }
+                        }
+                    ]
+                }
+                myChart.setOption(option);
+            }
+
+            function paintCurve() {
+                var data = [];
+                var total;
+                $.ajax({
+                    url: "/get-curve-data",
+                    async: false,
+                    success: function(result) {
+                        var length = result.length;
+                        for (var i = 0; i < length; i ++) {
+                            data.push({
+                                name: result[i].createDate,
+                                value: [result[i].createDate, result[i].sum.toFixed(2)]
+                            });
+                        }
+                        total = result[length - 1].sum;
                     }
                 });
 
-                var length = profitSumPerDayVOList.length;
-                for (var i = 0; i < length; i++) {
-                    profit.push({
-                        name: profitSumPerDayVOList[i].createDate,
-                        value: [profitSumPerDayVOList[i].createDate, profitSumPerDayVOList[i].sum]
-                    });
-                }
-
-                // 渲染每日收益曲线图
+                // 渲染曲线
                 var myChart = echarts.init(document.getElementById("curve"));
                 var option = {
                     title: {
-                        text: "累计收益"
+                        text: "累计收益：" + total.toFixed(2)
                     },
                     tooltip: {
                         trigger: 'axis',
@@ -176,6 +135,14 @@
                         },
                         axisPointer: {
                             animation: false
+                        }
+                    },
+                    toolbox: {
+                        show: true,
+                        feature: {
+                            magicType: {show: true, type: ['line', 'bar']},
+                            restore: {show: true},
+                            saveAsImage: {show: true}
                         }
                     },
                     xAxis: {
@@ -197,83 +164,11 @@
                         color: '#1E90FF',
                         showSymbol: false,
                         hoverAnimation: false,
-                        data: profit,
+                        data: data,
                     }]
                 };
                 myChart.setOption(option);
             }
-
-            function totalProfit() {
-                $.ajax({
-                    url: "/get-total-profit",
-                    success: function(result) {
-                        if (result != null) {
-                            $(".total-profit").text(result);
-                            if (result < 0) {
-                                $(".total-profit").css("color", "green");
-                            } else {
-                                $(".total-profit").css("color", "red");
-                            }
-
-                        }
-                    }
-                });
-            }
-
-            function loadSelect() {
-                var html = $(".product-select").html();
-                $.ajax({
-                    url: "/get-product-list",
-                    success: function(result) {
-                        for (var i = 0; i < result.length; i ++) {
-                            html = html + "<option value='" + result[i].id + "'>" + result[i].name + "</option>";
-                        }
-                        $(".product-select").html(html);
-                        form.render("select");
-                    }
-                });
-            }
-
-            function loadProfitDetail(productId) {
-                table.render({
-                    elem: "#profit-detail-table",
-                    id: "profit-detail-table",
-                    url: "/profit-detail-list?productId=" + productId,
-                    page: true,
-                    limit: 10,
-                    skin: "nob",
-                    cols: [
-                        [
-                            {
-                                field: "createDate",
-                                title: "日期",
-                                width: "70%",
-                                templet: "<a>{{ layui.util.toDateString(d.createDate, 'yyyy年MM月dd日') }}</a>"
-                            }, {
-                                field: "profit", title: "收益"
-                            }
-                        ]
-                    ]
-                });
-            }
-
-            form.on('submit(add-profit-detail)', function(data){
-                var productId = data.field.product;
-                var createDate = data.field.createdate;
-                var profit = data.field.profit;
-                $.ajax({
-                    url:"/add-profit-detail?productId=" + productId + "&createDate=" + createDate + "&profit=" + profit,
-                    success:function(result) {
-                        if (result) {
-                            layer.msg("添加成功");
-                            table.reload("my-product-table");
-                            paintCurve();
-                            totalProfit();
-                        }
-                    }
-                });
-                return false;
-            });
         });
     </script>
 </body>

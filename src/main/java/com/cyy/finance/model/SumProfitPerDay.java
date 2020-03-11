@@ -2,12 +2,9 @@ package com.cyy.finance.model;
 
 import java.util.Date;
 
-/**
- * 每日总收益曲线图
- */
-public class ProfitSumPerDayVO {
+public class SumProfitPerDay {
     private Date createDate;
-    private Float sum;
+    private float sum;
 
     public Date getCreateDate() {
         return createDate;
@@ -17,11 +14,11 @@ public class ProfitSumPerDayVO {
         this.createDate = createDate;
     }
 
-    public Float getSum() {
+    public float getSum() {
         return sum;
     }
 
-    public void setSum(Float sum) {
+    public void setSum(float sum) {
         this.sum = sum;
     }
 }

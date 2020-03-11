@@ -4,33 +4,3 @@ body {
 .layui-fluid {
     padding: 15px;
 }
-.add-profit-detail-form {
-    margin-top: 20px;
-    margin-bottom: 20px;
-}
-.add-profit-detail-form .layui-form-label {
-    width: 40px;
-}
-.add-profit-detail-form .layui-input-block {
-    margin-left: 80px;
-}
-.profit-detail-div {
-    width: 90%;
-    margin-left: auto;
-    margin-right: auto;
-}
-legend {
-    font-size: 15px !important;
-    margin-left: 15px !important;
-}
-.layui-field-box {
-    padding: 10px 15px;
-    font-size: 30px;
-    color: red;
-}
-.sum-profit {
-    text-decoration: underline;
-}
-.my-product {
-    height: 400px;
-}

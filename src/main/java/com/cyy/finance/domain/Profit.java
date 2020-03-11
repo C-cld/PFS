@@ -3,25 +3,25 @@ package com.cyy.finance.domain;
 import java.util.Date;
 
 public class Profit {
-    private String id;
-    private String productId;
+    private int id;
+    private Integer categoryId;
     private Float profit;
     private Date createDate;
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public String getProductId() {
-        return productId;
+    public Integer getCategoryId() {
+        return categoryId;
     }
 
-    public void setProductId(String productId) {
-        this.productId = productId;
+    public void setCategoryId(Integer categoryId) {
+        this.categoryId = categoryId;
     }
 
     public Float getProfit() {

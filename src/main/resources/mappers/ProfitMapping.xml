@@ -3,48 +3,43 @@
 <mapper namespace="com.cyy.finance.dao.ProfitMapper">
     <resultMap type="com.cyy.finance.domain.Profit" id="profitMap">
         <id property="id" column="id" />
-        <result property="productId" column="product_id" />
+        <result property="categoryId" column="category_id" />
         <result property="profit" column="profit" />
         <result property="createDate" column="create_date" />
     </resultMap>
 
-    <resultMap type="com.cyy.finance.model.ProfitSumPerDayVO" id="profitSumPerDayVOMap">
+    <resultMap type="com.cyy.finance.model.SumProfitPerDay" id="sumProfitPerDayMap">
         <result property="sum" column="sum" />
         <result property="createDate" column="create_date" />
     </resultMap>
 
-    <resultMap type="com.cyy.finance.model.ProfitSumVO" id="profitSumVOMap">
-        <result property="productId" column="productId" />
-        <result property="productName" column="productName" />
-        <result property="sumProfit" column="sumProfit" />
+    <resultMap id="currentMonthProfitMap" type="com.cyy.finance.model.CurrentMonthProfit">
+        <result property="name" column="name" />
+        <result property="value" column="sum" />
     </resultMap>
 
-    <select id="getProfitSumPerDayVOList" resultMap="profitSumPerDayVOMap">
-        select round(sum(profit),2) as sum, create_date from profit group by create_date ORDER BY create_date asc
+    <resultMap id="monthProfitMap" type="com.cyy.finance.model.MonthProfit">
+        <result property="date" column="date" />
+        <result property="value" column="value" />
+    </resultMap>
+
+    <resultMap id="categoryMap" type="com.cyy.finance.domain.Category">
+        <result property="id" column="id" />
+        <result property="name" column="name" />
+    </resultMap>
+
+    <select id="getProfitPerDay" resultMap="sumProfitPerDayMap">
+        select sum(profit) as sum, create_date from profit group by create_date ORDER BY create_date asc
     </select>
 
-    <select id="getProfitSumVOList" resultMap="profitSumVOMap">
-        select p.id as productId, p.name as productName, t.sumProfit as sumProfit
-        from product p LEFT JOIN (select product_id, round(sum(profit),2) as sumProfit from profit GROUP BY product_id) t
-        on p.id = t.product_id
-        order by sumProfit desc
+    <select id="getCurrentMountProfit" resultMap="currentMonthProfitMap">
+        select name, sum from
+        (select category_id, sum(profit) as sum from profit where DATE_FORMAT(create_date,'%Y-%m') = date_format(now(),'%Y-%m') and category_id is not null GROUP BY category_id) t1
+        LEFT JOIN category c on t1.category_id = c.id
     </select>
 
-    <select id="getProfitDetailList" resultMap="profitMap">
-        select profit, create_date from profit where product_id = #{productId} order by create_date desc limit #{index}, #{pageSize}
-    </select>
-
-    <select id="getCount" resultType="Integer">
-        select count(id) from profit where product_id = #{productId}
-    </select>
-
-    <insert id="addProfitDetail" parameterType="com.cyy.finance.domain.Profit">
-        insert into profit (id, product_id, profit, create_date)
-        values (#{id}, #{productId}, #{profit}, #{createDate})
-    </insert>
-
-    <select id="getTotalProfit" resultType="Float">
-        select round(sum(profit),2) from profit
+    <select id="getMonthProfit" resultMap="monthProfitMap">
+        select DATE_FORMAT(create_date,'%Y-%m') as date, sum(profit) as value from profit GROUP BY date ORDER BY date asc
     </select>
 
 </mapper>
