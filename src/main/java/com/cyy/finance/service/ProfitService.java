@@ -1,6 +1,7 @@
 package com.cyy.finance.service;
 
 import com.cyy.finance.dao.ProfitMapper;
+import com.cyy.finance.domain.Profit;
 import com.cyy.finance.model.CurrentMonthProfit;
 import com.cyy.finance.model.MonthProfit;
 import com.cyy.finance.model.SumProfitPerDay;
@@ -34,5 +35,9 @@ public class ProfitService {
 
     public List<MonthProfit> getMonthProfit() {
         return profitMapper.getMonthProfit();
+    }
+
+    public void addProfit(Profit profit) {
+        profitMapper.addProfit(profit);
     }
 }

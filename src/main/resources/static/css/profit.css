@@ -6,6 +6,7 @@ body {
 }
 .current-month-profit {
     padding-left: 10px;
+    height:300px;
 }
 .current-month-profit-head {
     font-size: 18px;
@@ -26,4 +27,7 @@ body {
 }
 #date-range {
     width: 400px;
+}
+.add-today-profit {
+    margin-left: 60px;
 }

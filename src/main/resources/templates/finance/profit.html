@@ -21,8 +21,8 @@
                                     <input type="text" class="layui-input layui-input-inline" id="end-date" autocomplete="off">
                                 </div>
                                 <div class="layui-inline">
-                                    <select id="category"  lay-filter="categories">
-                                        <option value=""></option>
+                                    <select class="category"  lay-filter="categories">
+
                                     </select>
                                 </div>
                             </div>
@@ -34,8 +34,11 @@
                         </div>
                         <div class="layui-row layui-col-space12">
                             <div class="layui-col-md4">
-                                <div class="current-month-profit">
-                                    <div class="layui-row current-month-profit-head">当月收益</div>
+                                <div class="layui-row current-month-profit">
+
+                                </div>
+                                <div class="layui-row">
+                                    <button class="layui-btn add-today-profit">新增当日收益</button>
                                 </div>
                             </div>
                             <div class="layui-col-md8">
@@ -76,6 +79,10 @@
                     paintBar();
                 }
             });
+            laydate.render({
+                elem: '.create-date',
+                value: new Date()
+            });
 
             form.on('select(categories)', function(data) {
                 // 加载收益曲线
@@ -92,6 +99,8 @@
             loadCurrentMonthProfit();
 
             function loadCurrentMonthProfit() {
+                $(".current-month-profit").html("<div class='layui-row current-month-profit-head'>当月收益</div>");
+                $(".category").html("<option value=''></option>");
                 $.ajax({
                     url: "/get-current-month-profit",
                     success: function(result) {
@@ -102,12 +111,12 @@
                             } else {
                                 html = "<div class='layui-row current-month-profit-item'>" + result[i].name + ": <a style='color:red;padding-left:20px'>" + result[i].value.toFixed(2) + "</a></div>";
                             }
+
                             $(".current-month-profit").append(html);
                             // 加载下拉菜单
                             var option = "<option value='" + result[i].id + "'>" + result[i].name + "</option>";
-                            $("#category").append(option);
+                            $(".category").append(option);
                             form.render();
-
                         }
                     }
                 });
@@ -117,7 +126,7 @@
                 var xData = [];
                 var yData = [];
                 $.ajax({
-                    url: "/get-month-profit?start-date=" + $("#startDate").val() + "&end-date=" + $("#endDate").val() + "&category=" + $("#category").val(),
+                    url: "/get-month-profit?start-date=" + $("#startDate").val() + "&end-date=" + $("#endDate").val() + "&category=" + $(".category").val(),
                     async: false,
                     success: function(result) {
                         for (var i = 0; i < result.length; i ++) {
@@ -173,7 +182,7 @@
                 var data = [];
                 var total;
                 $.ajax({
-                    url: "/get-curve-data?startDate=" + $("#start-date").val() + "&endDate=" + $("#end-date").val() + "&category=" + $("#category").val(),
+                    url: "/get-curve-data?startDate=" + $("#start-date").val() + "&endDate=" + $("#end-date").val() + "&category=" + $(".category").val(),
                     async: false,
                     success: function(result) {
                         var length = result.length;
@@ -235,6 +244,61 @@
                 };
                 myChart.setOption(option);
             }
+
+            $(".add-today-profit").on("click", function() {
+                layer.open({
+                  type: 1,
+                  area: '500px',
+                  content: $('#add-today-profit-div'),
+                  btn: '确定',
+                  yes: function(index, layero){
+                    $.ajax({
+                        url: "/add-profit",
+                        type: "POST",
+                        data: JSON.stringify({
+                            categoryId: $(".today-category").val(),
+                            profit: $(".profit").val(),
+                            createDate: $(".create-date").val()
+                        }),
+                        contentType: "application/json",
+                        success: function(result) {
+                            layer.msg("添加成功");
+                            // 加载收益曲线
+                            paintCurve();
+                            // 加载月柱状图
+                            paintBar();
+                            // 加载当月收益和下拉菜单
+                            loadCurrentMonthProfit();
+                        }
+                    });
+                    layer.close(index);
+                  }
+                });
+            });
         });
     </script>
 </body>
+<div class="layui-fluid" id="add-today-profit-div" style="display:none">
+    <form class="layui-form" action="" style="padding-right: 50px;">
+        <div class="layui-form-item">
+            <label class="layui-form-label">时间</label>
+            <div class="layui-input-block">
+                <input type="text" name="create-date" required  lay-verify="required" autocomplete="off" class="layui-input create-date">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">种类</label>
+            <div class="layui-input-block">
+                <select class="category today-category" name="category" lay-verify="required">
+                    <option value=""></option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">金额</label>
+            <div class="layui-input-block">
+                <input type="text" name="profit" required  lay-verify="required" autocomplete="off" class="layui-input profit">
+            </div>
+        </div>
+    </form>
+</div>

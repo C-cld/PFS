@@ -43,4 +43,8 @@
         select DATE_FORMAT(create_date,'%Y-%m') as date, sum(profit) as value from profit GROUP BY date ORDER BY date asc
     </select>
 
+    <insert id="addProfit" parameterType="com.cyy.finance.domain.Profit">
+        insert into profit (category_id, profit, create_date) values (#{categoryId}, #{profit}, #{createDate})
+    </insert>
+
 </mapper>
