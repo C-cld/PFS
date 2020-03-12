@@ -14,7 +14,7 @@
                 <div class="layui-card">
                     <div class="layui-card-header" style="height:50px">
                         <form class="layui-form" action="">
-                            <div class="layui-form-item" style="line-height:50px">
+                            <div class="layui-form-item" style="line-height:50px;text-align: center;">
                                 <div class="layui-inline">
                                     <input type="text" class="layui-input layui-input-inline" id="start-date" autocomplete="off">
                                     <div class="layui-form-mid">-</div>
@@ -23,9 +23,6 @@
                                 <div class="layui-inline">
                                     <select id="category"  lay-filter="categories">
                                         <option value=""></option>
-                                        <option value="010">股票</option>
-                                        <option value="021" >基金</option>
-                                        <option value="0571">黄金</option>
                                     </select>
                                 </div>
                             </div>
@@ -91,7 +88,7 @@
             paintCurve();
             // 加载月柱状图
             paintBar();
-            // 加载当月收益
+            // 加载当月收益和下拉菜单
             loadCurrentMonthProfit();
 
             function loadCurrentMonthProfit() {
@@ -106,6 +103,11 @@
                                 html = "<div class='layui-row current-month-profit-item'>" + result[i].name + ": <a style='color:red;padding-left:20px'>" + result[i].value.toFixed(2) + "</a></div>";
                             }
                             $(".current-month-profit").append(html);
+                            // 加载下拉菜单
+                            var option = "<option value='" + result[i].id + "'>" + result[i].name + "</option>";
+                            $("#category").append(option);
+                            form.render();
+
                         }
                     }
                 });

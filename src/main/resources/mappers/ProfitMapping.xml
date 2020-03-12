@@ -14,6 +14,7 @@
     </resultMap>
 
     <resultMap id="currentMonthProfitMap" type="com.cyy.finance.model.CurrentMonthProfit">
+        <result property="id" column="id" />
         <result property="name" column="name" />
         <result property="value" column="sum" />
     </resultMap>
@@ -33,7 +34,7 @@
     </select>
 
     <select id="getCurrentMountProfit" resultMap="currentMonthProfitMap">
-        select name, sum from
+        select id, name, sum from
         (select category_id, sum(profit) as sum from profit where DATE_FORMAT(create_date,'%Y-%m') = date_format(now(),'%Y-%m') and category_id is not null GROUP BY category_id) t1
         LEFT JOIN category c on t1.category_id = c.id
     </select>
