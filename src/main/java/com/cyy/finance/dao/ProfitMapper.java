@@ -10,9 +10,9 @@ import java.util.List;
 
 @Mapper
 public interface ProfitMapper {
-    List<SumProfitPerDay> getProfitPerDay();
+    List<SumProfitPerDay> getProfitPerDay(String startDate, String endDate, int category);
     List<CurrentMonthProfit> getCurrentMountProfit();
-    List<MonthProfit> getMonthProfit();
+    List<MonthProfit> getMonthProfit(String startDate, String endDate, int category);
     void addProfit(Profit profit);
 }
 

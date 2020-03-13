@@ -16,8 +16,8 @@ public class ProfitService {
     @Autowired
     ProfitMapper profitMapper;
 
-    public List<SumProfitPerDay> getCurveData() {
-        List<SumProfitPerDay> sumProfitPerDayList = profitMapper.getProfitPerDay();
+    public List<SumProfitPerDay> getCurveData(String startDate, String endDate, int category) {
+        List<SumProfitPerDay> sumProfitPerDayList = profitMapper.getProfitPerDay(startDate, endDate, category);
         //int size = sumProfitPerDayList.size();
         float sum = 0;
         for (SumProfitPerDay s : sumProfitPerDayList) {
@@ -33,8 +33,8 @@ public class ProfitService {
         return profitMapper.getCurrentMountProfit();
     }
 
-    public List<MonthProfit> getMonthProfit() {
-        return profitMapper.getMonthProfit();
+    public List<MonthProfit> getMonthProfit(String startDate, String endDate, Integer category) {
+        return profitMapper.getMonthProfit(startDate, endDate, category);
     }
 
     public void addProfit(Profit profit) {

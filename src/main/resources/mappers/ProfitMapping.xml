@@ -30,17 +30,37 @@
     </resultMap>
 
     <select id="getProfitPerDay" resultMap="sumProfitPerDayMap">
-        select sum(profit) as sum, create_date from profit group by create_date ORDER BY create_date asc
+        select sum(profit) as sum, create_date from profit where 1=1
+        <if test="startDate != null and startDate != ''">
+            and create_date &gt;= #{startDate}
+        </if>
+        <if test="endDate != null and endDate != ''">
+            and create_date &lt;= #{endDate}
+        </if>
+        <if test="category != 0">
+            and category_id in (#{category}, 0)
+        </if>
+        group by create_date ORDER BY create_date asc
     </select>
 
     <select id="getCurrentMountProfit" resultMap="currentMonthProfitMap">
         select id, name, sum from
-        (select category_id, sum(profit) as sum from profit where DATE_FORMAT(create_date,'%Y-%m') = date_format(now(),'%Y-%m') and category_id is not null GROUP BY category_id) t1
+        (select category_id, sum(profit) as sum from profit where DATE_FORMAT(create_date,'%Y-%m') = date_format(now(),'%Y-%m') and category_id &lt;&gt; 0 GROUP BY category_id) t1
         LEFT JOIN category c on t1.category_id = c.id
     </select>
 
     <select id="getMonthProfit" resultMap="monthProfitMap">
-        select DATE_FORMAT(create_date,'%Y-%m') as date, sum(profit) as value from profit GROUP BY date ORDER BY date asc
+        select DATE_FORMAT(create_date,'%Y-%m') as date, sum(profit) as value from profit where 1=1
+        <if test="startDate != null and startDate != ''">
+            and create_date &gt;= #{startDate}
+        </if>
+        <if test="endDate != null and endDate != ''">
+            and create_date &lt;= #{endDate}
+        </if>
+        <if test="category != 0">
+            and category_id in (#{category}, 0)
+        </if>
+        GROUP BY date ORDER BY date asc
     </select>
 
     <insert id="addProfit" parameterType="com.cyy.finance.domain.Profit">

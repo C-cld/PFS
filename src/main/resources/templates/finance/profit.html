@@ -91,16 +91,17 @@
                 paintBar();
             });
 
+            // 加载当月收益和下拉菜单
+            loadCurrentMonthProfit();
             // 加载收益曲线
             paintCurve();
             // 加载月柱状图
             paintBar();
-            // 加载当月收益和下拉菜单
-            loadCurrentMonthProfit();
+
 
             function loadCurrentMonthProfit() {
                 $(".current-month-profit").html("<div class='layui-row current-month-profit-head'>当月收益</div>");
-                $(".category").html("<option value=''></option>");
+                $(".category").html("<option value='0'>全部</option>");
                 $.ajax({
                     url: "/get-current-month-profit",
                     success: function(result) {
@@ -126,7 +127,7 @@
                 var xData = [];
                 var yData = [];
                 $.ajax({
-                    url: "/get-month-profit?start-date=" + $("#startDate").val() + "&end-date=" + $("#endDate").val() + "&category=" + $(".category").val(),
+                    url: "/get-month-profit?startDate=" + $("#start-date").val() + "&endDate=" + $("#end-date").val() + "&category=" + $(".category").val(),
                     async: false,
                     success: function(result) {
                         for (var i = 0; i < result.length; i ++) {
