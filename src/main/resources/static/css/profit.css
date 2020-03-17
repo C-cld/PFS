@@ -4,26 +4,10 @@ body {
 .layui-fluid {
     padding: 15px;
 }
-.current-month-profit {
-    padding-left: 10px;
-    height:300px;
-}
-.current-month-profit-head {
-    font-size: 18px;
-    font-weight: bold;
-    padding-bottom: 25px;
-}
-
-.current-month-profit-item {
-     padding: 15px 0px 15px 50px;
-     font-size: 20px;
-     font-family: Microsoft JhengHei Light,sans-serif;
-     font-weight: bold;
-}
-.current-month-profit-item:hover {
-    background-color: #f2f2f2;
-    -webkit-transition: all .3s;
-    cursor: pointer;
+.p-value {
+    padding: 9px 0px;
+    border: none;
+    font-size: inherit;
 }
 #date-range {
     width: 400px;
@@ -31,3 +15,7 @@ body {
 .add-today-profit {
     margin-left: 60px;
 }
+/*
+.layui-form-label {
+    width: auto;
+}*/
