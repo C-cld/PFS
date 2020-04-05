@@ -33,33 +33,18 @@ public class ProfitController {
         return modelAndView;
     }
 
-    /**
-     * 累计收益曲线数据
-     * @return
-     */
-    @RequestMapping(value = "/get-curve-data")
-    @ResponseBody
-    public List<SumProfitPerDay> getCurveData(String startDate, String endDate, int category) {
-        return profitService.getCurveData(startDate, endDate, category);
-    }
-
-    /**
-     * 当月收益状况
-     * @return
-     */
     @RequestMapping(value = "/get-current-month-profit")
     @ResponseBody
     public List<CurrentMonthProfit> getCurrentMountProfit() {
         return profitService.getCurrentMountProfit();
     }
 
-    /**
-     * 每月柱状图
-     * @param startDate
-     * @param endDate
-     * @param category
-     * @return
-     */
+    @RequestMapping(value = "/get-sum-profit-per-day")
+    @ResponseBody
+    public List<SumProfitPerDay> getSumProfitPerDay(String startDate, String endDate, int category) {
+        return profitService.getSumProfitPerDay(startDate, endDate, category);
+    }
+
     @RequestMapping(value = "/get-month-profit")
     @ResponseBody
     public List<MonthProfit> getMonthProfit(String startDate, String endDate, Integer category) {

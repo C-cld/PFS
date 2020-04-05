@@ -16,7 +16,7 @@ public class ProfitService {
     @Autowired
     ProfitMapper profitMapper;
 
-    public List<SumProfitPerDay> getCurveData(String startDate, String endDate, int category) {
+    public List<SumProfitPerDay> getSumProfitPerDay(String startDate, String endDate, int category) {
         List<SumProfitPerDay> sumProfitPerDayList = profitMapper.getProfitPerDay(startDate, endDate, category);
         //int size = sumProfitPerDayList.size();
         float sum = 0;
